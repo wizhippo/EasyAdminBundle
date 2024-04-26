@@ -251,17 +251,20 @@ abstract class AbstractCrudController extends AbstractController implements Crud
         $editForm = $this->createEditForm($context->getEntity(), $context->getCrud()->getEditFormOptions(), $context);
         $editForm->handleRequest($context->getRequest());
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->processUploadedFiles($editForm);
-
-            $event = new BeforeEntityUpdatedEvent($entityInstance);
-            $this->container->get('event_dispatcher')->dispatch($event);
-            $entityInstance = $event->getEntityInstance();
-
-            $this->updateEntity($this->container->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), $entityInstance);
-
-            $this->container->get('event_dispatcher')->dispatch(new AfterEntityUpdatedEvent($entityInstance));
-
-            return $this->getRedirectResponseAfterSave($context, Action::EDIT);
+            $submitButtonName = $context->getRequest()->request->all()['ea']['newForm']['btn'] ?? null;
+            if ($submitButtonName) {
+                $this->processUploadedFiles($editForm);
+    
+                $event = new BeforeEntityUpdatedEvent($entityInstance);
+                $this->container->get('event_dispatcher')->dispatch($event);
+                $entityInstance = $event->getEntityInstance();
+    
+                $this->updateEntity($this->container->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), $entityInstance);
+    
+                $this->container->get('event_dispatcher')->dispatch(new AfterEntityUpdatedEvent($entityInstance));
+    
+                return $this->getRedirectResponseAfterSave($context, Action::EDIT);
+            }
         }
 
         $responseParameters = $this->configureResponseParameters(KeyValueStore::new([
@@ -308,18 +311,21 @@ abstract class AbstractCrudController extends AbstractController implements Crud
         $context->getEntity()->setInstance($entityInstance);
 
         if ($newForm->isSubmitted() && $newForm->isValid()) {
-            $this->processUploadedFiles($newForm);
-
-            $event = new BeforeEntityPersistedEvent($entityInstance);
-            $this->container->get('event_dispatcher')->dispatch($event);
-            $entityInstance = $event->getEntityInstance();
-
-            $this->persistEntity($this->container->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), $entityInstance);
-
-            $this->container->get('event_dispatcher')->dispatch(new AfterEntityPersistedEvent($entityInstance));
-            $context->getEntity()->setInstance($entityInstance);
-
-            return $this->getRedirectResponseAfterSave($context, Action::NEW);
+            $submitButtonName = $context->getRequest()->request->all()['ea']['newForm']['btn'] ?? null;
+            if ($submitButtonName) {
+                $this->processUploadedFiles($newForm);
+    
+                $event = new BeforeEntityPersistedEvent($entityInstance);
+                $this->container->get('event_dispatcher')->dispatch($event);
+                $entityInstance = $event->getEntityInstance();
+    
+                $this->persistEntity($this->container->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), $entityInstance);
+    
+                $this->container->get('event_dispatcher')->dispatch(new AfterEntityPersistedEvent($entityInstance));
+                $context->getEntity()->setInstance($entityInstance);
+    
+                return $this->getRedirectResponseAfterSave($context, Action::NEW);
+            }
         }
 
         $responseParameters = $this->configureResponseParameters(KeyValueStore::new([
