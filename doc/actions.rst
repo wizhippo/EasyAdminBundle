@@ -369,6 +369,19 @@ The following example shows all kinds of actions in practice::
         }
     }
 
+Custom actions can define the ``#[AdminAction]`` attribute to
+:ref:`customize their route name, path and methods <crud_routes>`::
+
+    use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
+    // ...
+
+
+    #[AdminAction(routePath: '/invoice', routeName: 'view_invoice', methods: ['GET', 'POST'])]
+    public function renderInvoice(AdminContext $context)
+    {
+        // ...
+    }
+
 .. _global-actions:
 
 Global Actions
