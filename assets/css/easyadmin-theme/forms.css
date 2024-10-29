@@ -634,6 +634,7 @@ form .invalid-feedback > .d-block + .d-block {
     height: auto;
     margin-top: 7px;
     padding: 0;
+    border-color: var(--form-input-border-color);
 }
 .ea-fileupload .fileupload-list .fileupload-table {
     width: 100%;
@@ -649,10 +650,10 @@ form .invalid-feedback > .d-block + .d-block {
     max-width: 300px;
 }
 .ea-fileupload .fileupload-list .fileupload-table tr:nth-child(odd) td {
-    background-color: #f5f7ff;
+    background-color: var(--form-control-bg);
 }
 .ea-fileupload .fileupload-list .fileupload-table td.file-size {
-    color: #4e566d;
+    color: var(--text-muted);
 }
 
 /* Image/file vich uploads */
