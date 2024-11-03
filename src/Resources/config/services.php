@@ -201,8 +201,8 @@ return static function (ContainerConfigurator $container) {
             ->tag('container.service_locator')
 
         ->set(AdminRouteGenerator::class)
-        ->arg(0, tagged_iterator(EasyAdminExtension::TAG_DASHBOARD_CONTROLLER))
-        ->arg(1, tagged_iterator(EasyAdminExtension::TAG_CRUD_CONTROLLER))
+            ->arg(0, tagged_iterator(EasyAdminExtension::TAG_DASHBOARD_CONTROLLER))
+            ->arg(1, tagged_iterator(EasyAdminExtension::TAG_CRUD_CONTROLLER))
 
         ->set(AdminRouteLoader::class)
             ->arg(0, service(AdminRouteGenerator::class))
