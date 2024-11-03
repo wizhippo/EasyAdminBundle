@@ -228,7 +228,7 @@ final class EntityPaginator implements EntityPaginatorInterface
             $nextPageUrl->setController($crudControllerFqcn)->setAction($currentRequest->attributes->get(EA::CRUD_ACTION));
         }
 
-        $jsonResult['next_page'] = $nextPageUrl->generateUrl();
+        $jsonResult['next_page'] = $nextPageUrl?->generateUrl();
 
         return json_encode($jsonResult, \JSON_THROW_ON_ERROR);
     }
