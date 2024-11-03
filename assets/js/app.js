@@ -181,7 +181,11 @@ class App {
         };
 
         const searchQueryTerms = tokenizeString(searchElement.value);
-        const searchQueryTermsHighlightRegexp = new RegExp(searchQueryTerms.join('|'), 'i');
+        const searchQueryTermsHighlightSafe = searchQueryTerms
+            .join('|')
+            .replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+            .replace(/-/g, '\\x2d');
+        const searchQueryTermsHighlightRegexp = new RegExp(searchQueryTermsHighlightSafe, 'i');
 
         const elementsToHighlight = document.querySelectorAll('table tbody td.searchable');
         const highlighter = new Mark(elementsToHighlight);
