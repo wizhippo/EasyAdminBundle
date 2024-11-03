@@ -170,4 +170,9 @@ final class AdminContextProvider
     {
         return $this->getContext(true)->getTemplatePath($templateName);
     }
+
+    public function usePrettyUrls(): bool
+    {
+        return $this->getContext(true)->usePrettyUrls();
+    }
 }
