@@ -344,7 +344,7 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         if (!$usePrettyUrls && \in_array($routeParameters[EA::CRUD_ACTION] ?? Action::INDEX, Crud::ACTION_NAMES, true)) {
             trigger_deprecation(
                 'easycorp/easyadmin-bundle',
-                '4.13.0',
+                '4.14.0',
                 'Not using pretty admin URLs is deprecated because they will become the only available URLs starting from EasyAdmin 5.0.0. Read the docs to learn how to enable pretty URLs in your application.',
             );
         }
