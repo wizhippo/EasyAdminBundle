@@ -56,6 +56,8 @@ class PrettyUrlsControllerTest extends WebTestCase
         $expectedRoutes['second_dashboard_external_user_editor_detail'] = '/second/dashboard/user-editor/custom/path-for-detail/{entityId}';
         $expectedRoutes['admin_pretty_external_user_editor_foobar'] = '/admin/pretty/urls/user-editor/bar/foo';
         $expectedRoutes['second_dashboard_external_user_editor_foobar'] = '/second/dashboard/user-editor/bar/foo';
+        $expectedRoutes['admin_pretty_external_user_editor_foofoo'] = '/admin/pretty/urls/user-editor/bar/bar';
+        $expectedRoutes['second_dashboard_external_user_editor_foofoo'] = '/second/dashboard/user-editor/bar/bar';
 
         self::bootKernel();
         $container = static::getContainer();
