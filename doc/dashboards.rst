@@ -53,9 +53,9 @@ Dashboard Route
 Pretty Admin URLs
 -----------------
 
-.. versionadded:: 4.13.0
+.. versionadded:: 4.14.0
 
-    The support for pretty admin URLs was introduced in EasyAdmin 4.13.0.
+    The support for pretty admin URLs was introduced in EasyAdmin 4.14.0.
 
 EasyAdmin backends define concise and predictable route names (e.g. ``admin_product_index``
 or ``admin_category_detail``) that generate short and pretty URLs (e.g. ``/admin/product``
