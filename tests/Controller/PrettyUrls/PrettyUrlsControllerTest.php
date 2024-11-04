@@ -51,6 +51,7 @@ class PrettyUrlsControllerTest extends WebTestCase
         $expectedRoutes['admin_pretty_external_user_editor_delete'] = '/admin/pretty/urls/user-editor/{entityId}/delete';
         $expectedRoutes['admin_pretty_external_user_editor_detail'] = '/admin/pretty/urls/user-editor/custom/path-for-detail/{entityId}';
         $expectedRoutes['admin_pretty_external_user_editor_foobar'] = '/admin/pretty/urls/user-editor/bar/foo';
+        $expectedRoutes['admin_pretty_external_user_editor_foofoo'] = '/admin/pretty/urls/user-editor/bar/bar';
         $expectedRoutes['second_dashboard_external_user_editor_custom_route_for_index'] = '/second/dashboard/user-editor/custom/path-for-index';
         $expectedRoutes['second_dashboard_external_user_editor_custom_route_for_new'] = '/second/dashboard/user-editor/add-new';
         $expectedRoutes['second_dashboard_external_user_editor_batchDelete'] = '/second/dashboard/user-editor/batchDelete';
@@ -59,7 +60,6 @@ class PrettyUrlsControllerTest extends WebTestCase
         $expectedRoutes['second_dashboard_external_user_editor_delete_this_now'] = '/second/dashboard/user-editor/{entityId}/delete';
         $expectedRoutes['second_dashboard_external_user_editor_detail'] = '/second/dashboard/user-editor/custom/path-for-detail/{entityId}';
         $expectedRoutes['second_dashboard_external_user_editor_foobar'] = '/second/dashboard/user-editor/bar/foo';
-        $expectedRoutes['admin_pretty_external_user_editor_foofoo'] = '/admin/pretty/urls/user-editor/bar/bar';
         $expectedRoutes['second_dashboard_external_user_editor_foofoo'] = '/second/dashboard/user-editor/bar/bar';
 
         self::bootKernel();
