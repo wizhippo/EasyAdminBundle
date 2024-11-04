@@ -22,9 +22,6 @@ use Symfony\Component\Routing\RouteCollection;
  */
 final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 {
-    // the order in which routes are defined here is important because routes
-    // are added to the application in the same order and e.g. the path of the
-    // 'detail' route collides with the 'new' route and must be defined after it
     private const DEFAULT_ROUTES_CONFIG = [
         'index' => [
             'routePath' => '/',
@@ -92,6 +89,18 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 
                 $crudControllerRouteConfig = $this->getCrudControllerRouteConfig($crudControllerFqcn);
                 $actionsRouteConfig = array_replace_recursive($defaultRoutesConfig, $this->getCustomActionsConfig($crudControllerFqcn));
+                // by default, the 'detail' route uses a catch-all route pattern (/{entityId});
+                // so, if the user hasn't customized the 'detail' route path, we need to sort the actions
+                // to make sure that the 'detail' action is always the last one
+                if ('/{entityId}' === $actionsRouteConfig['detail']['routePath']) {
+                    uasort($actionsRouteConfig, static function ($a, $b) {
+                        return match (true) {
+                            'detail' === $a['routeName'] => 1,
+                            'detail' === $b['routeName'] => -1,
+                            default => 0,
+                        };
+                    });
+                }
 
                 foreach (array_keys($actionsRouteConfig) as $actionName) {
                     $actionRouteConfig = $actionsRouteConfig[$actionName];
