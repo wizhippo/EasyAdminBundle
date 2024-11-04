@@ -13,7 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Tests\PrettyUrlsTestApplication\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 
-#[AdminCrud(routePath: '/user-editor', routeName: 'external_user_editor')]
+#[AdminCrud('/user-editor', 'external_user_editor')]
 class UserCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
@@ -65,6 +65,12 @@ class UserCrudController extends AbstractCrudController
     public function someCustomAction(): Response
     {
         return new Response('This is a custom action');
+    }
+
+    #[AdminAction('/bar/bar', 'foofoo')]
+    public function anotherCustomActionWithoutPropertyNames(): Response
+    {
+        return new Response('This is custom action with short attribute syntax');
     }
 
     // this custom action doesn't use the #[AdminAction] attribute on purpose to test default behavior

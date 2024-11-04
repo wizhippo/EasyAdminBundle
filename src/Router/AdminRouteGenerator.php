@@ -228,20 +228,23 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 
         // first, check if the CRUD controller defines a custom route config in the #[AdminCrud] attribute
         if (null !== $attribute) {
-            if (\count(array_diff(array_keys($attribute->getArguments()), ['routePath', 'routeName'])) > 0) {
+            /** @var AdminCrud $attributeInstance */
+            $attributeInstance = $attribute->newInstance();
+
+            if (\count(array_diff(array_keys($attribute->getArguments()), ['routePath', 'routeName', 0, 1])) > 0) {
                 throw new \RuntimeException(sprintf('In the #[AdminCrud] attribute of the "%s" CRUD controller, the route configuration defines some unsupported keys. You can only define these keys: "routePath" and "routeName".', $crudControllerFqcn));
             }
 
-            if (\array_key_exists('routePath', $attribute->getArguments())) {
-                $crudControllerConfig['routePath'] = trim($attribute->getArguments()['routePath'], '/');
+            if (null !== $attributeInstance->routePath) {
+                $crudControllerConfig['routePath'] = trim($attributeInstance->routePath, '/');
             }
 
-            if (\array_key_exists('routeName', $attribute->getArguments())) {
-                if (!preg_match('/^[a-zA-Z0-9_-]+$/', $attribute->getArguments()['routeName'])) {
-                    throw new \RuntimeException(sprintf('In the #[AdminCrud] attribute of the "%s" CRUD controller, the route name "%s" is not valid. It can only contain letter, numbers, dashes, and underscores.', $crudControllerFqcn, $attribute->getArguments()['routeName']));
+            if (null !== $attributeInstance->routeName) {
+                if (!preg_match('/^[a-zA-Z0-9_-]+$/', $attributeInstance->routeName)) {
+                    throw new \RuntimeException(sprintf('In the #[AdminCrud] attribute of the "%s" CRUD controller, the route name "%s" is not valid. It can only contain letter, numbers, dashes, and underscores.', $crudControllerFqcn, $attributeInstance->routeName));
                 }
 
-                $crudControllerConfig['routeName'] = trim($attribute->getArguments()['routeName'], '_');
+                $crudControllerConfig['routeName'] = trim($attributeInstance->routeName, '_');
             }
         }
 
@@ -274,7 +277,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
             $attributeInstance = $attribute->newInstance();
             $action = $method->getName();
 
-            if (\count(array_diff(array_keys($attribute->getArguments()), ['routePath', 'routeName', 'methods'])) > 0) {
+            if (\count(array_diff(array_keys($attribute->getArguments()), ['routePath', 'routeName', 'methods', 0, 1, 2])) > 0) {
                 throw new \RuntimeException(sprintf('In the "%s" CRUD controller, the #[AdminAction] attribute applied to the "%s()" action includes some unsupported keys. You can only define these keys: "routePath", "routeName", and "methods".', $crudControllerFqcn, $action));
             }
 
