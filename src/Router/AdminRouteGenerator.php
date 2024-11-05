@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminCrud;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Router\AdminRouteGeneratorInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -22,6 +23,7 @@ use Symfony\Component\Routing\RouteCollection;
  */
 final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 {
+    public const ADMIN_ROUTES_CACHE_KEY = 'easyadmin.generated_routes';
     private const DEFAULT_ROUTES_CONFIG = [
         'index' => [
             'routePath' => '/',
@@ -63,13 +65,59 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
     public function __construct(
         private iterable $dashboardControllers,
         private iterable $crudControllers,
+        private CacheItemPoolInterface $cache,
     ) {
     }
 
     public function generateAll(): RouteCollection
     {
         $collection = new RouteCollection();
+        $adminRoutes = $this->generateAdminRoutes();
+
+        foreach ($adminRoutes as $routeName => $route) {
+            $collection->add($routeName, $route);
+        }
+
+        // save the generated routes in the cache; this will allow to detect
+        // if pretty URLs are being used in the application and also improves
+        // performance when finding a route name using the {dashboard, CRUD controller, action} tuple
+        $adminRoutesCache = [];
+        foreach ($adminRoutes as $routeName => $route) {
+            $adminRoutesCache[$route->getOption(EA::DASHBOARD_CONTROLLER_FQCN)][$route->getOption(EA::CRUD_CONTROLLER_FQCN)][$route->getOption(EA::CRUD_ACTION)] = $routeName;
+        }
+        $cachedAdminRoutes = $this->cache->getItem(self::ADMIN_ROUTES_CACHE_KEY);
+        $cachedAdminRoutes->set($adminRoutesCache);
+        $this->cache->save($cachedAdminRoutes);
+
+        return $collection;
+    }
+
+    // Temporary utility method to be removed in EasyAdmin 5, when the pretty URLs will be mandatory
+    // TODO: remove this method in EasyAdmin 5.x
+    public function usesPrettyUrls(): bool
+    {
+        $cachedAdminRoutes = $this->cache->getItem(self::ADMIN_ROUTES_CACHE_KEY)->get();
+
+        return null !== $cachedAdminRoutes && [] !== $cachedAdminRoutes;
+    }
+
+    public function findRouteName(string $dashboardFqcn, string $crudControllerFqcn, string $actionName): ?string
+    {
+        $adminRoutes = $this->cache->getItem(self::ADMIN_ROUTES_CACHE_KEY)->get();
+
+        return $adminRoutes[$dashboardFqcn][$crudControllerFqcn][$actionName] ?? null;
+    }
+
+    /**
+     * @return array<string, Route>
+     */
+    private function generateAdminRoutes(): array
+    {
+        /** @var array<string, Route> $adminRoutes Stores the collection of admin routes created for the app */
+        $adminRoutes = [];
+        /** @var array<string> $addedRouteNames Temporary cache that stores the route names to ensure that we don't add duplicated admin routes */
         $addedRouteNames = [];
+
         foreach ($this->dashboardControllers as $dashboardController) {
             $dashboardFqcn = $dashboardController::class;
             [$allowedCrudControllers, $deniedCrudControllers] = $this->getAllowedAndDeniedControllers($dashboardFqcn);
@@ -104,8 +152,12 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 
                 foreach (array_keys($actionsRouteConfig) as $actionName) {
                     $actionRouteConfig = $actionsRouteConfig[$actionName];
-                    $crudActionPath = sprintf('%s/%s/%s', $dashboardRouteConfig['routePath'], $crudControllerRouteConfig['routePath'], ltrim($actionRouteConfig['routePath'], '/'));
-                    $crudActionRouteName = sprintf('%s_%s_%s', $dashboardRouteConfig['routeName'], $crudControllerRouteConfig['routeName'], $actionRouteConfig['routeName']);
+                    $adminRoutePath = sprintf('%s/%s/%s', $dashboardRouteConfig['routePath'], $crudControllerRouteConfig['routePath'], ltrim($actionRouteConfig['routePath'], '/'));
+                    $adminRouteName = sprintf('%s_%s_%s', $dashboardRouteConfig['routeName'], $crudControllerRouteConfig['routeName'], $actionRouteConfig['routeName']);
+
+                    if (\in_array($adminRouteName, $addedRouteNames, true)) {
+                        throw new \RuntimeException(sprintf('When using pretty URLs, all CRUD controllers must have unique PHP class names to generate unique route names. However, your application has at least two controllers with the FQCN "%s", generating the route "%s". Even if both CRUD controllers are in different namespaces, they cannot have the same class name. Rename one of these controllers to resolve the issue.', $crudControllerFqcn, $adminRouteName));
+                    }
 
                     $defaults = [
                         '_controller' => $crudControllerFqcn.'::'.$actionName,
@@ -117,34 +169,14 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
                         EA::CRUD_ACTION => $actionName,
                     ];
 
-                    $route = new Route($crudActionPath, defaults: $defaults, options: $options, methods: $actionRouteConfig['methods']);
-
-                    if (\in_array($crudActionRouteName, $addedRouteNames, true)) {
-                        throw new \RuntimeException(sprintf('When using pretty URLs, all CRUD controllers must have unique PHP class names to generate unique route names. However, your application has at least two controllers with the FQCN "%s", generating the route "%s". Even if both CRUD controllers are in different namespaces, they cannot have the same class name. Rename one of these controllers to resolve the issue.', $crudControllerFqcn, $crudActionRouteName));
-                    }
-
-                    $collection->add($crudActionRouteName, $route);
-                    $addedRouteNames[] = $crudActionRouteName;
+                    $adminRoute = new Route($adminRoutePath, defaults: $defaults, options: $options, methods: $actionRouteConfig['methods']);
+                    $adminRoutes[$adminRouteName] = $adminRoute;
+                    $addedRouteNames[] = $adminRouteName;
                 }
             }
         }
 
-        return $collection;
-    }
-
-    public function findRouteName(string $dashboardFqcn, string $crudControllerFqcn, string $actionName): ?string
-    {
-        $defaultRoutesConfig = $this->getDefaultRoutesConfig($dashboardFqcn);
-        $actionsRouteConfig = array_replace_recursive($defaultRoutesConfig, $this->getCustomActionsConfig($crudControllerFqcn));
-        if (!isset($actionsRouteConfig[$actionName])) {
-            return null;
-        }
-
-        $dashboardRouteConfig = $this->getDashboardsRouteConfig()[$dashboardFqcn];
-        $crudControllerRouteConfig = $this->getCrudControllerRouteConfig($crudControllerFqcn);
-        $actionRouteConfig = $actionsRouteConfig[$actionName];
-
-        return sprintf('%s_%s_%s', $dashboardRouteConfig['routeName'], $crudControllerRouteConfig['routeName'], $actionRouteConfig['routeName']);
+        return $adminRoutes;
     }
 
     /**
