@@ -20,6 +20,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\I18nDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Registry\CrudControllerRegistry;
 use EasyCorp\Bundle\EasyAdminBundle\Registry\TemplateRegistry;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminRouteGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,14 +38,16 @@ final class AdminContextFactory
     private MenuFactoryInterface $menuFactory;
     private CrudControllerRegistry $crudControllers;
     private EntityFactory $entityFactory;
+    private AdminRouteGenerator $adminRouteGenerator;
 
-    public function __construct(string $cacheDir, ?TokenStorageInterface $tokenStorage, MenuFactoryInterface $menuFactory, CrudControllerRegistry $crudControllers, EntityFactory $entityFactory)
+    public function __construct(string $cacheDir, ?TokenStorageInterface $tokenStorage, MenuFactoryInterface $menuFactory, CrudControllerRegistry $crudControllers, EntityFactory $entityFactory, AdminRouteGenerator $adminRouteGenerator)
     {
         $this->cacheDir = $cacheDir;
         $this->tokenStorage = $tokenStorage;
         $this->menuFactory = $menuFactory;
         $this->crudControllers = $crudControllers;
         $this->entityFactory = $entityFactory;
+        $this->adminRouteGenerator = $adminRouteGenerator;
     }
 
     public function create(Request $request, DashboardControllerInterface $dashboardController, ?CrudControllerInterface $crudController, ?string $actionName = null): AdminContext
@@ -65,7 +68,9 @@ final class AdminContextFactory
         $templateRegistry = $this->getTemplateRegistry($dashboardController, $crudDto);
         $user = $this->getUser($this->tokenStorage);
 
-        return new AdminContext($request, $user, $i18nDto, $this->crudControllers, $dashboardDto, $dashboardController, $assetDto, $crudDto, $entityDto, $searchDto, $this->menuFactory, $templateRegistry);
+        $usePrettyUrls = $this->adminRouteGenerator->usesPrettyUrls();
+
+        return new AdminContext($request, $user, $i18nDto, $this->crudControllers, $dashboardDto, $dashboardController, $assetDto, $crudDto, $entityDto, $searchDto, $this->menuFactory, $templateRegistry, $usePrettyUrls);
     }
 
     private function getDashboardDto(Request $request, DashboardControllerInterface $dashboardControllerInstance): DashboardDto

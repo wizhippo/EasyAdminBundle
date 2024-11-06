@@ -43,8 +43,9 @@ final class AdminContext
     private TemplateRegistry $templateRegistry;
     private ?MainMenuDto $mainMenuDto = null;
     private ?UserMenuDto $userMenuDto = null;
+    private bool $usePrettyUrls;
 
-    public function __construct(Request $request, ?UserInterface $user, I18nDto $i18nDto, CrudControllerRegistry $crudControllers, DashboardDto $dashboardDto, DashboardControllerInterface $dashboardController, AssetsDto $assetDto, ?CrudDto $crudDto, ?EntityDto $entityDto, ?SearchDto $searchDto, MenuFactoryInterface $menuFactory, TemplateRegistry $templateRegistry)
+    public function __construct(Request $request, ?UserInterface $user, I18nDto $i18nDto, CrudControllerRegistry $crudControllers, DashboardDto $dashboardDto, DashboardControllerInterface $dashboardController, AssetsDto $assetDto, ?CrudDto $crudDto, ?EntityDto $entityDto, ?SearchDto $searchDto, MenuFactoryInterface $menuFactory, TemplateRegistry $templateRegistry, bool $usePrettyUrls = false)
     {
         $this->request = $request;
         $this->user = $user;
@@ -58,6 +59,7 @@ final class AdminContext
         $this->searchDto = $searchDto;
         $this->menuFactory = $menuFactory;
         $this->templateRegistry = $templateRegistry;
+        $this->usePrettyUrls = $usePrettyUrls;
     }
 
     public function getRequest(): Request
@@ -109,7 +111,7 @@ final class AdminContext
 
     public function usePrettyUrls(): bool
     {
-        return true === (bool) $this->request->attributes->get(EA::ROUTE_CREATED_BY_EASYADMIN);
+        return $this->usePrettyUrls;
     }
 
     public function getDashboardTitle(): string
