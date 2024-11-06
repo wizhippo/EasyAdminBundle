@@ -168,7 +168,7 @@ return static function (ContainerConfigurator $container) {
             ->arg(2, service('controller_resolver'))
             ->arg(3, service('router'))
             ->arg(4, service('router'))
-            ->arg(5, service('router'))
+            ->arg(5, service('cache.easyadmin'))
             ->tag('kernel.event_subscriber')
 
         ->set(ControllerFactory::class)

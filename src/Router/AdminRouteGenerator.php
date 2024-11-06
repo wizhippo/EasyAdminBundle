@@ -23,7 +23,9 @@ use Symfony\Component\Routing\RouteCollection;
  */
 final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 {
-    public const ADMIN_ROUTES_CACHE_KEY = 'easyadmin.generated_routes';
+    public const CACHE_KEY_ROUTE_TO_FQCN = 'easyadmin.routes.route_to_fqcn';
+    public const CACHE_KEY_FQCN_TO_ROUTE = 'easyadmin.routes.fqcn_to_route';
+
     private const DEFAULT_ROUTES_CONFIG = [
         'index' => [
             'routePath' => '/',
@@ -78,16 +80,9 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
             $collection->add($routeName, $route);
         }
 
-        // save the generated routes in the cache; this will allow to detect
-        // if pretty URLs are being used in the application and also improves
-        // performance when finding a route name using the {dashboard, CRUD controller, action} tuple
-        $adminRoutesCache = [];
-        foreach ($adminRoutes as $routeName => $route) {
-            $adminRoutesCache[$route->getOption(EA::DASHBOARD_CONTROLLER_FQCN)][$route->getOption(EA::CRUD_CONTROLLER_FQCN)][$route->getOption(EA::CRUD_ACTION)] = $routeName;
-        }
-        $cachedAdminRoutes = $this->cache->getItem(self::ADMIN_ROUTES_CACHE_KEY);
-        $cachedAdminRoutes->set($adminRoutesCache);
-        $this->cache->save($cachedAdminRoutes);
+        // this dumps all admin routes in a performance-optimized format to later
+        // find them quickly without having to use Symfony's router service
+        $this->saveAdminRoutesInCache($adminRoutes);
 
         return $collection;
     }
@@ -96,14 +91,14 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
     // TODO: remove this method in EasyAdmin 5.x
     public function usesPrettyUrls(): bool
     {
-        $cachedAdminRoutes = $this->cache->getItem(self::ADMIN_ROUTES_CACHE_KEY)->get();
+        $cachedAdminRoutes = $this->cache->getItem(self::CACHE_KEY_FQCN_TO_ROUTE)->get();
 
         return null !== $cachedAdminRoutes && [] !== $cachedAdminRoutes;
     }
 
     public function findRouteName(string $dashboardFqcn, string $crudControllerFqcn, string $actionName): ?string
     {
-        $adminRoutes = $this->cache->getItem(self::ADMIN_ROUTES_CACHE_KEY)->get();
+        $adminRoutes = $this->cache->getItem(self::CACHE_KEY_FQCN_TO_ROUTE)->get();
 
         return $adminRoutes[$dashboardFqcn][$crudControllerFqcn][$actionName] ?? null;
     }
@@ -365,5 +360,35 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         $shortName = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $shortName));
 
         return $shortName;
+    }
+
+    /**
+     * @param Route[] $adminRoutes
+     */
+    private function saveAdminRoutesInCache(array $adminRoutes): void
+    {
+        // to speedup the look up of routes in different parts of the bundle,
+        // we cache the admin routes in two different maps:
+        // 1) $cache[route_name] => [dashboard, CRUD controller, action]
+        // 2) $cache[dashboard][CRUD controller][action] => route_name
+        $routeNameToFqcn = [];
+        $fqcnToRouteName = [];
+        foreach ($adminRoutes as $routeName => $route) {
+            $routeNameToFqcn[$routeName] = [
+                EA::DASHBOARD_CONTROLLER_FQCN => $route->getOption(EA::DASHBOARD_CONTROLLER_FQCN),
+                EA::CRUD_CONTROLLER_FQCN => $route->getOption(EA::CRUD_CONTROLLER_FQCN),
+                EA::CRUD_ACTION => $route->getOption(EA::CRUD_ACTION),
+            ];
+
+            $fqcnToRouteName[$route->getOption(EA::DASHBOARD_CONTROLLER_FQCN)][$route->getOption(EA::CRUD_CONTROLLER_FQCN)][$route->getOption(EA::CRUD_ACTION)] = $routeName;
+        }
+
+        $routeNameToFqcnItem = $this->cache->getItem(self::CACHE_KEY_ROUTE_TO_FQCN);
+        $routeNameToFqcnItem->set($routeNameToFqcn);
+        $this->cache->save($routeNameToFqcnItem);
+
+        $fqcnToRouteNameItem = $this->cache->getItem(self::CACHE_KEY_FQCN_TO_ROUTE);
+        $fqcnToRouteNameItem->set($fqcnToRouteName);
+        $this->cache->save($fqcnToRouteNameItem);
     }
 }
