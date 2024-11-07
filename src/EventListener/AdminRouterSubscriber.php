@@ -7,6 +7,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\CrudControllerInterface
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\DashboardControllerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\AdminContextFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\ControllerFactory;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminRouteGenerator;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
@@ -14,7 +16,6 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * This subscriber acts as a "proxy" of all backend requests. First, if the
@@ -36,16 +37,16 @@ class AdminRouterSubscriber implements EventSubscriberInterface
     private ControllerResolverInterface $controllerResolver;
     private UrlGeneratorInterface $urlGenerator;
     private RequestMatcherInterface $requestMatcher;
-    private RouterInterface $router;
+    private CacheItemPoolInterface $cache;
 
-    public function __construct(AdminContextFactory $adminContextFactory, ControllerFactory $controllerFactory, ControllerResolverInterface $controllerResolver, UrlGeneratorInterface $urlGenerator, RequestMatcherInterface $requestMatcher, RouterInterface $router)
+    public function __construct(AdminContextFactory $adminContextFactory, ControllerFactory $controllerFactory, ControllerResolverInterface $controllerResolver, UrlGeneratorInterface $urlGenerator, RequestMatcherInterface $requestMatcher, CacheItemPoolInterface $cache)
     {
         $this->adminContextFactory = $adminContextFactory;
         $this->controllerFactory = $controllerFactory;
         $this->controllerResolver = $controllerResolver;
         $this->urlGenerator = $urlGenerator;
         $this->requestMatcher = $requestMatcher;
-        $this->router = $router;
+        $this->cache = $cache;
     }
 
     public static function getSubscribedEvents(): array
@@ -68,16 +69,14 @@ class AdminRouterSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $routes = $this->router->getRouteCollection();
-        $route = $routes->get($routeName);
-
-        if (null === $route || true !== $route->getOption(EA::ROUTE_CREATED_BY_EASYADMIN)) {
+        $adminRoutes = $this->cache->getItem(AdminRouteGenerator::CACHE_KEY_ROUTE_TO_FQCN)->get();
+        if (null === $adminRoutes || !\array_key_exists($routeName, $adminRoutes)) {
             return;
         }
 
         $request->attributes->set(EA::ROUTE_CREATED_BY_EASYADMIN, true);
 
-        $dashboardControllerFqcn = $route->getOption(EA::DASHBOARD_CONTROLLER_FQCN);
+        $dashboardControllerFqcn = $adminRoutes[$routeName][EA::DASHBOARD_CONTROLLER_FQCN];
         if (null === $dashboardControllerInstance = $this->getDashboardControllerInstance($dashboardControllerFqcn, $request)) {
             return;
         }
@@ -85,8 +84,8 @@ class AdminRouterSubscriber implements EventSubscriberInterface
         // creating the context is expensive, so it's created once and stored in the request
         // if the current request already has an AdminContext object, do nothing
         if (null === $adminContext = $request->attributes->get(EA::CONTEXT_REQUEST_ATTRIBUTE)) {
-            $crudControllerFqcn = $route->getOption(EA::CRUD_CONTROLLER_FQCN);
-            $actionName = $route->getOption(EA::CRUD_ACTION);
+            $crudControllerFqcn = $adminRoutes[$routeName][EA::CRUD_CONTROLLER_FQCN];
+            $actionName = $adminRoutes[$routeName][EA::CRUD_ACTION];
 
             $request->attributes->set(EA::DASHBOARD_CONTROLLER_FQCN, $dashboardControllerFqcn);
             $request->attributes->set(EA::CRUD_CONTROLLER_FQCN, $crudControllerFqcn);
