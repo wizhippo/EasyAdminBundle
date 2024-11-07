@@ -39,12 +39,17 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         ],
         'batchDelete' => [
             'routePath' => '/batchDelete',
-            'routeName' => 'batchDelete',
+            'routeName' => 'batch_delete',
             'methods' => ['POST'],
         ],
         'autocomplete' => [
             'routePath' => '/autocomplete',
             'routeName' => 'autocomplete',
+            'methods' => ['GET'],
+        ],
+        'renderFilters' => [
+            'routePath' => '/renderFilters',
+            'routeName' => 'render_filters',
             'methods' => ['GET'],
         ],
         'edit' => [
