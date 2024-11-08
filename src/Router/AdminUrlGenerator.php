@@ -327,8 +327,7 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
             $crudControllerFqcn = $this->get(EA::CRUD_CONTROLLER_FQCN) ?? $context->getRequest()->attributes->get(EA::CRUD_CONTROLLER_FQCN);
             $actionName = $this->get(EA::CRUD_ACTION) ?? $context->getRequest()->attributes->get(EA::CRUD_ACTION);
 
-            $routeName = $this->adminRouteGenerator->findRouteName($dashboardControllerFqcn, $crudControllerFqcn, $actionName);
-            if (null === $routeName) {
+            if (null === $crudControllerFqcn || null === $routeName = $this->adminRouteGenerator->findRouteName($dashboardControllerFqcn, $crudControllerFqcn, $actionName)) {
                 $routeName = $this->dashboardRoute;
             } else {
                 // remove these parameters so they don't appear in the query string when using pretty URLs
