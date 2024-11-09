@@ -1,5 +1,4 @@
 var Encore = require('@symfony/webpack-encore');
-const WebpackRTLPlugin = require('@automattic/webpack-rtl-plugin');
 
 Encore
     .setOutputPath('./src/Resources/public/')
@@ -29,8 +28,6 @@ Encore
         from: './assets/images/flags/',
         to: 'images/flags/[path][name].[ext]',
     })
-
-    .addPlugin(new WebpackRTLPlugin())
 
     .configureCssMinimizerPlugin((options) => {
         options.minimizerOptions = {

@@ -784,7 +784,7 @@
 .alert {
     --bs-alert-padding-x: 1rem;
     --bs-alert-padding-y: 1rem;
-    --bs-alert-margin-bottom: 0;
+    --bs-alert-margin-block-end: 0;
     --bs-alert-border-radius: 0;
     --bs-alert-link-color: inherit;
 }
