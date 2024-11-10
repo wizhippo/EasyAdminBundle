@@ -17,4 +17,11 @@ class EasyAdminBundle extends Bundle
     {
         $container->addCompilerPass(new CreateControllerRegistriesPass());
     }
+
+    public function getPath(): string
+    {
+        $reflected = new \ReflectionObject($this);
+
+        return \dirname($reflected->getFileName(), 2);
+    }
 }
