@@ -79,7 +79,8 @@
     {%  set field = form.vars.ea_vars.field %}
 
     <div class="{{ field.columns ?? field.defaultColumns ?? '' }}">
-        <div {% with { attr: row_attr } %}{{ block('attributes') }}{% endwith %}>
+        {%- set row_class = row_class|default(row_attr.class|default('mb-3')) -%}
+        <div {% with {attr: row_attr|merge({class: (row_class ~ ((not compound or force_error|default(false)) and not valid ? ' has-error'))|trim})} %}{{ block('attributes') }}{% endwith %}>
             {{- form_label(form) -}}
             <div class="form-widget">
                 {% set has_prepend_html = field.prepend_html|default(null) is not null %}
@@ -531,7 +532,7 @@
         'data-trix-editor-config': form.vars.ea_vars.field.customOptions.get('trixEditorConfig')|default(null)|json_encode,
     }) }) }}
 
-    <div class="ea-text-editor-wrapper">
+    <div class="ea-text-editor-wrapper {{ row_attr.class|default('') ~ (not valid ? ' has-error') }}">
         <trix-editor input="{{ id }}" class="trix-content"></trix-editor>
     </div>
 {% endblock ea_text_editor_widget %}
