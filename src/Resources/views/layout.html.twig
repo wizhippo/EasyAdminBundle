@@ -41,10 +41,6 @@
         {{ include('@EasyAdmin/includes/_encore_script_tags.html.twig', { assets: ea.assets.webpackEncoreAssets ?? [] }, with_context = false) }}
     {% endblock %}
 
-    {% if 'rtl' == ea.i18n.textDirection %}
-        <link rel="stylesheet" href="{{ asset('app.rtl.css', ea.assets.defaultAssetPackageName) }}">
-    {% endif %}
-
     {% block configured_head_contents %}
         {% for htmlContent in ea.assets.headContents ?? [] %}
             {{ htmlContent|raw }}

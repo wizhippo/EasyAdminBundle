@@ -35,6 +35,10 @@ jobs:
               with:
                   args: --diff --dry-run
 
+            - name: Lint logical CSS properties
+              run: |
+                  php ./src/Resources/bin/logical-css-properties-linter.php
+
     phpstan:
         runs-on: ubuntu-latest
         steps:

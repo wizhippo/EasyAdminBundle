@@ -13,7 +13,13 @@
             <ul class="pagination">
                 <li class="page-item page-item-previous {{ not paginator.hasPreviousPage ? 'disabled' }}">
                     <a class="page-link" href="{{ not paginator.hasPreviousPage ? '#' : paginator.generateUrlForPage(paginator.previousPage) }}">
-                        <i class="fa fa-angle-left mx-1" aria-label="{{ 'paginator.previous'|trans }}"></i> <span class="btn-label">{{ 'paginator.previous'|trans }}</span>
+                        {% if 'rtl' == ea.i18n.textDirection %}
+                            <i class="fa fa-angle-right mx-1" aria-label="{{ 'paginator.previous'|trans }}"></i>
+                        {% else %}
+                            <i class="fa fa-angle-left mx-1" aria-label="{{ 'paginator.previous'|trans }}"></i>
+                        {% endif %}
+
+                        <span class="btn-label">{{ 'paginator.previous'|trans }}</span>
                     </a>
                 </li>
 
@@ -35,7 +41,13 @@
 
                 <li class="page-item page-item-next {{ not paginator.hasNextPage ? 'disabled' }}">
                     <a class="page-link" href="{{ not paginator.hasNextPage ? '#' : paginator.generateUrlForPage(paginator.nextPage) }}">
-                        <span class="btn-label">{{ 'paginator.next'|trans }}</span> <i class="fa fa-angle-right mx-1" aria-label="{{ 'paginator.next'|trans }}"></i>
+                        <span class="btn-label">{{ 'paginator.next'|trans }}</span>
+
+                        {% if 'rtl' == ea.i18n.textDirection %}
+                            <i class="fa fa-angle-left mx-1" aria-label="{{ 'paginator.next'|trans }}"></i>
+                        {% else %}
+                            <i class="fa fa-angle-right mx-1" aria-label="{{ 'paginator.next'|trans }}"></i>
+                        {% endif %}
                     </a>
                 </li>
             </ul>

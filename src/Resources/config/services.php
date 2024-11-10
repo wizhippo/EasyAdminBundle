@@ -31,7 +31,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\AssociationConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\AvatarConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\BooleanConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\ChoiceConfigurator;
-use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\CodeEditorConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\CollectionConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\CommonPostConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\CommonPreConfigurator;
@@ -51,7 +50,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\PercentConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\SlugConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\TelephoneConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\TextConfigurator;
-use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\TextEditorConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\TimezoneConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\UrlConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\Configurator\ChoiceConfigurator as ChoiceFilterConfigurator;
@@ -329,8 +327,6 @@ return static function (ContainerConfigurator $container) {
             ->arg(0, service(AdminUrlGenerator::class))
             ->arg(1, new Reference('security.csrf.token_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE))
 
-        ->set(CodeEditorConfigurator::class)
-
         ->set(CollectionConfigurator::class)
 
         ->set(CommonPostConfigurator::class)
@@ -388,8 +384,6 @@ return static function (ContainerConfigurator $container) {
         ->set(TelephoneConfigurator::class)
 
         ->set(TextConfigurator::class)
-
-        ->set(TextEditorConfigurator::class)
 
         ->set(TimezoneConfigurator::class)
 
