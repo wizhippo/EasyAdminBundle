@@ -491,11 +491,17 @@ label.form-check-label {
 .has-error .form-widget input.form-control,
 .has-error .form-widget textarea.form-control,
 .has-error .form-widget .form-select,
+.has-error .form-widget input.form-check-input,
 .has-error .ea-fileupload .input-group,
 .has-error .btn.input-file-container,
 .has-error .CodeMirror,
-.has-error .ea-text-editor-wrapper {
+.has-error.ea-text-editor-wrapper, .has-error.form-group .ea-text-editor-wrapper {
+    border-color: var(--form-input-error-border-color);
     box-shadow: var(--form-input-error-shadow);
+}
+.form-group.has-error label,
+.form-group.has-error legend {
+    color: var(--form-input-error-legend-color);
 }
 
 .has-error .ea-fileupload .input-group {
