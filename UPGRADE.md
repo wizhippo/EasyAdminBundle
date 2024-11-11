@@ -1,6 +1,19 @@
 Upgrade between EasyAdmin 4.x versions
 ======================================
 
+EasyAdmin 4.16.0
+----------------
+
+### FontAwesome Icons Are Now Inlined as SVGs
+
+As part of the new feature that allows to use custom icon sets, the FontAwesome
+icons included by default in EasyAdmin are now inlined as SVGs. The font files
+(.ttf, .woff2) and the CSS file that loads the icons have been removed.
+
+This doesn't require any change on your side, unless you were relying on the
+FontAwesome CSS classes to style the icons, which is something undocumented and
+not recommended.
+
 EasyAdmin 4.14.0
 ----------------
 

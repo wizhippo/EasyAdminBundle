@@ -56,6 +56,8 @@
         data-ea-sidebar-width="{{ ea.crud.sidebarWidth ?? ea.dashboardSidebarWidth ?? 'normal' }}"
         data-ea-dark-scheme-is-enabled="{{ ea.dashboardHasDarkModeEnabled ? 'true' : 'false' }}"
         data-ea-default-color-scheme="{{ ea.dashboardDefaultColorScheme }}"
+        data-ea-icon-set="{{ ea.assets.iconSet }}"
+        data-ea-icon-prefix="{{ ea.assets.defaultIconPrefix }}"
     >
     {% block javascript_page_layout %}
         <script src="{{ asset('page-layout.js', ea.assets.defaultAssetPackageName) }}"></script>
@@ -72,10 +74,7 @@
         {% set user_menu_avatar %}
             {% if null == ea.userMenu.avatarUrl %}
                 <span class="user-avatar">
-                    <span class="fa-stack">
-                        <i class="user-avatar-icon-background fas fa-square fa-stack-2x"></i>
-                        <i class="user-avatar-icon-foreground {{ ea.user is not null ? 'fa fa-user' : 'fas fa-user-slash' }} fa-stack-1x fa-inverse"></i>
-                    </span>
+                    <twig:ea:Icon name="internal:user" />
                 </span>
             {% else %}
                 <img class="user-avatar" src="{{ ea.userMenu.avatarUrl }}" />
@@ -105,7 +104,7 @@
                                     <a href="{{ item.linkUrl }}" class="dropdown-item user-action {{ item.cssClass }}"
                                        target="{{ item.linkTarget }}" rel="{{ item.linkRel }}"
                                        referrerpolicy="origin-when-cross-origin">
-                                        {% if item.icon is not empty %}<i class="fa fa-fw {{ item.icon }}"></i>{% endif %}
+                                        {% if item.icon is not empty %}<twig:ea:Icon name="{{ item.icon }}" />{% endif %}
                                         {{ item.label|trans }}
                                     </a>
                                 {% endif %}
@@ -120,7 +119,7 @@
             {% if ea.dashboardLocales or ea.dashboardHasDarkModeEnabled %}
                 <div class="dropdown dropdown-settings">
                     <a class="dropdown-settings-button" type="button" data-bs-toggle="dropdown" data-bs-offset="0,5" aria-expanded="false">
-                        <i class="fas fa-gear"></i>
+                        <twig:ea:Icon name="internal:gear" />
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -133,7 +132,7 @@
                                 <li>
                                     <a href="{{ ea_url().set('_locale', localeDto.locale) }}" class="dropdown-item{% if app.request.locale == localeDto.locale %} active{% endif %}">
                                         {% if localeDto.icon %}
-                                            <i class="{{ localeDto.icon }}"></i>
+                                            <twig:ea:Icon name="{{ localeDto.icon }}" />
                                         {% endif %}
                                         {{ localeDto.name }}
                                     </a>
@@ -151,19 +150,19 @@
                             </li>
                             <li>
                                 <a href="#" class="dropdown-item dropdown-appearance-item" data-ea-color-scheme="light">
-                                    <i class="far fa-sun fa-fw"></i>
+                                    <twig:ea:Icon name="internal:sun" />
                                     {{ 'settings.appearance.light'|trans(domain = 'EasyAdminBundle') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="dropdown-item dropdown-appearance-item" data-ea-color-scheme="dark">
-                                    <i class="far fa-moon fa-fw"></i>
+                                    <twig:ea:Icon name="internal:moon" />
                                     {{ 'settings.appearance.dark'|trans(domain = 'EasyAdminBundle') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="dropdown-item dropdown-appearance-item active" data-ea-color-scheme="auto">
-                                    <i class="fas fa-desktop fa-fw"></i>
+                                    <twig:ea:Icon name="internal:desktop" />
                                     {{ 'settings.appearance.auto'|trans(domain = 'EasyAdminBundle') }}
                                 </a>
                             </li>
@@ -178,7 +177,7 @@
                 <div class="responsive-header">
                     {% block responsive_header %}
                         <button id="navigation-toggler" type="button" aria-label="Toggle navigation">
-                            <i class="fa fa-fw fa-bars"></i>
+                            <twig:ea:Icon name="internal:menu-bars" />
                         </button>
 
                         <div id="responsive-header-logo" class="text-truncate ms-auto">
@@ -196,7 +195,7 @@
                                 {% if ea.userMenu.avatarDisplayed %}
                                     {{ user_menu_avatar }}
                                 {% else %}
-                                    <i class="user-avatar fa fa-fw {{ ea.user is not null ? 'fa-user' : 'fa-user-times' }}"></i>
+                                    <twig:ea:Icon class="user-avatar" name="{{ ea.user is not null ? 'inernal:user' : 'internal:user-xmark' }}" />
                                 {% endif %}
                             </a>
 
@@ -218,7 +217,7 @@
                                             {% block header_logo %}
                                                 <a class="logo" title="{{ ea.dashboardTitle|striptags }}" href="{{ path(ea.dashboardRouteName) }}">
                                                     <span class="logo-custom">{{ ea.dashboardTitle|raw }}</span>
-                                                    <span class="logo-compact"><i class="fas fa-home"></i></span>
+                                                    <span class="logo-compact"><twig:ea:Icon name="internal:home" /></span>
                                                 </a>
                                             {% endblock header_logo %}
                                         </div>
@@ -284,7 +283,7 @@
 
                                                 <div class="form-group">
                                                     <div class="form-widget">
-                                                        <i class="fas fa-search content-search-icon"></i>
+                                                        <twig:ea:Icon name="internal:search" class="content-search-icon" />
 
                                                         <label class="content-search-label" data-value="{{ app.request.get('query') }}">
                                                             <input class="form-control {{ app.request.get('query') is null ? 'is-blank' }}" type="search" name="query" value="{{ app.request.get('query') ?? '' }}" placeholder="{{ t('action.search', ea.i18n.translationParameters, 'EasyAdminBundle')|trans }}" spellcheck="false" autocorrect="off" onInput="this.parentNode.dataset.value=this.value"{% if ea.crud.currentAction == 'index' and ea.crud.autofocusSearch == true %} autofocus="autofocus"{% endif %}>
@@ -296,7 +295,7 @@
                                                                 {% set search_reset_url = ea_url().unset('query').setController(ea.request.attributes.get('crudControllerFqcn')).setAction('index').set('page', 1) %}
                                                             {% endif %}
                                                             <a href="{{ search_reset_url }}" class="content-search-reset">
-                                                                <i class="fas fa-fw fa-times"></i>
+                                                                <twig:ea:Icon name="internal:xmark" />
                                                             </a>
                                                         {% endif %}
                                                     </div>
@@ -345,7 +344,7 @@
                                                     {% block content_help %}
                                                         {% if has_help_message %}
                                                             <a tabindex="0" class="content-header-help" data-bs-toggle="popover" data-bs-custom-class="ea-content-help-popover" data-bs-animation="true" data-bs-html="true" data-bs-placement="bottom" data-bs-trigger="focus" data-bs-content="{{ ea.crud.helpMessage|trans|e('html_attr') }}">
-                                                                <i class="far fa-question-circle"></i>
+                                                                <twig:ea:Icon name="internal:circle-info" />
                                                             </a>
                                                         {% endif %}
                                                     {% endblock %}

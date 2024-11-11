@@ -299,9 +299,21 @@ The arguments of the ``addTab()`` method are:
   icon for the tab or users won't be able to click on it); You can also pass
   ``string`` and ``TranslatableInterface`` variables. In both cases, if they
   contain HTML tags they will be rendered in stead of escaped;
-* ``$icon``: (type: ``?string``) the full CSS class of a `FontAwesome icon`_
-  (e.g. ``far fa-folder-open``); if you don't display a text label for the tab,
-  make sure to display an icon or users won't be able to click on the tab.
+* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6regular:folder-open``);
+  if you don't display a text label for the tab, make sure to display an icon or
+  users won't be able to click on the tab.
+
+.. note::
+
+    By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
+    (``fa6regular:``, ``fa6solid:`` and ``fa6brands:``), but you can
+    :ref:`use your own icon sets <icon-customization>`.
+
+    .. deprecated:: 4.16
+
+        In EasyAdmin versions prior to 4.16.0, the icon name was defined as the full
+        FontAwesome CSS class: e.g., ``fa-regular fa-user``. This syntax is now
+        deprecated and will be removed in EasyAdmin 5.0.0.
 
 Inside tabs you can include not only form fields but all the other form layout
 fields explained in the following sections: columns, fieldsets and rows. This
@@ -360,12 +372,24 @@ The arguments of the ``addColumn()`` method are:
   or an empy string, no title is displayed. You can also pass ``string`` and
   ``TranslatableInterface`` variables. In both cases, if they contain HTML tags
   they will be rendered in stead of escaped;
-* ``$icon``: (type: ``?string``) the full CSS class of a `FontAwesome icon`_
-  (e.g. ``far fa-folder-open``) that is displayed next to the column label;
+* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6regulat:folder-open``)
+  that is displayed next to the column label;
 * ``$help``: (type: ``?string``) an optional content that is displayed below the
   column label; it's mostly used to describe the column contents or provide further
   instructions or help contents. You can include HTML tags and they will be
   rendered instead of escaped.
+
+.. note::
+
+    By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
+    (``fa6regular:``, ``fa6solid:`` and ``fa6brands:``), but you can
+    :ref:`use your own icon sets <icon-customization>`.
+
+    .. deprecated:: 4.16
+
+        In EasyAdmin versions prior to 4.16.0, the icon name was defined as the full
+        FontAwesome CSS class: e.g., ``fa-regular fa-user``. This syntax is now
+        deprecated and will be removed in EasyAdmin 5.0.0.
 
 Thanks to Bootstrap responsive classes, you can have columns of different sizes,
 or even no columns at all, depending on the browser window size. In the following
@@ -451,7 +475,7 @@ Add fieldsets with the created with the ``addFieldset()`` method of the special
 
             // fieldsets can also define their icon, CSS class and help message
             FormField::addFieldset('Contact information')
-                ->setIcon('phone')->addCssClass('optional')
+                ->setIcon('fa6solid:phone')->addCssClass('optional')
                 ->setHelp('Phone number is preferred'),
             TextField::new('phone'),
             TextField::new('email')->hideOnIndex(),
@@ -471,8 +495,20 @@ The arguments of the ``addFieldset()`` method are:
   or an empy string, no title is displayed. You can also pass ``string`` and
   ``TranslatableInterface`` variables. In both cases, if they contain HTML tags
   they will be rendered in stead of escaped;
-* ``$icon``: (type: ``?string``) the full CSS class of a `FontAwesome icon`_
-  (e.g. ``far fa-folder-open``) that is displayed next to the fieldset label.
+* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6regular:folder-open``)
+  that is displayed next to the fieldset label.
+
+.. note::
+
+    By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
+    (``fa6regular:``, ``fa6solid:`` and ``fa6brands:``), but you can
+    :ref:`use your own icon sets <icon-customization>`.
+
+    .. deprecated:: 4.16
+
+        In EasyAdmin versions prior to 4.16.0, the icon name was defined as the full
+        FontAwesome CSS class: e.g., ``fa-regular fa-user``. This syntax is now
+        deprecated and will be removed in EasyAdmin 5.0.0.
 
 When using form columns, fieldsets inside them display a slightly different
 design to better group the different fields. That's why it's recommended to
@@ -995,4 +1031,4 @@ attribute of the tag to run your configurator before or after the built-in ones.
 .. _`Doctrine DBAL Type`: https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html
 .. _`Custom Mapping Types`: https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html#custom-mapping-types
 .. _`Custom Form Field Types`: https://symfony.com/doc/current/form/create_custom_field_type.html
-.. _`FontAwesome icon`: https://fontawesome.com/v6/search?m=free
+.. _`FontAwesome`: https://fontawesome.com/

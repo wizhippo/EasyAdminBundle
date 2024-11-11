@@ -64,7 +64,7 @@ abstract class AbstractDashboardController extends AbstractController implements
 
         if (class_exists(LogoutUrlGenerator::class)) {
             $userMenuItems[] = MenuItem::section();
-            $userMenuItems[] = MenuItem::linkToLogout(t('user.sign_out', domain: 'EasyAdminBundle'), 'fa-sign-out');
+            $userMenuItems[] = MenuItem::linkToLogout(t('user.sign_out', domain: 'EasyAdminBundle'), 'internal:sign-out');
         }
         if ($this->isGranted(Permission::EA_EXIT_IMPERSONATION)) {
             $userMenuItems[] = MenuItem::linkToExitImpersonation(t('user.exit_impersonation', domain: 'EasyAdminBundle'), 'fa-user-lock');

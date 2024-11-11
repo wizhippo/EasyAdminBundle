@@ -514,21 +514,34 @@ the look and behavior of each menu item::
         public function configureMenuItems(): iterable
         {
             return [
-                MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
+                MenuItem::linkToDashboard('Dashboard', 'fa6solid:house'),
 
                 MenuItem::section('Blog'),
-                MenuItem::linkToCrud('Categories', 'fa fa-tags', Category::class),
-                MenuItem::linkToCrud('Blog Posts', 'fa fa-file-text', BlogPost::class),
+                MenuItem::linkToCrud('Categories', 'fa6solid:tags', Category::class),
+                MenuItem::linkToCrud('Blog Posts', 'fa6regular:lines', BlogPost::class),
 
                 MenuItem::section('Users'),
-                MenuItem::linkToCrud('Comments', 'fa fa-comment', Comment::class),
-                MenuItem::linkToCrud('Users', 'fa fa-user', User::class),
+                MenuItem::linkToCrud('Comments', 'fa6regular:comments', Comment::class),
+                MenuItem::linkToCrud('Users', 'fa6solid:user', User::class),
             ];
         }
     }
 
 The first argument of ``MenuItem::new()`` is the label displayed by the item and
-the second argument is the full CSS class of the `FontAwesome`_ icon to display.
+the second argument is the icon to display. The icon name follows the pattern
+``icon_set:icon_name``, the same as used in `Symfony UX Icons`_.
+
+.. note::
+
+    By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
+    (``fa6regular:``, ``fa6solid:`` and ``fa6brands:``), but you can
+    :ref:`use your own icon sets <icon-customization>`.
+
+    .. deprecated:: 4.16
+
+        In EasyAdmin versions prior to 4.16.0, the icon name was defined as the full
+        FontAwesome CSS class: e.g., ``fa-regular fa-user``. This syntax is now
+        deprecated and will be removed in EasyAdmin 5.0.0.
 
 Menu Item Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1107,7 +1120,7 @@ etc. Example:
 .. _`Symfony controllers`: https://symfony.com/doc/current/controller.html
 .. _`Symfony route annotations`: https://symfony.com/doc/current/routing.html#creating-routes-as-annotations
 .. _`context object`: https://wiki.c2.com/?ContextObject
-.. _`FontAwesome`: https://fontawesome.com/v6/search?m=free
+.. _`FontAwesome`: https://fontawesome.com/
 .. _`allowed values for the "rel" attribute`: https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types
 .. _`Symfony security permission`: https://symfony.com/doc/current/security.html#roles
 .. _`logout feature`: https://symfony.com/doc/current/security.html#logging-out
@@ -1115,3 +1128,4 @@ etc. Example:
 .. _`translation domain`: https://symfony.com/doc/current/components/translation.html#using-message-domains
 .. _`Symfony UX Chart.js`: https://symfony.com/bundles/ux-chartjs/current/index.html
 .. _`custom Symfony route loader`: https://symfony.com/doc/current/routing/custom_route_loader.html
+.. _`Symfony UX Icons`: https://symfony.com/bundles/ux-icons/current/index.html

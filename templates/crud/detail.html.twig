@@ -126,7 +126,7 @@
                 <li class="nav-item">
                     <a class="nav-link {% if tab.getCustomOption(tab_is_active_option_name) %}active{% endif %}" href="#{{ tab.getCustomOption(tab_id_option_name) }}" id="tablist-{{ tab.getCustomOption(tab_id_option_name) }}" data-bs-toggle="tab">
                         {%- if tab.getCustomOption('icon')|default(false) -%}
-                            <i class="tab-nav-item-icon fa-fw {{ tab.getCustomOption('icon') }}"></i>
+                            <twig:ea:Icon name="{{ tab.getCustomOption('icon') }}" class="tab-nav-item-icon"/>
                         {%- endif -%}
                         {{ tab.label|trans(domain = ea.i18n.translationDomain)|raw }}
 
@@ -194,7 +194,7 @@
         {% if column_has_title %}
             <div class="form-column-title">
                 <div class="form-column-title-content">
-                    {% if field_icon %}<i class="form-column-icon fa fa-fw fa-{{ field_icon }}"></i>{% endif %}
+                    {% if field_icon %}<twig:ea:Icon name="{{ field_icon }}" class="form-column-icon" />{% endif %}
                     {% if field.label %}{{ field.label|trans(domain = ea.i18n.translationDomain)|raw }}{% endif %}
                 </div>
 
@@ -223,11 +223,11 @@
                     <div class="form-fieldset-title">
                         {% set fieldset_title_contents %}
                             {% if is_collapsible %}
-                                <i class="fas fw fa-chevron-right form-fieldset-collapse-marker"></i>
+                                <twig:ea:Icon name="internal:chevron-right" class="form-fieldset-collapse-marker"/>
                             {% endif %}
 
                             {% if field.getCustomOption('icon') %}
-                                <i class="form-fieldset-icon {{ field.getCustomOption('icon') }}"></i>
+                                <twig:ea:Icon name="{{ field.getCustomOption('icon') }}" class="form-fieldset-icon" />
                             {% endif %}
 
                             {{ field.label|trans|raw }}
@@ -274,7 +274,7 @@
                     <li class="nav-item">
                         <a class="nav-link {% if loop.first %}active{% endif %}" href="#tab-pane-{{ tab.uniqueId }}" id="tab-{{ tab.uniqueId }}" data-bs-toggle="tab">
                             {%- if tab.customOption('icon') -%}
-                                <i class="fa-fw {{ tab.customOption('icon') }}"></i>
+                                <twig:ea:Icon name="{{ tab.customOption('icon') }}" />
                             {%- endif -%}
                             {{ tab.label|trans(domain = ea.i18n.translationDomain)|raw }}
                         </a>
@@ -354,11 +354,11 @@
                         {% endif %}
                         >
                             {% if collapsible %}
-                                <i class="fas fw fa-chevron-right form-fieldset-collapse-marker"></i>
+                                <twig:ea:Icon name="internal:chevron-right" class="form-fieldset-collapse-marker"/>
                             {% endif %}
 
                             {% if fieldset_icon %}
-                                <i class="form-fieldset-icon {{ fieldset_icon }}"></i>
+                                <twig:ea:Icon name="{{ fieldset_icon }}" class="form-fieldset-icon" />
                             {% endif %}
                             {{ fieldset_label|trans|raw }}
                         </a>
@@ -392,7 +392,7 @@
 
             {% if field.help is not empty %}
                 <a tabindex="0" class="data-help" data-bs-toggle="popover" data-bs-custom-class="ea-content-help-popover" data-bs-animation="true" data-bs-html="true" data-bs-placement="right" data-bs-trigger="focus" data-bs-content="{{ field.help|trans|e('html_attr') }}">
-                    <i class="far fa-question-circle"></i>
+                    <twig:ea:Icon name="internal:circle-info" />
                 </a>
             {% endif %}
         </dt>

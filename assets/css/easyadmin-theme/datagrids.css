@@ -79,7 +79,7 @@ table.datagrid {
   box-shadow: inset 0 -2px 0 var(--table-cell-border-color);
   padding: 0;
 }
-.datagrid thead a, .datagrid thead span {
+.datagrid thead a, .datagrid thead > span {
   color: var(--table-thead-color);
   display: block;
   font-weight: 500;
@@ -106,7 +106,8 @@ table.datagrid {
 .datagrid thead .sorted a, .datagrid thead .sorted span {
   font-weight: 700;
 }
-.datagrid thead i {
+.datagrid thead i,
+.datagrid thead .icon {
   color: var(--table-thead-marker-color);
   margin-inline-start: 2px;
 }
@@ -116,8 +117,10 @@ table.datagrid {
 .datagrid thead .sorted a, .datagrid thead .sorted span {
   color: var(--table-thead-sorted-color);
 }
-.datagrid thead .sorted i {
+.datagrid thead .sorted i,
+.datagrid thead .sorted .icon {
   color: var(--table-thead-sorted-marker-color);
+  display: inline-block;
 }
 .datagrid th, .datagrid td {
   border: none;
@@ -349,7 +352,7 @@ table.datagrid {
   border-radius: var(--border-radius);
   padding: 15px;
 }
-.action-filters-button i {
+.action-filters-button .icon {
   color: var(--text-color-light);
 }
 .action-filters-button.action-filters-applied i {

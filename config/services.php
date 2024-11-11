@@ -82,6 +82,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Router\UrlSigner;
 use EasyCorp\Bundle\EasyAdminBundle\Security\AuthorizationChecker;
 use EasyCorp\Bundle\EasyAdminBundle\Security\SecurityVoter;
+use EasyCorp\Bundle\EasyAdminBundle\Twig\Component\Icon;
 use EasyCorp\Bundle\EasyAdminBundle\Twig\EasyAdminTwigExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Reference;
@@ -134,6 +135,7 @@ return static function (ContainerConfigurator $container) {
             ->arg(2, new Reference('security.csrf.token_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE))
             ->arg(3, new Reference('asset_mapper.importmap.renderer', ContainerInterface::NULL_ON_INVALID_REFERENCE))
             ->arg(4, service('translator'))
+            ->arg(5, new Reference('.ux_icons.twig_icon_runtime', ContainerInterface::NULL_ON_INVALID_REFERENCE))
             ->tag('twig.extension')
 
         ->set(EaCrudFormTypeExtension::class)
@@ -392,5 +394,9 @@ return static function (ContainerConfigurator $container) {
         ->set(AssetPackage::class)
             ->arg(0, service('request_stack'))
             ->tag('assets.package', ['package' => AssetPackage::PACKAGE_NAME])
+
+        ->set(Icon::class)
+            ->arg(0, service(AdminContextProvider::class))
+            ->tag('twig.component')
     ;
 };

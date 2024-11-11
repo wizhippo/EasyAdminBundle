@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-$manifestJsonPath = __DIR__.'/../public/manifest.json';
+$manifestJsonPath = __DIR__.'/../../../public/manifest.json';
 if (!file_exists($manifestJsonPath)) {
     return 0;
 }
@@ -50,7 +50,7 @@ function fixFontPathsInCssFiles(string $manifestJsonPath)
             continue;
         }
 
-        $assetFilePath = __DIR__.'/../public/'.str_replace('bundles/easyadmin/', '', $assetPath);
+        $assetFilePath = __DIR__.'/../../../public/'.str_replace('bundles/easyadmin/', '', $assetPath);
         $originalFileContents = file_get_contents($assetFilePath);
         $fixedFileContents = str_replace('url(/fonts/', 'url(fonts/', $originalFileContents);
 
