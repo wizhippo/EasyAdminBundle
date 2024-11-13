@@ -581,43 +581,47 @@
     </div>
 {% endblock ea_form_column_close_row %}
 
+{% block ea_form_fieldset_open_ealabel %}
+    {% if ea_is_collapsible %}
+        <i class="fas fw fa-chevron-right form-fieldset-collapse-marker"></i>
+    {% endif %}
+
+    {% if ea_icon %}
+        <i class="form-fieldset-icon {{ ea_icon }}"></i>
+    {% endif %}
+
+    {{ form.vars.label|trans|raw }}
+{% endblock ea_form_fieldset_open_ealabel %}
+
+{% block ea_form_fieldset_open_label %}
+    <div class="form-fieldset-header {{ ea_is_collapsible ? 'collapsible' }} {{ ea_help is not empty ? 'with-help' }}">
+        <div class="form-fieldset-title">
+            {% if ea_is_collapsible %}
+                <a href="#content-{{ form.vars.name }}" data-bs-toggle="collapse"
+                   class="form-fieldset-title-content form-fieldset-collapse {{ ea_is_collapsed ? 'collapsed' }}"
+                   aria-expanded="{{ ea_is_collapsed ? 'false' : 'true' }}" aria-controls="content-{{ form.vars.name }}">
+                    {{ ea_form_ealabel(form) }}
+                </a>
+            {% else %}
+                <span class="not-collapsible form-fieldset-title-content">
+                    {{ ea_form_ealabel(form) }}
+                </span>
+            {% endif %}
+
+            {% if ea_help %}
+                <div class="form-fieldset-help">{{ ea_help|trans|raw }}</div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock ea_form_fieldset_open_label %}
+
 {% block ea_form_fieldset_open_row %}
     {% set fieldset_has_header = form.vars.label or ea_icon or ea_help %}
 
     <div class="form-fieldset {{ not fieldset_has_header ? 'form-fieldset-no-header' }} {{ ea_css_class }}">
         <fieldset>
             {% if fieldset_has_header %}
-                <div class="form-fieldset-header {{ ea_is_collapsible ? 'collapsible' }} {{ ea_help is not empty ? 'with-help' }}">
-                    <div class="form-fieldset-title">
-                        {% set fieldset_title_contents %}
-                            {% if ea_is_collapsible %}
-                                <i class="fas fw fa-chevron-right form-fieldset-collapse-marker"></i>
-                            {% endif %}
-
-                            {% if ea_icon %}
-                                <i class="form-fieldset-icon {{ ea_icon }}"></i>
-                            {% endif %}
-
-                            {{ form.vars.label|trans|raw }}
-                        {% endset %}
-
-                        {% if ea_is_collapsible %}
-                            <a href="#content-{{ form.vars.name }}" data-bs-toggle="collapse"
-                               class="form-fieldset-title-content form-fieldset-collapse {{ ea_is_collapsed ? 'collapsed' }}"
-                               aria-expanded="{{ ea_is_collapsed ? 'false' : 'true' }}" aria-controls="content-{{ form.vars.name }}">
-                                {{ fieldset_title_contents|raw }}
-                            </a>
-                        {% else %}
-                            <span class="not-collapsible form-fieldset-title-content">
-                                {{ fieldset_title_contents|raw }}
-                            </span>
-                        {% endif %}
-
-                        {% if ea_help %}
-                            <div class="form-fieldset-help">{{ ea_help|trans|raw }}</div>
-                        {% endif %}
-                    </div>
-                </div>
+                {{ form_label(form) }}
             {% endif %}
 
             <div id="content-{{ form.vars.name }}" class="form-fieldset-body {{ not fieldset_has_header ? 'without-header' }} {{ ea_is_collapsible ? 'collapse' }} {{ not ea_is_collapsed ? 'show'}}">
