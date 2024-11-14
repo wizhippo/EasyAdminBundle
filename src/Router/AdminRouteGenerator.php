@@ -152,7 +152,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 
                 foreach (array_keys($actionsRouteConfig) as $actionName) {
                     $actionRouteConfig = $actionsRouteConfig[$actionName];
-                    $adminRoutePath = sprintf('%s/%s/%s', $dashboardRouteConfig['routePath'], $crudControllerRouteConfig['routePath'], ltrim($actionRouteConfig['routePath'], '/'));
+                    $adminRoutePath = rtrim(sprintf('%s/%s/%s', $dashboardRouteConfig['routePath'], $crudControllerRouteConfig['routePath'], ltrim($actionRouteConfig['routePath'], '/')), '/');
                     $adminRouteName = sprintf('%s_%s_%s', $dashboardRouteConfig['routeName'], $crudControllerRouteConfig['routeName'], $actionRouteConfig['routeName']);
 
                     if (\in_array($adminRouteName, $addedRouteNames, true)) {
