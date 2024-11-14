@@ -29,7 +29,7 @@ class PrettyUrlsControllerTest extends WebTestCase
         $expectedRoutes = [];
         $expectedRoutes['admin_pretty'] = '/admin/pretty/urls';
         $expectedRoutes['second_dashboard'] = '/second/dashboard';
-        $expectedRoutes['admin_pretty_blog_post_index'] = '/admin/pretty/urls/blog_post/';
+        $expectedRoutes['admin_pretty_blog_post_index'] = '/admin/pretty/urls/blog_post';
         $expectedRoutes['admin_pretty_blog_post_new'] = '/admin/pretty/urls/blog_post/new';
         $expectedRoutes['admin_pretty_blog_post_batch_delete'] = '/admin/pretty/urls/blog_post/batchDelete';
         $expectedRoutes['admin_pretty_blog_post_autocomplete'] = '/admin/pretty/urls/blog_post/autocomplete';
@@ -37,7 +37,7 @@ class PrettyUrlsControllerTest extends WebTestCase
         $expectedRoutes['admin_pretty_blog_post_edit'] = '/admin/pretty/urls/blog_post/{entityId}/edit';
         $expectedRoutes['admin_pretty_blog_post_delete'] = '/admin/pretty/urls/blog_post/{entityId}/delete';
         $expectedRoutes['admin_pretty_blog_post_detail'] = '/admin/pretty/urls/blog_post/{entityId}';
-        $expectedRoutes['admin_pretty_category_index'] = '/admin/pretty/urls/category/';
+        $expectedRoutes['admin_pretty_category_index'] = '/admin/pretty/urls/category';
         $expectedRoutes['admin_pretty_category_new'] = '/admin/pretty/urls/category/new';
         $expectedRoutes['admin_pretty_category_batch_delete'] = '/admin/pretty/urls/category/batchDelete';
         $expectedRoutes['admin_pretty_category_autocomplete'] = '/admin/pretty/urls/category/autocomplete';
@@ -129,9 +129,9 @@ class PrettyUrlsControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/admin/pretty/urls/blog_post');
 
         $this->assertSame('/admin/pretty/urls', $crawler->filter('#header-logo a.logo')->attr('href'), 'The main Dashboard logo link points to the dashboard entry URL');
-        $this->assertSame('http://localhost/admin/pretty/urls/blog_post/', $crawler->filter('li.menu-item a:contains("Dashboard")')->attr('href'), 'The Dashboard link inside the menu points to the first entity of the menu');
-        $this->assertSame('http://localhost/admin/pretty/urls/blog_post/', $crawler->filter('li.menu-item a:contains("Blog Posts")')->attr('href'));
-        $this->assertSame('http://localhost/admin/pretty/urls/category/', $crawler->filter('li.menu-item a:contains("Categories")')->attr('href'));
+        $this->assertSame('http://localhost/admin/pretty/urls/blog_post', $crawler->filter('li.menu-item a:contains("Dashboard")')->attr('href'), 'The Dashboard link inside the menu points to the first entity of the menu');
+        $this->assertSame('http://localhost/admin/pretty/urls/blog_post', $crawler->filter('li.menu-item a:contains("Blog Posts")')->attr('href'));
+        $this->assertSame('http://localhost/admin/pretty/urls/category', $crawler->filter('li.menu-item a:contains("Categories")')->attr('href'));
     }
 
     public function testCustomMainMenuUsesPrettyUrls()
@@ -153,7 +153,7 @@ class PrettyUrlsControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/admin/pretty/urls/blog_post');
 
-        $this->assertSame('http://localhost/admin/pretty/urls/blog_post/?page=1', $crawler->filter('form.form-action-search')->attr('action'));
+        $this->assertSame('http://localhost/admin/pretty/urls/blog_post?page=1', $crawler->filter('form.form-action-search')->attr('action'));
         $this->assertSame('http://localhost/admin/pretty/urls/blog_post/new', $crawler->filter('.global-actions a.action-new')->attr('href'));
         $this->assertSame('http://localhost/admin/pretty/urls/blog_post/1/edit', $crawler->filter('td a.action-edit')->attr('href'));
         $this->assertSame('http://localhost/admin/pretty/urls/blog_post/1/delete', $crawler->filter('td a.action-delete')->attr('href'));
@@ -180,11 +180,11 @@ class PrettyUrlsControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/admin/pretty/urls/blog_post');
 
-        $this->assertSame('http://localhost/admin/pretty/urls/blog_post/?page=1&sort%5Bid%5D=DESC', $crawler->filter('th.searchable a')->eq(0)->attr('href'));
-        $this->assertSame('http://localhost/admin/pretty/urls/blog_post/?page=1&sort%5Btitle%5D=DESC', $crawler->filter('th.searchable a')->eq(1)->attr('href'));
-        $this->assertSame('http://localhost/admin/pretty/urls/blog_post/?page=1&sort%5Bslug%5D=DESC', $crawler->filter('th.searchable a')->eq(2)->attr('href'));
-        $this->assertSame('http://localhost/admin/pretty/urls/blog_post/?page=1&sort%5Bcontent%5D=DESC', $crawler->filter('th.searchable a')->eq(3)->attr('href'));
-        $this->assertSame('http://localhost/admin/pretty/urls/blog_post/?page=1&sort%5Bauthor%5D=DESC', $crawler->filter('th.searchable a')->eq(4)->attr('href'));
+        $this->assertSame('http://localhost/admin/pretty/urls/blog_post?page=1&sort%5Bid%5D=DESC', $crawler->filter('th.searchable a')->eq(0)->attr('href'));
+        $this->assertSame('http://localhost/admin/pretty/urls/blog_post?page=1&sort%5Btitle%5D=DESC', $crawler->filter('th.searchable a')->eq(1)->attr('href'));
+        $this->assertSame('http://localhost/admin/pretty/urls/blog_post?page=1&sort%5Bslug%5D=DESC', $crawler->filter('th.searchable a')->eq(2)->attr('href'));
+        $this->assertSame('http://localhost/admin/pretty/urls/blog_post?page=1&sort%5Bcontent%5D=DESC', $crawler->filter('th.searchable a')->eq(3)->attr('href'));
+        $this->assertSame('http://localhost/admin/pretty/urls/blog_post?page=1&sort%5Bauthor%5D=DESC', $crawler->filter('th.searchable a')->eq(4)->attr('href'));
     }
 
     public function testCustomSortLinksUsePrettyUrls()
