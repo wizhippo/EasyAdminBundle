@@ -143,6 +143,10 @@ jobs:
                   composer update ${{ matrix.composer_args }};
                   vendor/bin/simple-phpunit install
 
+            - name: Show installed dependencies
+              run: |
+                  composer show
+
             - name: Run tests
               continue-on-error: ${{ matrix.stability == 'dev' }}
               env:
