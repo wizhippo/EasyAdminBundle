@@ -316,7 +316,7 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
 
         $context = $this->adminContextProvider->getContext();
         $usePrettyUrls = null !== $context && $context->usePrettyUrls();
-        $urlType = null !== $context && false === $context->getAbsoluteUrls() ? UrlGeneratorInterface::RELATIVE_PATH : UrlGeneratorInterface::ABSOLUTE_URL;
+        $urlType = null !== $context && false === $context->getAbsoluteUrls() ? UrlGeneratorInterface::ABSOLUTE_PATH : UrlGeneratorInterface::ABSOLUTE_URL;
 
         if (null !== $this->get(EA::ROUTE_NAME)) {
             return $this->urlGenerator->generate($this->dashboardRoute, $routeParameters, $urlType);
