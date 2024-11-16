@@ -83,12 +83,12 @@ jobs:
                       stability: "stable"
                     # Lowest deps support
                     - os: ubuntu-latest
-                      php_version: "8.0.2"
+                      php_version: "8.1"
                       composer_args: "--prefer-lowest"
                       stability: "stable"
                     # Lowest PHP version support. Remove when it is dropped
                     - os: ubuntu-latest
-                      php_version: "8.0"
+                      php_version: "8.1"
                       symfony_version: "5.4"
                       stability: "stable"
                     - os: ubuntu-latest
