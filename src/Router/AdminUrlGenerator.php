@@ -7,8 +7,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\DashboardControllerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
-use EasyCorp\Bundle\EasyAdminBundle\Registry\DashboardControllerRegistry;
+use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProviderInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Registry\DashboardControllerRegistryInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -17,27 +17,20 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class AdminUrlGenerator implements AdminUrlGeneratorInterface
 {
     private bool $isInitialized = false;
-    private AdminContextProvider $adminContextProvider;
-    private UrlGeneratorInterface $urlGenerator;
-    private DashboardControllerRegistry $dashboardControllerRegistry;
-    private AdminRouteGenerator $adminRouteGenerator;
     private ?string $dashboardRoute = null;
     private ?bool $includeReferrer = null;
     private array $routeParameters = [];
     private ?string $currentPageReferrer = null;
     private ?string $customPageReferrer = null;
 
-    public function __construct(AdminContextProvider $adminContextProvider, UrlGeneratorInterface $urlGenerator, DashboardControllerRegistry $dashboardControllerRegistry, AdminRouteGenerator $adminRouteGenerator)
-    {
-        $this->adminContextProvider = $adminContextProvider;
-        $this->urlGenerator = $urlGenerator;
-        $this->dashboardControllerRegistry = $dashboardControllerRegistry;
-        $this->adminRouteGenerator = $adminRouteGenerator;
+    public function __construct(
+        private readonly AdminContextProviderInterface $adminContextProvider,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly DashboardControllerRegistryInterface $dashboardControllerRegistry,
+        private readonly AdminRouteGeneratorInterface $adminRouteGenerator,
+    ) {
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function setDashboard(string $dashboardControllerFqcn): AdminUrlGeneratorInterface
     {
         $this->setRouteParameter(EA::DASHBOARD_CONTROLLER_FQCN, $dashboardControllerFqcn);
@@ -45,9 +38,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function setController(string $crudControllerFqcn): AdminUrlGeneratorInterface
     {
         $this->setRouteParameter(EA::CRUD_CONTROLLER_FQCN, $crudControllerFqcn);
@@ -57,9 +47,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function setAction(string $action): AdminUrlGeneratorInterface
     {
         $this->setRouteParameter(EA::CRUD_ACTION, $action);
@@ -69,9 +56,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function setRoute(string $routeName, array $routeParameters = []): AdminUrlGeneratorInterface
     {
         $this->unsetAllExcept(EA::DASHBOARD_CONTROLLER_FQCN);
@@ -81,9 +65,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function setEntityId($entityId): AdminUrlGeneratorInterface
     {
         $this->setRouteParameter(EA::ENTITY_ID, $entityId);
@@ -100,9 +81,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this->routeParameters[$paramName] ?? null;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function set(string $paramName, $paramValue): AdminUrlGeneratorInterface
     {
         if (\in_array($paramName, [EA::MENU_INDEX, EA::SUBMENU_INDEX], true)) {
@@ -119,9 +97,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function setAll(array $routeParameters): AdminUrlGeneratorInterface
     {
         foreach ($routeParameters as $paramName => $paramValue) {
@@ -131,9 +106,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function unset(string $paramName): AdminUrlGeneratorInterface
     {
         if (false === $this->isInitialized) {
@@ -145,9 +117,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function unsetAll(): AdminUrlGeneratorInterface
     {
         if (false === $this->isInitialized) {
@@ -159,9 +128,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function unsetAllExcept(string ...$namesOfParamsToKeep): AdminUrlGeneratorInterface
     {
         if (false === $this->isInitialized) {
@@ -173,9 +139,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function includeReferrer(): AdminUrlGeneratorInterface
     {
         trigger_deprecation(
@@ -193,9 +156,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function removeReferrer(): AdminUrlGeneratorInterface
     {
         if (false === $this->isInitialized) {
@@ -207,9 +167,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function setReferrer(string $referrer): AdminUrlGeneratorInterface
     {
         trigger_deprecation(
@@ -228,9 +185,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         return $this;
     }
 
-    /**
-     * @return AdminUrlGenerator
-     */
     public function addSignature(bool $addSignature = true): AdminUrlGeneratorInterface
     {
         trigger_deprecation(

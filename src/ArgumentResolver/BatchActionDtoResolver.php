@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
 use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
+use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProviderInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
@@ -19,13 +20,10 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 if (interface_exists(ValueResolverInterface::class)) {
     final class BatchActionDtoResolver implements ValueResolverInterface
     {
-        private AdminContextProvider $adminContextProvider;
-        private AdminUrlGeneratorInterface $adminUrlGenerator;
-
-        public function __construct(AdminContextProvider $adminContextProvider, AdminUrlGeneratorInterface $adminUrlGenerator)
-        {
-            $this->adminContextProvider = $adminContextProvider;
-            $this->adminUrlGenerator = $adminUrlGenerator;
+        public function __construct(
+            private readonly AdminContextProviderInterface $adminContextProvider,
+            private readonly AdminUrlGeneratorInterface $adminUrlGenerator,
+        ) {
         }
 
         public function resolve(Request $request, ArgumentMetadata $argument): iterable
@@ -75,7 +73,7 @@ if (interface_exists(ValueResolverInterface::class)) {
         private AdminContextProvider $adminContextProvider;
         private AdminUrlGeneratorInterface $adminUrlGenerator;
 
-        public function __construct(AdminContextProvider $adminContextProvider, AdminUrlGeneratorInterface $adminUrlGenerator)
+        public function __construct(AdminContextProviderInterface $adminContextProvider, AdminUrlGeneratorInterface $adminUrlGenerator)
         {
             $this->adminContextProvider = $adminContextProvider;
             $this->adminUrlGenerator = $adminUrlGenerator;

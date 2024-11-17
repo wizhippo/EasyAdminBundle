@@ -5,7 +5,7 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Twig;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldLayoutDto;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\FormLayoutFactory;
-use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
+use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProviderInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use Symfony\Component\AssetMapper\ImportMap\ImportMapRenderer;
@@ -29,19 +29,13 @@ use Twig\TwigFunction;
  */
 class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterface
 {
-    private ServiceLocator $serviceLocator;
-    private AdminContextProvider $adminContextProvider;
-    private ?CsrfTokenManagerInterface $csrfTokenManager;
-    private ?ImportMapRenderer $importMapRenderer;
-    private TranslatorInterface $translator;
-
-    public function __construct(ServiceLocator $serviceLocator, AdminContextProvider $adminContextProvider, ?CsrfTokenManagerInterface $csrfTokenManager, ?ImportMapRenderer $importMapRenderer, TranslatorInterface $translator)
-    {
-        $this->serviceLocator = $serviceLocator;
-        $this->adminContextProvider = $adminContextProvider;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->importMapRenderer = $importMapRenderer;
-        $this->translator = $translator;
+    public function __construct(
+        private readonly ServiceLocator $serviceLocator,
+        private readonly AdminContextProviderInterface $adminContextProvider,
+        private readonly ?CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly ?ImportMapRenderer $importMapRenderer,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     public function getFunctions(): array
