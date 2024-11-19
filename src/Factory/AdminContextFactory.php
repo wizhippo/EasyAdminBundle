@@ -183,14 +183,9 @@ final class AdminContextFactory
         if (null !== $crudDto) {
             $translationParameters['%entity_name%'] = $entityName = basename(str_replace('\\', '/', $crudDto->getEntityFqcn()));
             $translationParameters['%entity_as_string%'] = null === $entityDto ? '' : $entityDto->toString();
-
-            // If pretty URLs are used, extract the entity ID from the route attributes, otherwise from the query parameters
-            if ($this->adminRouteGenerator->usesPrettyUrls()) {
-                $translationParameters['%entity_id%'] = $entityId = $request->attributes->get(EA::ENTITY_ID);
-            } else {
-                $translationParameters['%entity_id%'] = $entityId = $request->query->get(EA::ENTITY_ID);
-            }
-
+            // when using pretty URLs, the entity ID is passed as a request attribute (it's part of the route path);
+            // in legacy URLs, the entity ID is passed as a regular query parameter
+            $translationParameters['%entity_id%'] = $entityId = $request->attributes->get(EA::ENTITY_ID) ?? $request->query->get(EA::ENTITY_ID);
             $translationParameters['%entity_short_id%'] = null === $entityId ? null : u($entityId)->truncate(7)->toString();
 
             $entityInstance = null === $entityDto ? null : $entityDto->getInstance();
