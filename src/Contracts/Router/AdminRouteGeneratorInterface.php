@@ -27,7 +27,7 @@ interface AdminRouteGeneratorInterface
     public function findRouteName(string $dashboardFqcn, string $crudControllerFqcn, string $actionName): ?string;
 
     /**
-     * This will removed in EasyAdmin 5.0, which will only use pretty URLs
+     * This will removed in EasyAdmin 5.0, which will only use pretty URLs.
      */
     // public function usesPrettyUrls(): bool;
 }
