@@ -6,21 +6,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminCrud;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
-use EasyCorp\Bundle\EasyAdminBundle\Contracts\Router\AdminRouteGeneratorInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-/**
- * This class generates all routes for every EasyAdmin dashboard in the application
- * and provides a utility to get the Symfony route name for a given {dashboard, CRUD controller, action} tuple.
- *
- * The generated ROUTES are based on a set of default route names and paths, but
- * that can be overwritten at the dashboard, controller and method/action level
- * using the #[AdminDashboard], #[AdminCrud] and #[AdminCrud] attributes.
- *
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- */
 final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 {
     public const CACHE_KEY_ROUTE_TO_FQCN = 'easyadmin.routes.route_to_fqcn';

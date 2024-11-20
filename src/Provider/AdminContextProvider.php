@@ -8,7 +8,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\AssetsDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\CrudDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\I18nDto;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\LocaleDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\MainMenuDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\UserMenuDto;
@@ -17,12 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Inject this in services that need to get the admin context object.
- *
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- */
-final class AdminContextProvider
+final class AdminContextProvider implements AdminContextProviderInterface
 {
     private RequestStack $requestStack;
 
@@ -138,9 +132,6 @@ final class AdminContextProvider
         return $this->getContext(true)->getDashboardDefaultColorScheme();
     }
 
-    /**
-     * @return LocaleDto[]
-     */
     public function getDashboardLocales(): array
     {
         return $this->getContext(true)->getDashboardLocales();
