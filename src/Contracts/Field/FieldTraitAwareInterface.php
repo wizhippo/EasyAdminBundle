@@ -36,18 +36,12 @@ interface FieldTraitAwareInterface extends FieldInterface
     /**
      * @param string $optionName You can use "dot" notation to set nested options (e.g. 'attr.class')
      */
-    public function setFormTypeOption(
-        string $optionName,
-        $optionValue,
-    ): self;
+    public function setFormTypeOption(string $optionName, $optionValue,): self;
 
     /**
      * @param string $optionName You can use "dot" notation to set nested options (e.g. 'attr.class')
      */
-    public function setFormTypeOptionIfNotSet(
-        string $optionName,
-        $optionValue,
-    ): self;
+    public function setFormTypeOptionIfNotSet(string $optionName, $optionValue,): self;
 
     public function setSortable(bool $isSortable): self;
 
@@ -72,8 +66,7 @@ interface FieldTraitAwareInterface extends FieldInterface
 
     public function addFormTheme(string ...$formThemePaths): self;
 
-    public function addWebpackEncoreEntries(Asset|string ...$entryNamesOrAssets,
-    ): self;
+    public function addWebpackEncoreEntries(Asset|string ...$entryNamesOrAssets): self;
 
     public function addCssFiles(Asset|string ...$pathsOrAssets): self;
 
@@ -83,10 +76,7 @@ interface FieldTraitAwareInterface extends FieldInterface
 
     public function addHtmlContentsToBody(string ...$contents): self;
 
-    public function setCustomOption(
-        string $optionName,
-        $optionValue,
-    ): self;
+    public function setCustomOption(string $optionName, $optionValue,): self;
 
     public function setCustomOptions(array $options): self;
 

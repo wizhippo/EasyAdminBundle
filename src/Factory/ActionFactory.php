@@ -9,7 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\ActionConfigDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\ActionDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProviderInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Provider\AdminContextProviderInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use EasyCorp\Bundle\EasyAdminBundle\Translation\TranslatableMessageBuilder;

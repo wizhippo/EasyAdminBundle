@@ -4,6 +4,7 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Provider;
 
 use Doctrine\DBAL\Types\Types;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Provider\AdminContextProviderInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 
 /**

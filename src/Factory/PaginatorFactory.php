@@ -4,7 +4,7 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Factory;
 
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Orm\EntityPaginatorInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProviderInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Provider\AdminContextProviderInterface;
 
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>

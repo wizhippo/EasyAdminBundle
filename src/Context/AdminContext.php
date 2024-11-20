@@ -4,6 +4,7 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Context;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Context\AdminContextInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\DashboardControllerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Factory\MenuFactoryInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\AssetsDto;
@@ -27,7 +28,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-final class AdminContext
+final class AdminContext implements AdminContextInterface
 {
     private Request $request;
     private ?UserInterface $user;

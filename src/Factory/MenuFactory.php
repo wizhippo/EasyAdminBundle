@@ -12,7 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\MainMenuDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\MenuItemDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\UserMenuDto;
-use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProviderInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Provider\AdminContextProviderInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;

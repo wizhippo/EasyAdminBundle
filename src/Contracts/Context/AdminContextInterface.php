@@ -1,10 +1,7 @@
 <?php
 
-declare(strict_types=1);
+namespace EasyCorp\Bundle\EasyAdminBundle\Contracts\Context;
 
-namespace EasyCorp\Bundle\EasyAdminBundle\Provider;
-
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\AssetsDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\CrudDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -17,17 +14,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Registry\CrudControllerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Inject this in services that need to get the admin context object.
- *
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- */
-interface AdminContextProviderInterface
+interface AdminContextInterface
 {
-    public function hasContext(): bool;
-
-    public function getContext(bool $throw = false): ?AdminContext;
-
     public function getRequest(): Request;
 
     public function getReferrer(): ?string;
