@@ -2,7 +2,6 @@
 
 namespace EasyCorp\Bundle\EasyAdminBundle\Contracts\Provider;
 
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Context\AdminContextInterface;
 
 /**
@@ -14,5 +13,5 @@ interface AdminContextProviderInterface extends AdminContextInterface
 {
     public function hasContext(): bool;
 
-    public function getContext(bool $throw = false): ?AdminContext;
+    public function getContext(bool $throw = false): ?AdminContextInterface;
 }
