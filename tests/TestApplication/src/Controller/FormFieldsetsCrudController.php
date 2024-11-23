@@ -20,12 +20,12 @@ class FormFieldsetsCrudController extends AbstractCrudController
         return [
             // this field is out of any fieldset on purpose
             IdField::new('id'),
-            FormField::addFieldset('Fieldset 1')->setIcon('fa fa-cog')->addCssClass('bg-info'),
+            FormField::addFieldset('Fieldset 1')->setIcon('fa6-solid:gear')->addCssClass('bg-info'),
             TextField::new('title'),
-            FormField::addFieldset('Fieldset 2')->setIcon('fa fa-user')->addCssClass('bg-warning'),
+            FormField::addFieldset('Fieldset 2')->setIcon('fa6-solid:user')->addCssClass('bg-warning'),
             TextField::new('slug'),
             // this fieldset is added after all fields on purpose
-            FormField::addFieldset('Fieldset 3')->setIcon('fa fa-file-alt')->addCssClass('bg-danger'),
+            FormField::addFieldset('Fieldset 3')->setIcon('fa6-solid:file-lines')->addCssClass('bg-danger'),
         ];
     }
 }

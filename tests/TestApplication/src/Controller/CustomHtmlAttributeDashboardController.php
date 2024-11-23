@@ -26,7 +26,7 @@ class CustomHtmlAttributeDashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linktoDashboard('Dashboard', 'fa6-solid:house');
         yield MenuItem::linkToCrud('Categories', 'fas fa-tags', Category::class)->setHtmlAttribute(
             'test-attribute', 'test'
         );
