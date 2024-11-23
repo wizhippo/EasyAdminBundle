@@ -83,7 +83,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\UrlSigner;
 use EasyCorp\Bundle\EasyAdminBundle\Security\AuthorizationChecker;
 use EasyCorp\Bundle\EasyAdminBundle\Security\SecurityVoter;
 use EasyCorp\Bundle\EasyAdminBundle\Twig\EasyAdminTwigExtension;
-use EasyCorp\Bundle\EasyAdminBundle\Twig\FormExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ServiceLocator;
@@ -135,9 +134,6 @@ return static function (ContainerConfigurator $container) {
             ->arg(2, new Reference('security.csrf.token_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE))
             ->arg(3, new Reference('asset_mapper.importmap.renderer', ContainerInterface::NULL_ON_INVALID_REFERENCE))
             ->arg(4, service('translator'))
-            ->tag('twig.extension')
-
-        ->set(FormExtension::class)
             ->tag('twig.extension')
 
         ->set(EaCrudFormTypeExtension::class)

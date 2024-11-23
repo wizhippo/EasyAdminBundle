@@ -26,6 +26,7 @@ use Twig\TwigFunction;
  * to be used by admin templates.
  *
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
+ * @author Benjamin Georgeault <git@wedgesama.fr>
  */
 class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterface
 {
@@ -46,6 +47,7 @@ class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterfa
             new TwigFunction('ea_call_function_if_exists', [$this, 'callFunctionIfExists'], ['needs_environment' => true, 'is_safe' => ['html' => true]]),
             new TwigFunction('ea_create_field_layout', [$this, 'createFieldLayout']),
             new TwigFunction('ea_importmap', [$this, 'renderImportmap'], ['is_safe' => ['html']]),
+            new TwigFunction('ea_form_ealabel', null, ['node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => ['html']]),
         ];
     }
 
