@@ -43,10 +43,8 @@
         </header>
 
         <section class="content">
-
             {% if error|default(false) %}
                 <div class="w-100 alert alert-danger rounded mb-3">
-                    <i class="fas fa-times-circle mr-1"></i>
                     {{ error.messageKey|trans(error.messageData, 'security') }}
                 </div>
             {% endif %}

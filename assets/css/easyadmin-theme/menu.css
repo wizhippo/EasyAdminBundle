@@ -45,7 +45,7 @@
 }
 
 #main-menu .menu .menu-item.active:not(.expanded) a,
-#main-menu .menu .menu-item.active:not(.expanded) .menu-icon {
+#main-menu .menu .menu-item.active:not(.expanded) .menu-icon svg {
     color: var(--sidebar-menu-active-item-color);
 }
 
@@ -60,8 +60,6 @@
 
 #main-menu .menu .menu-item .submenu-toggle .submenu-toggle-icon {
     color: var(--sidebar-menu-icon-color);
-    position: relative;
-    inset-block-start: 5px;
     transition: transform 0.25s ease;
     inline-size: auto; /* this is needed to make it look better */
 }
@@ -75,11 +73,16 @@
 
 #main-menu .menu .menu-icon {
     color: var(--sidebar-menu-icon-color);
-    font-size: var(--font-size-lg);
     margin-inline-end: 10px;
-    transform: translateY(3px);
+    text-align: center;
     block-size: 16px;
-    inline-size: 20px;
+    inline-size: 1.25em;
+}
+#main-menu .menu .menu-icon svg {
+    color: var(--sidebar-menu-icon-color);
+    max-block-size: 16px;
+    max-inline-size: 20px;
+    vertical-align: sub;
 }
 
 #main-menu .menu .menu-item-badge {

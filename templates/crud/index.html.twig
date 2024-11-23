@@ -50,11 +50,11 @@
                 {% set applied_filters = ea.request.query.all['filters']|default([])|keys %}
                 <div class="btn-group action-filters">
                     <a href="#" data-href="{{ ea_url().setAction('renderFilters') }}" class="btn btn-secondary btn-labeled btn-labeled-right action-filters-button disabled {{ applied_filters ? 'action-filters-applied' }}" data-bs-toggle="modal" data-bs-target="#modal-filters">
-                        <i class="fa fa-filter fa-fw"></i> {{ t('filter.title', ea.i18n.translationParameters, 'EasyAdminBundle')|trans }}{% if applied_filters %} <span class="action-filters-button-count">({{ applied_filters|length }})</span>{% endif %}
+                        <twig:ea:Icon name="internal:filter" /> {{ t('filter.title', ea.i18n.translationParameters, 'EasyAdminBundle')|trans }}{% if applied_filters %} <span class="action-filters-button-count">({{ applied_filters|length }})</span>{% endif %}
                     </a>
                     {% if applied_filters %}
                         <a href="{{ ea_url().unset('filters') }}" class="btn btn-secondary action-filters-reset">
-                            <i class="fa fa-close"></i>
+                            <twig:ea:Icon name="internal:xmark" />
                         </a>
                     {% endif %}
                 </div>
@@ -109,7 +109,7 @@
                         {% set is_searchable = null == ea.crud.searchFields or field.property in ea.crud.searchFields %}
                         {% set is_sorting_field = ea.search.isSortingField(field.property) %}
                         {% set next_sort_direction = is_sorting_field ? (ea.search.sortDirection(field.property) == ea_sort_desc ? ea_sort_asc : ea_sort_desc) : ea_sort_desc %}
-                        {% set column_icon = is_sorting_field ? (next_sort_direction == ea_sort_desc ? 'fa-arrow-up' : 'fa-arrow-down') : 'fa-sort' %}
+                        {% set column_icon = is_sorting_field ? (next_sort_direction == ea_sort_desc ? 'internal:sort-arrow-up' : 'internal:sort-arrow-down') : 'internal:sort-arrows' %}
 
                         <th data-column="{{ field.property }}" class="{{ is_searchable ? 'searchable' }} {{ is_sorting_field ? 'sorted' }} {{ field.isVirtual ? 'field-virtual' }} header-for-{{ field.cssClass|split(' ')|filter(class => class starts with 'field-')|join('') }} text-{{ field.textAlign }}" dir="{{ ea.i18n.textDirection }}">
                             {% if field.isSortable %}
@@ -119,7 +119,7 @@
                                 {% endif %}
 
                                 <a href="{{ sortable_url }}">
-                                    {{ field.label|trans|raw }} <i class="fa fa-fw {{ column_icon }}"></i>
+                                    {{ field.label|trans|raw }} <twig:ea:Icon name="{{ column_icon }}" />
                                 </a>
                             {% else %}
                                 <span>{{ field.label|trans|raw }}</span>
@@ -212,7 +212,7 @@
             {% if some_results_are_hidden %}
                 <tr class="datagrid-row-empty">
                     <td class="text-center" colspan="100">
-                        <span class="datagrid-row-empty-message"><i class="fa fa-lock mr-1"></i> {{ 'datagrid.hidden_results'|trans({}, 'EasyAdminBundle') }}</span>
+                        <span class="datagrid-row-empty-message"><twig:ea:Icon name="internal:lock" class="mr-1" /> {{ 'datagrid.hidden_results'|trans({}, 'EasyAdminBundle') }}</span>
                     </td>
                 </tr>
             {% endif %}

@@ -44,7 +44,7 @@
 {% macro render_menu_item(item) %}
     {% if item.isMenuSection %}
         <span class="menu-header-contents" {{ _self.render_html_attributes(item) }}>
-            {% if item.icon is not empty %}<i class="menu-icon fa-fw {{ item.icon }}"></i>{% endif %}
+            {% if item.icon is not empty %}<twig:ea:Icon name="{{ item.icon }}" class="menu-icon" />{% endif %}
             <span class="menu-item-label position-relative {{ item.cssClass }}">
                 {{ item.label|trans|raw }}
             </span>
@@ -54,11 +54,11 @@
         </span>
     {% else %}
         <a href="{{ item.linkUrl }}" class="menu-item-contents {{ item.hasSubItems ? 'submenu-toggle' }} {{ item.cssClass }}" target="{{ item.linkTarget }}" rel="{{ item.linkRel }}" referrerpolicy="origin-when-cross-origin" {{ _self.render_html_attributes(item) }}>
-            {% if item.icon is not empty %}<i class="menu-icon fa-fw {{ item.icon }}"></i>{% endif %}
+            {% if item.icon is not empty %}<twig:ea:Icon name="{{ item.icon }}" class="menu-icon" />{% endif %}
             <span class="menu-item-label position-relative">
                 {{ item.label|trans|raw }}
             </span>
-            {% if item.hasSubItems %}<i class="fa fa-fw fa-angle-right submenu-toggle-icon"></i>{% endif %}
+            {% if item.hasSubItems %}<twig:ea:Icon name="internal:chevron-right" class="submenu-toggle-icon" />{% endif %}
             {% if item.badge %}
                 <span class="menu-item-badge rounded-pill badge {{ item.badge.cssClass }}" {{ _self.render_html_attributes(item.badge) }} style="{{ item.badge.htmlStyle }}">{{ item.badge.content }}</span>
             {% endif %}

@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\UX\Icons\Twig\UXIconRuntime;
 use Twig\Environment;
 use Twig\Error\RuntimeError;
 use Twig\Extension\AbstractExtension;
@@ -36,6 +37,7 @@ class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterfa
         private readonly ?CsrfTokenManagerInterface $csrfTokenManager,
         private readonly ?ImportMapRenderer $importMapRenderer,
         private readonly TranslatorInterface $translator,
+        private ?UXIconRuntime $uxIconRuntime,
     ) {
     }
 
@@ -48,6 +50,8 @@ class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterfa
             new TwigFunction('ea_create_field_layout', [$this, 'createFieldLayout']),
             new TwigFunction('ea_importmap', [$this, 'renderImportmap'], ['is_safe' => ['html']]),
             new TwigFunction('ea_form_ealabel', null, ['node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => ['html']]),
+            // TODO: remove this when Twig 3.15 is published and we can use the 'guard' tag
+            new TwigFunction('ea_ux_icon', [$this, 'renderIcon'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -232,5 +236,18 @@ class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterfa
         }
 
         return $this->importMapRenderer->render($entryPoint, $attributes);
+    }
+
+    /**
+     * We need to recreate the 'ux_icon()' Twig function from Symfony because calling it
+     * via 'ea_call_function_if_exists('ux_icon', '...')' doesn't work.
+     */
+    public function renderIcon(string $name, array $attributes = []): string
+    {
+        if ('' === $name || null === $this->uxIconRuntime) {
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"  stroke="#f00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><title>You are not seeing any icon because you are using custom icons (instead of the built-in FontAwesome icons) and don\'t have the Symfony UX Icons package installed in your application. Run "composer require symfony/ux-icons" and reload this page.</title><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>';
+        }
+
+        return $this->uxIconRuntime->renderIcon($name, $attributes);
     }
 }

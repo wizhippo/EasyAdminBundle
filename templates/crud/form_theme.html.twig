@@ -181,7 +181,7 @@
 
     {% if allow_add|default(false) and not disabled %}
         <button type="button" class="btn btn-link field-collection-add-button">
-            <i class="fa fa-plus pr-1"></i>
+            <twig:ea:Icon name="internal:plus" class="pr-1" />
             {{ 'action.add_new_item'|trans({}, 'EasyAdminBundle') }}
         </button>
     {% endif %}
@@ -196,7 +196,7 @@
     {% set delete_item_button %}
         <button type="button" class="btn btn-link btn-link-danger field-collection-delete-button"
                 title="{{ 'action.remove_item'|trans({}, 'EasyAdminBundle') }}">
-            <i class="far fa-trash-alt"></i>
+            <twig:ea:Icon name="internal:delete" />
         </button>
     {% endset %}
 
@@ -211,7 +211,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button {{ render_expanded ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id }}-contents">
-                        <i class="fas fw fa-chevron-right form-collection-item-collapse-marker"></i>
+                        <twig:ea:Icon name="internal:chevron-right" class="form-collection-item-collapse-marker" />
                         {{ value|ea_as_string(to_string_method) }}
                     </button>
 
@@ -318,16 +318,8 @@
 {% block vich_file_widget %}
     <div class="ea-vich-file">
         {% if download_uri|default('') is not empty %}
-            {% set file_extension = download_uri|split('.')|last %}
-            {% set extension_icons = {
-                'gif': 'fa-file-image-o',
-                'jpg': 'fa-file-image-o',
-                'pdf': 'fa-file-pdf-o',
-                'png': 'fa-file-image-o',
-                'zip': 'fa-file-archive-o'
-            } %}
             <a class="ea-vich-file-name" href="{{ asset_helper is same as(true) ? asset(download_uri) : download_uri }}">
-                <i class="fa fa-fw {{ extension_icons[file_extension] ?? 'fa-file-o' }}"></i>
+                <twig:ea:Icon name="internal:file-lines" />
                 {%- if download_label|default(false) -%}
                     {{ download_label|trans({}, 'VichUploaderBundle') }}
                 {%- else -%}
@@ -346,7 +338,7 @@
         <div class="ea-vich-file-actions">
             {# the container element is needed to allow customizing the <input type="file" /> #}
             <div class="btn btn-secondary input-file-container">
-                <i class="fa fa-fw fa-upload"></i> {{ 'action.choose_file'|trans({}, 'EasyAdminBundle') }}
+                <twig:ea:Icon name="internal:upload" /> {{ 'action.choose_file'|trans({}, 'EasyAdminBundle') }}
                 {{ form_widget(form.file, { 'attr': { 'onchange': file_upload_js }, vich: true}) }}
             </div>
 
@@ -406,7 +398,7 @@
         <div class="ea-vich-image-actions">
             {# the container element is needed to allow customizing the <input type="file" /> #}
             <div class="btn btn-secondary input-file-container">
-                <i class="fa fa-fw fa-upload"></i> {{ 'action.choose_file'|trans({}, 'EasyAdminBundle') }}
+                <twig:ea:Icon name="internal:upload" /> {{ 'action.choose_file'|trans({}, 'EasyAdminBundle') }}
                 {{ form_widget(form.file, { 'attr': { 'onchange': file_upload_js }, vich: true}) }}
             </div>
 
@@ -459,11 +451,11 @@
                             {% endif %}
                             >
                                 {% if collapsible %}
-                                    <i class="fas fw fa-chevron-right form-fieldset-collapse-marker"></i>
+                                    <twig:ea:Icon name="internal:chevron-right" class="form-fieldset-collapse-marker" />
                                 {% endif %}
 
                                 {% if fieldset_config.icon|default(false) %}
-                                    <i class="form-fieldset-icon {{ fieldset_config.icon }}"></i>
+                                    <twig:ea:Icon name="{{ fieldset_config.icon }}" class="form-fieldset-icon" />
                                 {% endif %}
                                 {{ fieldset_config.label|trans|raw }}
                             </a>
@@ -566,7 +558,7 @@
         {% if column_has_title %}
             <div class="form-column-title">
                 <div class="form-column-title-content">
-                    {% if field_icon %}<i class="form-column-icon fa fa-fw fa-{{ field_icon }}"></i>{% endif %}
+                    {% if field_icon %}<twig:ea:Icon name="{{ field_icon }}" class="form-column-icon" />{% endif %}
                     {% if field.label %}{{ field.label|default('')|trans(domain = ea.i18n.translationDomain)|raw }}{% endif %}
                 </div>
 
@@ -583,11 +575,11 @@
 
 {% block ea_form_fieldset_open_ealabel %}
     {% if ea_is_collapsible %}
-        <i class="fas fw fa-chevron-right form-fieldset-collapse-marker"></i>
+        <twig:ea:Icon name="internal:chevron-right" class="form-fieldset-collapse-marker" />
     {% endif %}
 
     {% if ea_icon %}
-        <i class="form-fieldset-icon {{ ea_icon }}"></i>
+        <twig:ea:Icon name="{{ ea_icon }}" class="form-fieldset-icon" />
     {% endif %}
 
     {{ form.vars.label|trans|raw }}
@@ -647,7 +639,7 @@
                 <li class="nav-item">
                     <a class="nav-link {% if tab.getCustomOption(tab_is_active_option_name) %}active{% endif %}" href="#{{ tab.getCustomOption(tab_id_option_name) }}" id="tablist-{{ tab.getCustomOption(tab_id_option_name) }}" data-bs-toggle="tab">
                         {%- if tab.getCustomOption('icon')|default(false) -%}
-                            <i class="tab-nav-item-icon fa-fw {{ tab.getCustomOption('icon') }}"></i>
+                            <twig:ea:Icon name="{{ tab.getCustomOption('icon') }}" class="tab-nav-item-icon" />
                         {%- endif -%}
                         {{ tab.label|trans(domain = ea.i18n.translationDomain)|raw }}
 
@@ -764,11 +756,11 @@
                 {%- endif -%}
                 {% if allow_delete %}
                     <label class="btn ea-fileupload-delete-btn {{ currentFiles is empty ? 'd-none' }}" for="{{ form.delete.vars.id }}">
-                        <i class="fa fa-trash-o"></i>
+                        <twig:ea:Icon name="internal:delete" />
                     </label>
                 {% endif %}
                 <label class="btn" for="{{ form.file.vars.id }}">
-                    <i class="fa fa-folder-open-o"></i>
+                    <twig:ea:Icon name="internal:folder-open" />
                 </label>
             </div>
         </div>
@@ -781,7 +773,7 @@
                             <td>
                                 {% if download_path %}<a href="{{ asset(download_path ~ file.filename) }}">{% endif %}
                                     <span title="{{ file.mTime|date }}">
-                                        <i class="fa fa-file-o"></i> {{ file.filename }}
+                                        <twig:ea:Icon name="internal:file-lines" /> {{ file.filename }}
                                     </span>
                                 {% if download_path %}</a>{% endif %}
                             </td>
@@ -828,13 +820,13 @@
 
             {% if currentFiles and allow_delete %}
                 <button class="btn ea-fileupload-delete-btn">
-                    <i class="fa fa-trash-o"></i>
+                    <twig:ea:Icon name="inernal:delete" />
                 </button>
             {% endif %}
 
             {% if currentFiles %}
                 <button class="btn">
-                    <i class="fa fa-folder-open-o"></i>
+                    <twig:ea:Icon name="inernal:folder-open" />
                 </button>
             {% endif %}
         </div>
@@ -848,7 +840,7 @@
                             <td>
                                 {% if download_path %}<a href="{{ asset(download_path ~ file.filename) }}">{% endif %}
                                     <span title="{{ file.mTime|date }}">
-                                        <i class="fa fa-file-o"></i> {{ file.filename }}
+                                        <twig:ea:Icon name="internal:file-lines" /> {{ file.filename }}
                                     </span>
                                     {% if download_path %}</a>{% endif %}
                             </td>
@@ -881,7 +873,7 @@
     <div class="input-group">
         {{ block('form_widget') }}
         <button type="button" class="btn">
-            <i class="fas fa-lock fa-fw"></i>
+            <twig:ea:Icon name="internal:lock" />
         </button>
     </div>
 {% endblock %}
