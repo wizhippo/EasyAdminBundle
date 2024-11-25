@@ -269,6 +269,12 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         );
         ksort($routeParameters, \SORT_STRING);
 
+        // if no route parameters are passed, the route doesn't point to any CRUD controller
+        // action or to any custom action/route; consider it a link to the current dashboard
+        if ([] === $routeParameters) {
+            return $this->urlGenerator->generate($this->dashboardRoute);
+        }
+
         $context = $this->adminContextProvider->getContext();
         $usePrettyUrls = null !== $context && $context->usePrettyUrls();
         $urlType = null !== $context && false === $context->getAbsoluteUrls() ? UrlGeneratorInterface::ABSOLUTE_PATH : UrlGeneratorInterface::ABSOLUTE_URL;

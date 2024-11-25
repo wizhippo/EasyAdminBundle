@@ -69,7 +69,7 @@ class AdminUrlGeneratorTest extends WebTestCase
 
         $adminUrlGenerator->set('foo1', 'bar1');
         $adminUrlGenerator->unsetAll();
-        $this->assertSame('http://localhost/admin', $adminUrlGenerator->generateUrl());
+        $this->assertSame('/admin', $adminUrlGenerator->generateUrl());
     }
 
     public function testUnsetAllExcept()
