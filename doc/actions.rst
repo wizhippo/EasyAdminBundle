@@ -275,12 +275,12 @@ the ``Action`` class constructor::
     $viewInvoice = Action::new('viewInvoice', false);
 
     // the third optional argument is the full icon name
-    $viewInvoice = Action::new('viewInvoice', 'Invoice', 'fa6solid:file-invoice');
+    $viewInvoice = Action::new('viewInvoice', 'Invoice', 'fa6-solid:file-invoice');
 
 .. note::
 
     By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
-    (``fa6regular:``, ``fa6solid:`` and ``fa6brands:``), but you can
+    (``fa6-regular:``, ``fa6-solid:`` and ``fa6-brands:``), but you can
     :ref:`use your own icon sets <icon-customization>`.
 
     .. deprecated:: 4.16

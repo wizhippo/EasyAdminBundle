@@ -514,15 +514,15 @@ the look and behavior of each menu item::
         public function configureMenuItems(): iterable
         {
             return [
-                MenuItem::linkToDashboard('Dashboard', 'fa6solid:house'),
+                MenuItem::linkToDashboard('Dashboard', 'fa6-solid:house'),
 
                 MenuItem::section('Blog'),
-                MenuItem::linkToCrud('Categories', 'fa6solid:tags', Category::class),
-                MenuItem::linkToCrud('Blog Posts', 'fa6regular:lines', BlogPost::class),
+                MenuItem::linkToCrud('Categories', 'fa6-solid:tags', Category::class),
+                MenuItem::linkToCrud('Blog Posts', 'fa6-regular:file-lines', BlogPost::class),
 
                 MenuItem::section('Users'),
-                MenuItem::linkToCrud('Comments', 'fa6regular:comments', Comment::class),
-                MenuItem::linkToCrud('Users', 'fa6solid:user', User::class),
+                MenuItem::linkToCrud('Comments', 'fa6-regular:comments', Comment::class),
+                MenuItem::linkToCrud('Users', 'fa6-solid:user', User::class),
             ];
         }
     }
@@ -534,7 +534,7 @@ the second argument is the icon to display. The icon name follows the pattern
 .. note::
 
     By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
-    (``fa6regular:``, ``fa6solid:`` and ``fa6brands:``), but you can
+    (``fa6-regular:``, ``fa6-solid:`` and ``fa6-brands:``), but you can
     :ref:`use your own icon sets <icon-customization>`.
 
     .. deprecated:: 4.16
