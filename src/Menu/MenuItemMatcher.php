@@ -189,7 +189,6 @@ class MenuItemMatcher implements MenuItemMatcherInterface
         if (str_ends_with($currentRequestUriWithoutQueryString, '/edit')) {
             $currentRequestUriWithoutAction = preg_replace('#/[^/]+$#', '', $currentRequestUriWithoutAction);
         }
-        $currentRequestUriWithoutAction .= '/';
 
         foreach ($menuItems as $menuItemDto) {
             if ($menuItemDto->isMenuSection()) {
