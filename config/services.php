@@ -180,7 +180,7 @@ return static function (ContainerConfigurator $container) {
             ->tag('kernel.event_listener', ['event' => ViewEvent::class])
 
         ->set(AdminContextFactory::class)
-            ->arg(0, '%kernel.cache_dir%')
+            ->arg(0, '%kernel.build_dir%')
             ->arg(1, new Reference('security.token_storage', ContainerInterface::NULL_ON_INVALID_REFERENCE))
             ->arg(2, new Reference(MenuFactory::class))
             ->arg(3, new Reference(CrudControllerRegistry::class))
