@@ -146,6 +146,19 @@ class PrettyUrlsControllerTest extends WebTestCase
         $this->assertSame('http://localhost/second/dashboard/user-editor/custom/path-for-index', $crawler->filter('li.menu-item a:contains("Users")')->attr('href'));
     }
 
+    /**
+     * @dataProvider provideActiveMenuUrls
+     */
+    public function testMainMenuActiveItemWithPrettyUrls(string $url)
+    {
+        $client = static::createClient();
+        $client->followRedirects();
+
+        $crawler = $client->request('GET', $url);
+
+        $this->assertSame('Categories', trim($crawler->filter('.menu-item.active')->text()));
+    }
+
     public function testDefaultActionsUsePrettyUrls()
     {
         $client = static::createClient();
@@ -210,6 +223,14 @@ class PrettyUrlsControllerTest extends WebTestCase
         $this->assertSame('http://localhost/second/dashboard/user-editor/custom/path-for-index?page=1&sort%5Bid%5D=DESC', $crawler->filter('th.searchable a')->eq(0)->attr('href'));
         $this->assertSame('http://localhost/second/dashboard/user-editor/custom/path-for-index?page=1&sort%5Bname%5D=DESC', $crawler->filter('th.searchable a')->eq(1)->attr('href'));
         $this->assertSame('http://localhost/second/dashboard/user-editor/custom/path-for-index?page=1&sort%5Bemail%5D=DESC', $crawler->filter('th.searchable a')->eq(2)->attr('href'));
+    }
+
+    public static function provideActiveMenuUrls(): iterable
+    {
+        yield ['/admin/pretty/urls/category'];
+        yield ['/admin/pretty/urls/category/new'];
+        yield ['/admin/pretty/urls/category/1'];
+        yield ['/admin/pretty/urls/category/1/edit'];
     }
 
     public static function provideDefaultPageUrls(): iterable
