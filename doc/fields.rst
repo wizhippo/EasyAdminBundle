@@ -299,14 +299,14 @@ The arguments of the ``addTab()`` method are:
   icon for the tab or users won't be able to click on it); You can also pass
   ``string`` and ``TranslatableInterface`` variables. In both cases, if they
   contain HTML tags they will be rendered in stead of escaped;
-* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6regular:folder-open``);
+* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6-regular:folder-open``);
   if you don't display a text label for the tab, make sure to display an icon or
   users won't be able to click on the tab.
 
 .. note::
 
     By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
-    (``fa6regular:``, ``fa6solid:`` and ``fa6brands:``), but you can
+    (``fa6-regular:``, ``fa6-solid:`` and ``fa6-brands:``), but you can
     :ref:`use your own icon sets <icon-customization>`.
 
     .. deprecated:: 4.16
@@ -372,7 +372,7 @@ The arguments of the ``addColumn()`` method are:
   or an empy string, no title is displayed. You can also pass ``string`` and
   ``TranslatableInterface`` variables. In both cases, if they contain HTML tags
   they will be rendered in stead of escaped;
-* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6regulat:folder-open``)
+* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6-regulat:folder-open``)
   that is displayed next to the column label;
 * ``$help``: (type: ``?string``) an optional content that is displayed below the
   column label; it's mostly used to describe the column contents or provide further
@@ -382,7 +382,7 @@ The arguments of the ``addColumn()`` method are:
 .. note::
 
     By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
-    (``fa6regular:``, ``fa6solid:`` and ``fa6brands:``), but you can
+    (``fa6-regular:``, ``fa6-solid:`` and ``fa6-brands:``), but you can
     :ref:`use your own icon sets <icon-customization>`.
 
     .. deprecated:: 4.16
@@ -475,7 +475,7 @@ Add fieldsets with the created with the ``addFieldset()`` method of the special
 
             // fieldsets can also define their icon, CSS class and help message
             FormField::addFieldset('Contact information')
-                ->setIcon('fa6solid:phone')->addCssClass('optional')
+                ->setIcon('fa6-solid:phone')->addCssClass('optional')
                 ->setHelp('Phone number is preferred'),
             TextField::new('phone'),
             TextField::new('email')->hideOnIndex(),
@@ -495,13 +495,13 @@ The arguments of the ``addFieldset()`` method are:
   or an empy string, no title is displayed. You can also pass ``string`` and
   ``TranslatableInterface`` variables. In both cases, if they contain HTML tags
   they will be rendered in stead of escaped;
-* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6regular:folder-open``)
+* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6-regular:folder-open``)
   that is displayed next to the fieldset label.
 
 .. note::
 
     By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
-    (``fa6regular:``, ``fa6solid:`` and ``fa6brands:``), but you can
+    (``fa6-regular:``, ``fa6-solid:`` and ``fa6-brands:``), but you can
     :ref:`use your own icon sets <icon-customization>`.
 
     .. deprecated:: 4.16

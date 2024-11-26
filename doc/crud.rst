@@ -85,7 +85,7 @@ served by some dashboard using the ``#[AdminDashboard]`` attribute::
     // ...
 
     #[AdminDashboard(routes: [
-        'index' => ['routePath' => '/all']
+        'index' => ['routePath' => '/all'],
         'new' => ['routePath' => '/create', 'routeName' => 'create'],
         'edit' => ['routePath' => '/editing-{entityId}', 'routeName' => 'editing'],
         'delete' => ['routePath' => '/remove/{entityId}'],
