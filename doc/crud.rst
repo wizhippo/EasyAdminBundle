@@ -49,7 +49,7 @@ CRUD route name     CRUD route path
 ==================  ======================
 ``*_index``         ``/``
 ``*_new``           ``/new``
-``*_batchDelete``   ``/batchDelete``
+``*_batchDelete``   ``/batch-delete``
 ``*_autocomplete``  ``/autocomplete``
 ``*_edit``          ``/{entityId}/edit``
 ``*_delete``        ``/{entityId}/delete``
@@ -65,7 +65,7 @@ Admin route name                Admin route path
 ==============================  ===============================
 ``admin_product_index``         ``/admin/product``
 ``admin_product_new``           ``/admin/product/new``
-``admin_product_batchDelete``   ``/admin/product/batchDelete``
+``admin_product_batchDelete``   ``/admin/product/batch-delete``
 ``admin_product_autocomplete``  ``/admin/product/autocomplete``
 ``admin_product_edit``          ``/admin/product/324/edit``
 ``admin_product_delete``        ``/admin/product/324/delete``
@@ -103,7 +103,7 @@ Admin route name                Admin route path
 ==============================  =====================================
 ``admin_product_index``         ``/admin/product/all``
 ``admin_product_create``        ``/admin/product/create``
-``admin_product_batchDelete``   ``/admin/product/current/batchDelete``
+``admin_product_batchDelete``   ``/admin/product/current/batch-delete``
 ``admin_product_autocomplete``  ``/admin/product/current/autocomplete``
 ``admin_product_editing``       ``/admin/product/current/editing-324``
 ``admin_product_delete``        ``/admin/product/remove/324``
@@ -138,7 +138,7 @@ Admin route name                Admin route path
 ==============================  =====================================
 ``admin_stock_index``           ``/admin/stock/current``
 ``admin_stock_new``             ``/admin/stock/current/new``
-``admin_stock_batchDelete``     ``/admin/stock/current/batchDelete``
+``admin_stock_batchDelete``     ``/admin/stock/current/batch-delete``
 ``admin_stock_autocomplete``    ``/admin/stock/current/autocomplete``
 ``admin_stock_edit``            ``/admin/stock/current/324/edit``
 ``admin_stock_delete``          ``/admin/stock/current/324/delete``

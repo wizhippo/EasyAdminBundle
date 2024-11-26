@@ -28,7 +28,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
             'methods' => ['GET', 'POST'],
         ],
         'batchDelete' => [
-            'routePath' => '/batchDelete',
+            'routePath' => '/batch-delete',
             'routeName' => 'batch_delete',
             'methods' => ['POST'],
         ],
@@ -38,7 +38,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
             'methods' => ['GET'],
         ],
         'renderFilters' => [
-            'routePath' => '/renderFilters',
+            'routePath' => '/render-filters',
             'routeName' => 'render_filters',
             'methods' => ['GET'],
         ],
@@ -273,7 +273,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         // if the CRUD controller doesn't define any or all of the route configuration,
         // use the default values based on the controller's class name
         if (!\array_key_exists('routePath', $crudControllerConfig)) {
-            $crudControllerConfig['routePath'] = trim($this->transformCrudControllerNameToSnakeCase($crudControllerFqcn), '/');
+            $crudControllerConfig['routePath'] = trim($this->transformCrudControllerNameToKebabCase($crudControllerFqcn), '/');
         }
         if (!\array_key_exists('routeName', $crudControllerConfig)) {
             $crudControllerConfig['routeName'] = trim($this->transformCrudControllerNameToSnakeCase($crudControllerFqcn), '_');
@@ -348,13 +348,20 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         return $attributes[0]->newInstance();
     }
 
+    // transforms 'App\Controller\Admin\FooBarBazCrudController' into 'foo-bar-baz'
+    private function transformCrudControllerNameToKebabCase(string $crudControllerFqcn): string
+    {
+        $shortName = str_replace(['CrudController', 'Controller'], '', (new \ReflectionClass($crudControllerFqcn))->getShortName());
+
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $shortName));
+    }
+
     // transforms 'App\Controller\Admin\FooBarBazCrudController' into 'foo_bar_baz'
     private function transformCrudControllerNameToSnakeCase(string $crudControllerFqcn): string
     {
         $shortName = str_replace(['CrudController', 'Controller'], '', (new \ReflectionClass($crudControllerFqcn))->getShortName());
-        $shortName = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $shortName));
 
-        return $shortName;
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $shortName));
     }
 
     /**
