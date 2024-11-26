@@ -12,7 +12,22 @@ icons included by default in EasyAdmin are now inlined as SVGs. The font files
 
 This doesn't require any change on your side, unless you were relying on the
 FontAwesome CSS classes to style the icons, which is something undocumented and
-not recommended.
+not recommended. In that case, replace the `fa-*` CSS classes by the new Twig
+Component that renders icons:
+
+```twig
+{# Before: #}
+<i class="fa-regular fa-user"></i>
+<i class="far fa-user"></i>
+<i class="fa-solid fa-tags"></i>
+<i class="fas fa-tags"></i>
+
+{# After: #}
+<twig:ea:Icon name="fa6-regular:user" />
+<twig:ea:Icon name="fa6-regular:user" />
+<twig:ea:Icon name="fa6-solid:tags" />
+<twig:ea:Icon name="fa6-solid:tags" />
+```
 
 EasyAdmin 4.14.0
 ----------------
