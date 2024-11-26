@@ -63,7 +63,7 @@ icons), pass it to the ``useCustomIconSet()`` method::
 
     return Assets::new()->useCustomIconSet('tabler');
 
-Now, the `tabler:`` prefix will be added automatically to all your custom icon
+Now, the ``tabler:`` prefix will be added automatically to all your custom icon
 names. This way, you can use names like ``user`` and ``file`` instead of
 ``tabler:user`` and ``tabler:file``.
 

@@ -37,7 +37,7 @@ final class FormField implements FieldInterface
 
     /**
      * @param TranslatableInterface|string|false|null $label
-     * @param string|null                             $icon  The full CSS classes of the FontAwesome icon to render (see https://fontawesome.com/v6/search?m=free)
+     * @param string|null                             $icon  The full FontAwesome icon name to render (e.g. 'fa6-solid:user', 'fa6-regular:lines') (see https://fontawesome.com/v6/search?m=free)
      */
     public static function addPanel($label = false, ?string $icon = null): self
     {
@@ -52,7 +52,7 @@ final class FormField implements FieldInterface
 
     /**
      * @param TranslatableInterface|string|false|null $label
-     * @param string|null                             $icon  The full CSS classes of the FontAwesome icon to render (see https://fontawesome.com/v6/search?m=free)
+     * @param string|null                             $icon  The full FontAwesome icon name to render (e.g. 'fa6-solid:user', 'fa6-regular:lines') (see https://fontawesome.com/v6/search?m=free)
      */
     public static function addFieldset($label = false, ?string $icon = null): self
     {

@@ -537,11 +537,11 @@ the second argument is the icon to display. The icon name follows the pattern
     (``fa6-regular:``, ``fa6-solid:`` and ``fa6-brands:``), but you can
     :ref:`use your own icon sets <icon-customization>`.
 
-    .. deprecated:: 4.16
+.. deprecated:: 4.16
 
-        In EasyAdmin versions prior to 4.16.0, the icon name was defined as the full
-        FontAwesome CSS class: e.g., ``fa-regular fa-user``. This syntax is now
-        deprecated and will be removed in EasyAdmin 5.0.0.
+    In EasyAdmin versions prior to 4.16.0, the icon name was defined as the full
+    FontAwesome CSS class: e.g., ``fa-regular fa-user`` or ``far fa-user``.
+    This syntax is now deprecated and will be removed in EasyAdmin 5.0.0.
 
 Menu Item Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
