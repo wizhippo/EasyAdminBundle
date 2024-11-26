@@ -372,7 +372,7 @@ The arguments of the ``addColumn()`` method are:
   or an empy string, no title is displayed. You can also pass ``string`` and
   ``TranslatableInterface`` variables. In both cases, if they contain HTML tags
   they will be rendered in stead of escaped;
-* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6-regulat:folder-open``)
+* ``$icon``: (type: ``?string``) the full icon name (e.g. ``fa6-regular:folder-open``)
   that is displayed next to the column label;
 * ``$help``: (type: ``?string``) an optional content that is displayed below the
   column label; it's mostly used to describe the column contents or provide further
