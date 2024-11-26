@@ -128,7 +128,7 @@
                     {% endfor %}
 
                     <th class="{{ ea.crud.showEntityActionsAsDropdown ? 'actions-as-dropdown-table-head' }}" dir="{{ ea.i18n.textDirection }}">
-                        <span class="sr-only">{{ t('action.entity_actions', ea.i18n.translationParameters, 'EasyAdminBundle')|trans }}</span>
+                        <span class="visually-hidden">{{ t('action.entity_actions', ea.i18n.translationParameters, 'EasyAdminBundle')|trans }}</span>
                     </th>
                 </tr>
             {% endblock table_head %}
