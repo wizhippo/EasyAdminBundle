@@ -351,9 +351,10 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
     // transforms 'App\Controller\Admin\FooBarBazCrudController' into 'foo-bar-baz'
     private function transformCrudControllerNameToKebabCase(string $crudControllerFqcn): string
     {
-        $shortName = str_replace(['CrudController', 'Controller'], '', (new \ReflectionClass($crudControllerFqcn))->getShortName());
+        $cleanShortName = str_replace(['CrudController', 'Controller'], '', (new \ReflectionClass($crudControllerFqcn))->getShortName());
+        $snakeCaseName = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $cleanShortName));
 
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $shortName));
+        return $snakeCaseName;
     }
 
     // transforms 'App\Controller\Admin\FooBarBazCrudController' into 'foo_bar_baz'
