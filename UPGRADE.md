@@ -1,6 +1,18 @@
 Upgrade between EasyAdmin 4.x versions
 ======================================
 
+EasyAdmin 4.17.0
+----------------
+
+### Pretty URLs Changed Their Url Patterns
+
+This is a small BC break. When using pretty URLs, the generated URLs used
+underscores and they now use dashes and snake case. For example, before an URL
+could be `/admin/blog_post/batchDelete` and now it's `/admin/blog-post/batch-delete`
+
+The route names remain the same (e.g. `admin_blog_post_batch_delete`) and you
+probably always generate URLs using the route name, so this BC break won't impact you.
+
 EasyAdmin 4.16.0
 ----------------
 
