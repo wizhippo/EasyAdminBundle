@@ -8,7 +8,7 @@ table.datagrid {
   margin-block-end: 0;
   inline-size: 100%;
 }
-@media (max-inline-size: 767px) {
+@media (max-width: 767px) {
   table.datagrid:not(.datagrid-empty) tbody,
   table.datagrid:not(.datagrid-empty) tr,
   table.datagrid:not(.datagrid-empty) td { display: block; }
@@ -79,7 +79,7 @@ table.datagrid {
   box-shadow: inset 0 -2px 0 var(--table-cell-border-color);
   padding: 0;
 }
-.datagrid thead a, .datagrid thead > span {
+.datagrid thead a, .datagrid thead span:not(.icon) {
   color: var(--table-thead-color);
   display: block;
   font-weight: 500;
@@ -236,7 +236,7 @@ table.datagrid {
   position: relative;
   inset-block-start: 3px;
 }
-@media (max-inline-size: 992px) {
+@media (max-width: 992px) {
   .datagrid .field-country {
     text-align: left !important;
   }
