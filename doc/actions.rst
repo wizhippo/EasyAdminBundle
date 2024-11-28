@@ -274,20 +274,13 @@ the ``Action`` class constructor::
     // to display an icon for the action; otherwise users can't see or click on the action)
     $viewInvoice = Action::new('viewInvoice', false);
 
-    // the third optional argument is the full icon name
-    $viewInvoice = Action::new('viewInvoice', 'Invoice', 'fa6-solid:file-invoice');
+    // the third optional argument is the icon name
+    $viewInvoice = Action::new('viewInvoice', 'Invoice', 'fa fa-file-invoice');
 
-.. note::
-
-    By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
-    (``fa6-regular:``, ``fa6-solid:`` and ``fa6-brands:``), but you can
-    :ref:`use your own icon sets <icon-customization>`.
-
-    .. deprecated:: 4.16
-
-        In EasyAdmin versions prior to 4.16.0, the icon name was defined as the full
-        FontAwesome CSS class: e.g., ``fa-regular fa-user``. This syntax is now
-        deprecated and will be removed in EasyAdmin 5.0.0.
+By default, EasyAdmin assumes that icon names correspond to `FontAwesome`_ CSS
+classes. The necessary CSS styles and web fonts are included by default too,
+so you don't need to take any additional steps to use FontAwesome icons. Alternatively,
+you can :ref:`use your own icon sets <icon-customization>` instead of FontAwesome.
 
 Then you can configure the basic HTML/CSS attributes of the button/element
 that will represent the action::

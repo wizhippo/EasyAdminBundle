@@ -24,7 +24,7 @@ class ErrorDashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linktoDashboard('Error Dashboard', 'fa6-solid:house');
+        yield MenuItem::linktoDashboard('Error Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('ErrorFieldDoesNotBelongToAnyTabCrudController', null, ErrorFieldDoesNotBelongToAnyTabCrudController::class);
     }
 }

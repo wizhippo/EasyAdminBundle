@@ -1,6 +1,18 @@
 Upgrade between EasyAdmin 4.x versions
 ======================================
 
+EasyAdmin 4.18.0
+----------------
+
+### Reverted FontAwesome Icon Changes
+
+In EasyAdmin 4.16.0, we introduced a feature allowing the use of custom icon
+sets in addition to the default FontAwesome icons. As part of this update,
+FontAwesome icons were changed to be rendered as inline SVGs instead of being
+applied via CSS classes. **This change has been reverted in this version**,
+restoring the previous behavior so you can continue using FontAwesome icons as
+before in EasyAdmin.
+
 EasyAdmin 4.17.0
 ----------------
 
@@ -18,28 +30,8 @@ EasyAdmin 4.16.0
 
 ### FontAwesome Icons Are Now Inlined as SVGs
 
-As part of the new feature that allows to use custom icon sets, the FontAwesome
-icons included by default in EasyAdmin are now inlined as SVGs. The font files
-(.ttf, .woff2) and the CSS file that loads the icons have been removed.
-
-This doesn't require any change on your side, unless you were relying on the
-FontAwesome CSS classes to style the icons, which is something undocumented and
-not recommended. In that case, replace the `fa-*` CSS classes by the new Twig
-Component that renders icons:
-
-```twig
-{# Before: #}
-<i class="fa-regular fa-user"></i>
-<i class="far fa-user"></i>
-<i class="fa-solid fa-tags"></i>
-<i class="fas fa-tags"></i>
-
-{# After: #}
-<twig:ea:Icon name="fa6-regular:user" />
-<twig:ea:Icon name="fa6-regular:user" />
-<twig:ea:Icon name="fa6-solid:tags" />
-<twig:ea:Icon name="fa6-solid:tags" />
-```
+**REVERTED** This change was reverted in EasyAdmin 4.18.0. If you use FontAwesome
+icons, you don't have to do any change.
 
 EasyAdmin 4.14.0
 ----------------

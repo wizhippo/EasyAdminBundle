@@ -514,15 +514,15 @@ the look and behavior of each menu item::
         public function configureMenuItems(): iterable
         {
             return [
-                MenuItem::linkToDashboard('Dashboard', 'fa6-solid:house'),
+                MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
 
                 MenuItem::section('Blog'),
-                MenuItem::linkToCrud('Categories', 'fa6-solid:tags', Category::class),
-                MenuItem::linkToCrud('Blog Posts', 'fa6-regular:file-lines', BlogPost::class),
+                MenuItem::linkToCrud('Categories', 'fa fa-tags', Category::class),
+                MenuItem::linkToCrud('Blog Posts', 'fa fa-file-text', BlogPost::class),
 
                 MenuItem::section('Users'),
-                MenuItem::linkToCrud('Comments', 'fa6-regular:comments', Comment::class),
-                MenuItem::linkToCrud('Users', 'fa6-solid:user', User::class),
+                MenuItem::linkToCrud('Comments', 'fa fa-comment', Comment::class),
+                MenuItem::linkToCrud('Users', 'fa fa-user', User::class),
             ];
         }
     }
@@ -533,15 +533,10 @@ the second argument is the icon to display. The icon name follows the pattern
 
 .. note::
 
-    By default, EasyAdmin includes the full icon sets for `FontAwesome`_ icons
-    (``fa6-regular:``, ``fa6-solid:`` and ``fa6-brands:``), but you can
-    :ref:`use your own icon sets <icon-customization>`.
-
-.. deprecated:: 4.16
-
-    In EasyAdmin versions prior to 4.16.0, the icon name was defined as the full
-    FontAwesome CSS class: e.g., ``fa-regular fa-user`` or ``far fa-user``.
-    This syntax is now deprecated and will be removed in EasyAdmin 5.0.0.
+    By default, EasyAdmin assumes that icon names correspond to `FontAwesome`_ CSS
+    classes. The necessary CSS styles and web fonts are included by default too,
+    so you don't need to take any additional steps to use FontAwesome icons. Alternatively,
+    you can :ref:`use your own icon sets <icon-customization>` instead of FontAwesome.
 
 Menu Item Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
