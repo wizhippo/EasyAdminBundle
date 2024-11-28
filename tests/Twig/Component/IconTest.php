@@ -17,7 +17,7 @@ class IconTest extends TestCase
     /**
      * @dataProvider provideGetInternalIconData
      */
-    public function testGetInternalIcon(string $iconName, string $appIconSet, string $expectedOutput): void
+    public function testGetInternalIcon(string $iconName, string $appIconSet): void
     {
         $iconComponent = new Icon($this->getAdminContextProviderMock($appIconSet));
         $iconComponent->name = $iconName;
@@ -32,9 +32,9 @@ class IconTest extends TestCase
     {
         // internal icons used in EasyAdmin UI; we test it with different icon sets to
         // test that the icon set is ignored for internal icons and the result is always the same
-        yield ['internal:user', IconSet::Internal, 'internal:user'];
-        yield ['internal:user', IconSet::Custom, 'internal:user'];
-        yield ['internal:user', IconSet::FontAwesome, 'internal:user'];
+        yield ['internal:user', IconSet::Internal];
+        yield ['internal:user', IconSet::Custom];
+        yield ['internal:user', IconSet::FontAwesome];
     }
 
     /**
@@ -42,59 +42,50 @@ class IconTest extends TestCase
      *
      * @group legacy (needed for tests that use legacy FontAwesome icon names)
      */
-    public function testGetFontAwesomeIcon(string $iconName, string $appIconSet, string $expectedOutput): void
+    public function testGetFontAwesomeIcon(string $iconName): void
     {
-        $iconComponent = new Icon($this->getAdminContextProviderMock($appIconSet));
+        $iconComponent = new Icon($this->getAdminContextProviderMock(IconSet::FontAwesome));
         $iconComponent->name = $iconName;
         $iconDto = $iconComponent->getIcon();
 
-        $lastDirName = basename(\dirname($iconDto->getPath()));
-        $svgFileName = pathinfo($iconDto->getPath(), \PATHINFO_FILENAME);
-        $expectedIconName = sprintf('%s:%s', $lastDirName, $svgFileName);
-
-        $this->assertSame($expectedIconName, $iconDto->getName());
-        $this->assertStringEndsWith($expectedOutput, $iconDto->getPath());
-        $this->assertStringContainsString('(Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.', $iconDto->getSvgContents());
+        $this->assertSame($iconName, $iconDto->getName());
+        $this->assertNull($iconDto->getPath());
+        $this->assertNull($iconDto->getSvgContents());
     }
 
     public function provideGetFontAwesomeIconData(): iterable
     {
-        // FontAwesome icons using the modern format
-        yield ['fa6-solid:address-card', IconSet::FontAwesome, 'assets/icons/fa6-solid/address-card.svg'];
-        yield ['fa6-regular:face-laugh', IconSet::FontAwesome, 'assets/icons/fa6-regular/face-laugh.svg'];
-        yield ['fa6-brands:symfony', IconSet::FontAwesome, 'assets/icons/fa6-brands/symfony.svg'];
-        // FontAwesome icons using the old format (it's important to test different locations of the icon name in the CSS class list)
-        yield ['fa fa-list', IconSet::FontAwesome, 'assets/icons/fa6-solid/list.svg'];
-        yield ['fa-solid fa-list', IconSet::FontAwesome, 'assets/icons/fa6-solid/list.svg'];
-        yield ['fa-list fa-solid', IconSet::FontAwesome, 'assets/icons/fa6-solid/list.svg'];
-        yield ['fa-list fa-solid fa-fw', IconSet::FontAwesome, 'assets/icons/fa6-solid/list.svg'];
-        yield ['fa-list fa-fw fa-solid', IconSet::FontAwesome, 'assets/icons/fa6-solid/list.svg'];
-        yield ['fa-brands fa-twitter', IconSet::FontAwesome, 'assets/icons/fa6-brands/twitter.svg'];
-        yield ['fa-twitter fa-brands', IconSet::FontAwesome, 'assets/icons/fa6-brands/twitter.svg'];
-        yield ['fa-twitter fa-brands fa-fw', IconSet::FontAwesome, 'assets/icons/fa6-brands/twitter.svg'];
-        yield ['fa-twitter fa-fw fa-brands', IconSet::FontAwesome, 'assets/icons/fa6-brands/twitter.svg'];
-        yield ['fa-clock fa-regular', IconSet::FontAwesome, 'assets/icons/fa6-regular/clock.svg'];
-        yield ['fa-regular fa-clock', IconSet::FontAwesome, 'assets/icons/fa6-regular/clock.svg'];
-        yield ['fa-regular fa-clock fa-fw', IconSet::FontAwesome, 'assets/icons/fa6-regular/clock.svg'];
-        yield ['fa-regular fa-fw fa-clock', IconSet::FontAwesome, 'assets/icons/fa6-regular/clock.svg'];
-        yield ['fa-address-card', IconSet::FontAwesome, 'assets/icons/fa6-solid/address-card.svg'];
-        yield ['fas fa-address-card', IconSet::FontAwesome, 'assets/icons/fa6-solid/address-card.svg'];
-        yield ['fa-address-card fas', IconSet::FontAwesome, 'assets/icons/fa6-solid/address-card.svg'];
-        yield ['fa-address-card fas fa-fw', IconSet::FontAwesome, 'assets/icons/fa6-solid/address-card.svg'];
-        yield ['fa-address-card fa-fw fas', IconSet::FontAwesome, 'assets/icons/fa6-solid/address-card.svg'];
-        yield ['fas fa-fw fa-address-card', IconSet::FontAwesome, 'assets/icons/fa6-solid/address-card.svg'];
-        yield ['fas fa-address-card fa-fw', IconSet::FontAwesome, 'assets/icons/fa6-solid/address-card.svg'];
-        // FontAwesome icons using the old format and legacy icon names
-        yield ['fa-file-text-o', IconSet::FontAwesome, 'assets/icons/fa6-regular/file-lines.svg'];
-        yield ['fa fa-file-text-o', IconSet::FontAwesome, 'assets/icons/fa6-regular/file-lines.svg'];
-        yield ['far fa-file-text-o', IconSet::FontAwesome, 'assets/icons/fa6-regular/file-lines.svg'];
-        yield ['fas fa-file-text-o', IconSet::FontAwesome, 'assets/icons/fa6-regular/file-lines.svg'];
-        yield ['fa-file-text-o fa', IconSet::FontAwesome, 'assets/icons/fa6-regular/file-lines.svg'];
-        yield ['fa-file-text-o fas', IconSet::FontAwesome, 'assets/icons/fa6-regular/file-lines.svg'];
-        yield ['fa-file-text-o far', IconSet::FontAwesome, 'assets/icons/fa6-regular/file-lines.svg'];
-        yield ['fa-fw fa-file-text-o fa', IconSet::FontAwesome, 'assets/icons/fa6-regular/file-lines.svg'];
-        yield ['fa-fw fa-file-text-o fas', IconSet::FontAwesome, 'assets/icons/fa6-regular/file-lines.svg'];
-        yield ['fa-fw fa-file-text-o far', IconSet::FontAwesome, 'assets/icons/fa6-regular/file-lines.svg'];
+        yield ['fa fa-list'];
+        yield ['fa-solid fa-list'];
+        yield ['fa-list fa-solid'];
+        yield ['fa-list fa-solid fa-fw'];
+        yield ['fa-list fa-fw fa-solid'];
+        yield ['fa-brands fa-twitter'];
+        yield ['fa-twitter fa-brands'];
+        yield ['fa-twitter fa-brands fa-fw'];
+        yield ['fa-twitter fa-fw fa-brands'];
+        yield ['fa-clock fa-regular'];
+        yield ['fa-regular fa-clock'];
+        yield ['fa-regular fa-clock fa-fw'];
+        yield ['fa-regular fa-fw fa-clock'];
+        yield ['fa-address-card'];
+        yield ['fas fa-address-card'];
+        yield ['fa-address-card fas'];
+        yield ['fa-address-card fas fa-fw'];
+        yield ['fa-address-card fa-fw fas'];
+        yield ['fas fa-fw fa-address-card'];
+        yield ['fas fa-address-card fa-fw'];
+        // FontAwesome icons using legacy icon names
+        yield ['fa-file-text-o'];
+        yield ['fa fa-file-text-o'];
+        yield ['far fa-file-text-o'];
+        yield ['fas fa-file-text-o'];
+        yield ['fa-file-text-o fa'];
+        yield ['fa-file-text-o fas'];
+        yield ['fa-file-text-o far'];
+        yield ['fa-fw fa-file-text-o fa'];
+        yield ['fa-fw fa-file-text-o fas'];
+        yield ['fa-fw fa-file-text-o far'];
     }
 
     /**
@@ -125,44 +116,6 @@ class IconTest extends TestCase
         $iconComponent = new Icon($this->getAdminContextProviderMock(IconSet::Internal));
         $iconComponent->name = 'internal:this-does-not-exist';
         $iconComponent->getIcon();
-    }
-
-    public function testUnknownFontAwesomeIcon(): void
-    {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageMatches('/The icon "fa6-solid:this-does-not-exist" does not exist\. After processing by EasyAdmin, this icon corresponds to the file "this-does-not-exist\.svg", which could not be found in any of the FontAwesome directories within the "assets\/icons\/" directory of EasyAdmin\./');
-
-        $iconComponent = new Icon($this->getAdminContextProviderMock(IconSet::FontAwesome));
-        $iconComponent->name = 'fa6-solid:this-does-not-exist';
-        $iconComponent->getIcon();
-    }
-
-    /**
-     * @group legacy
-     *
-     * @dataProvider provideDeprecatedFontAwesomeIconData
-     */
-    public function testDeprecationWhenUsingLegacyFontAwesomeIcon(string $iconName): void
-    {
-        $this->expectDeprecation('Since easycorp/easyadmin-bundle 4.15.0: The "file-text-o" icon name was deprecated by FontAwesome. The equivalent icon name that you must use is "fa6-regular:file-lines". Using deprecated icon names will no longer work in EasyAdmin 5.0.0.');
-
-        $iconComponent = new Icon($this->getAdminContextProviderMock(IconSet::FontAwesome));
-        $iconComponent->name = $iconName;
-        $iconComponent->getIcon();
-    }
-
-    public function provideDeprecatedFontAwesomeIconData(): iterable
-    {
-        yield ['fa-file-text-o'];
-        yield ['fa fa-file-text-o'];
-        yield ['far fa-file-text-o'];
-        yield ['fas fa-file-text-o'];
-        yield ['fa-file-text-o fa'];
-        yield ['fa-file-text-o fas'];
-        yield ['fa-file-text-o far'];
-        yield ['fa-fw fa-file-text-o fa'];
-        yield ['fa-fw fa-file-text-o fas'];
-        yield ['fa-fw fa-file-text-o far'];
     }
 
     /**

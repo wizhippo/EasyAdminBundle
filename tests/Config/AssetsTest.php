@@ -8,6 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class AssetsTest extends TestCase
 {
+    public function testDefaultIconSet()
+    {
+        $assetsConfig = Assets::new();
+
+        $this->assertSame(IconSet::FontAwesome, $assetsConfig->getAsDto()->getIconSet());
+        $this->assertSame('', $assetsConfig->getAsDto()->getDefaultIconPrefix());
+    }
+
     public function testCustomIconSet()
     {
         $assetsConfig = Assets::new();
