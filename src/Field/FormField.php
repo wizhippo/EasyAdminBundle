@@ -183,7 +183,7 @@ final class FormField implements FieldInterface
         if (null === $icon) {
             return $icon;
         }
-        if (!str_contains($icon, 'fa-') && !str_contains($icon, 'far-') && !str_contains($icon, 'fab-')) {
+        if (!str_contains($icon, ':') && !str_contains($icon, 'fa-') && !str_contains($icon, 'far-') && !str_contains($icon, 'fab-')) {
             trigger_deprecation('easycorp/easyadmin-bundle', '4.4.0', 'The value passed as the $icon argument in "%s" method must be the full FontAwesome CSS class of the icon. For example, if you passed "user" before, you now must pass "fa fa-user" (or any style variant like "fa fa-solid fa-user").', $methodName);
             $icon = sprintf('fa fa-%s', $icon);
         }
