@@ -66,11 +66,11 @@ jobs:
                     # Latest Symfony version support
                     - os: macos-latest
                       php_version: "8.4"
-                      symfony_version: "7.1"
+                      symfony_version: "7.2"
                       stability: "stable"
                     - os: windows-latest
                       php_version: "8.4"
-                      symfony_version: "7.1"
+                      symfony_version: "7.2"
                       stability: "stable"
                     # LTS Symfony version support
                     - os: macos-latest
@@ -106,8 +106,8 @@ jobs:
                     # Upcoming Symfony versions
                     - os: ubuntu-latest
                       php_version: "8.4"
-                      symfony_version: "7.2.x-dev"
-                      stability: "dev"
+                      symfony_version: "7.2"
+                      stability: "stable"
         runs-on: ${{ matrix.os }}
         steps:
             - uses: actions/checkout@v4
