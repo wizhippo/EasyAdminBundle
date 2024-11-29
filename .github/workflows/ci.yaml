@@ -132,7 +132,7 @@ jobs:
 
             - name: Configure Symfony version for symfony/flex
               if: ${{ matrix.symfony_version }}
-              run: composer config extra.symfony.require "${{ matrix.symfony_version }}"
+              run: composer config extra.symfony.require "${{ matrix.symfony_version }}.*"
 
             - name: Install dependencies
               run: |
