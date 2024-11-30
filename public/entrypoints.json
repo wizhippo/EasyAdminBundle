@@ -2,15 +2,15 @@
   "entrypoints": {
     "app": {
       "css": [
-        "/app.a5229f5e.css"
+        "/app.d6cba853.css"
       ],
       "js": [
-        "/app.5574818b.js"
+        "/app.1ecd6d7a.js"
       ]
     },
     "form": {
       "js": [
-        "/form.ec4ce275.js"
+        "/form.bcec6c2a.js"
       ]
     },
     "page-layout": {
@@ -33,7 +33,7 @@
         "/field-code-editor.cdcf15eb.css"
       ],
       "js": [
-        "/field-code-editor.42d2db92.js"
+        "/field-code-editor.877c61fa.js"
       ]
     },
     "field-collection": {
@@ -48,12 +48,12 @@
     },
     "field-image": {
       "js": [
-        "/field-image.672243bd.js"
+        "/field-image.c338d2ad.js"
       ]
     },
     "field-slug": {
       "js": [
-        "/field-slug.978b0c9c.js"
+        "/field-slug.bed171ad.js"
       ]
     },
     "field-textarea": {
@@ -66,7 +66,7 @@
         "/field-text-editor.750725ec.css"
       ],
       "js": [
-        "/field-text-editor.c19616af.js"
+        "/field-text-editor.cb6de4f5.js"
       ]
     },
     "login": {

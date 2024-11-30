@@ -82,6 +82,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Router\UrlSigner;
 use EasyCorp\Bundle\EasyAdminBundle\Security\AuthorizationChecker;
 use EasyCorp\Bundle\EasyAdminBundle\Security\SecurityVoter;
+use EasyCorp\Bundle\EasyAdminBundle\Twig\Component\Flag;
 use EasyCorp\Bundle\EasyAdminBundle\Twig\Component\Icon;
 use EasyCorp\Bundle\EasyAdminBundle\Twig\EasyAdminTwigExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -342,7 +343,7 @@ return static function (ContainerConfigurator $container) {
             ->tag(EasyAdminExtension::TAG_FIELD_CONFIGURATOR, ['priority' => 9999])
 
         ->set(CountryConfigurator::class)
-            ->arg(0, service(AssetPackage::class))
+            ->arg(0, service('twig'))
 
         ->set(CurrencyConfigurator::class)
 
@@ -397,6 +398,9 @@ return static function (ContainerConfigurator $container) {
 
         ->set(Icon::class)
             ->arg(0, service(AdminContextProvider::class))
+            ->tag('twig.component')
+
+        ->set(Flag::class)
             ->tag('twig.component')
     ;
 };

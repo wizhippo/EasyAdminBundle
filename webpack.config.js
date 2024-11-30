@@ -10,18 +10,6 @@ Encore
     .enableVersioning(true)
     .disableSingleRuntimeChunk()
 
-    // copy flag images for country type
-    .copyFiles({
-        from: './node_modules/country-flag-icons/3x2/',
-        to: 'images/flags/[path][name].[ext]',
-        pattern: /\.svg$/
-    })
-    // this is needed for special 'flags' such as UNKNOWN.svg (which is used for missing flags)
-    .copyFiles({
-        from: './assets/images/flags/',
-        to: 'images/flags/[path][name].[ext]',
-    })
-
     .configureCssMinimizerPlugin((options) => {
         options.minimizerOptions = {
             preset: [
