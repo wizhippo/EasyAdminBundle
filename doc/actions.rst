@@ -373,6 +373,11 @@ The following example shows all kinds of actions in practice::
         }
     }
 
+.. tip::
+
+    ``renderInvoice()`` behave like ``Symfony controllers`_,
+    so you can do anything you usually do in a controller.
+
 Custom actions can define the ``#[AdminAction]`` attribute to
 :ref:`customize their route name, path and methods <crud_routes>`::
 
@@ -662,3 +667,4 @@ by EasyAdmin::
     }
 
 .. _`FontAwesome`: https://fontawesome.com/
+.. _`Symfony controllers`: https://symfony.com/doc/current/controller.html
