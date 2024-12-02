@@ -49,6 +49,8 @@ final class ActionFactory
                 continue;
             }
 
+            $actionDto->computeLabel($entityDto);
+
             // if CSS class hasn't been overridden, apply the default ones
             if ('' === $actionDto->getCssClass()) {
                 $defaultCssClass = 'action-'.$actionDto->getName();

@@ -13,6 +13,12 @@ final class ActionDto
     private ?string $type = null;
     private ?string $name = null;
     private TranslatableInterface|string|null $label = null;
+
+    /**
+     * @var (callable(object): string)|null
+     */
+    private $labelCallable;
+
     private ?string $icon = null;
     private string $cssClass = '';
     private string $addedCssClass = '';
@@ -63,13 +69,28 @@ final class ActionDto
         $this->name = $name;
     }
 
+    public function isDynamicLabel(): bool
+    {
+        return \is_callable($this->labelCallable);
+    }
+
     public function getLabel(): TranslatableInterface|string|false|null
     {
         return $this->label;
     }
 
-    public function setLabel(TranslatableInterface|string|false|null $label): void
+    /**
+     * @param TranslatableInterface|string|(callable(object $entity): string)|false|null $label
+     */
+    public function setLabel(TranslatableInterface|string|callable|false|null $label): void
     {
+        if (\is_callable($label)) {
+            $this->labelCallable = $label;
+            $this->label = null;
+
+            return;
+        }
+
         $this->label = $label;
     }
 
@@ -259,6 +280,25 @@ final class ActionDto
     public function setDisplayCallable(callable $displayCallable): void
     {
         $this->displayCallable = $displayCallable;
+    }
+
+    public function computeLabel(EntityDto $entityDto): void
+    {
+        if (null !== $this->label) {
+            return;
+        }
+
+        if (!\is_callable($this->labelCallable)) {
+            return;
+        }
+
+        $label = \call_user_func_array($this->labelCallable, array_filter([$entityDto->getInstance()]));
+
+        if (!\is_string($label) && !$label instanceof TranslatableInterface) {
+            throw new \RuntimeException(sprintf('Action label callable must return a string or a %s instance but it returned a(n) "%s" value instead.', TranslatableInterface::class, \gettype($label)));
+        }
+
+        $this->label = $label;
     }
 
     /**
