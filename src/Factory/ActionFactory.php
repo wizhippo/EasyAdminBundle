@@ -49,8 +49,6 @@ final class ActionFactory
                 continue;
             }
 
-            $actionDto->computeLabel($entityDto);
-
             // if CSS class hasn't been overridden, apply the default ones
             if ('' === $actionDto->getCssClass()) {
                 $defaultCssClass = 'action-'.$actionDto->getName();
@@ -123,19 +121,7 @@ final class ActionFactory
 
         $actionDto->setHtmlAttribute('data-action-name', $actionDto->getName());
 
-        if (false === $actionDto->getLabel()) {
-            $actionDto->setHtmlAttribute('title', $actionDto->getName());
-        } elseif (!$actionDto->getLabel() instanceof TranslatableInterface) {
-            $translationParameters = array_merge(
-                $defaultTranslationParameters,
-                $actionDto->getTranslationParameters()
-            );
-            $label = $actionDto->getLabel();
-            $translatableActionLabel = (null === $label || '' === $label) ? $label : t($label, $translationParameters, $translationDomain);
-            $actionDto->setLabel($translatableActionLabel);
-        } else {
-            $actionDto->setLabel(TranslatableMessageBuilder::withParameters($actionDto->getLabel(), $defaultTranslationParameters));
-        }
+        $this->processActionLabel($actionDto, $entityDto, $translationDomain, $defaultTranslationParameters);
 
         $defaultTemplatePath = $adminContext->getTemplatePath('crud/action');
         $actionDto->setTemplatePath($actionDto->getTemplatePath() ?? $defaultTemplatePath);
@@ -166,6 +152,35 @@ final class ActionFactory
         }
 
         return $actionDto;
+    }
+
+    private function processActionLabel(ActionDto $actionDto, ?EntityDto $entityDto, string $translationDomain, array $defaultTranslationParameters): void
+    {
+        $label = $actionDto->getLabel();
+
+        // FALSE means that action doesn't show a visible label in the interface
+        if (false === $label) {
+            $actionDto->setHtmlAttribute('title', $actionDto->getName());
+
+            return;
+        }
+
+        if (\is_callable($label)) {
+            $label = \call_user_func_array($label, array_filter([$entityDto?->getInstance()]));
+
+            if (!\is_string($label) && !$label instanceof TranslatableInterface) {
+                throw new \RuntimeException(sprintf('The callable used to define the label of the "%s" action label %s must return a string or a %s instance but it returned a(n) "%s" value instead.', $actionDto->getName(), null !== $entityDto ? 'in the "'.$entityDto->getName().'" entity' : '', TranslatableInterface::class, \gettype($label)));
+            }
+        }
+
+        $translationParameters = array_merge($defaultTranslationParameters, $actionDto->getTranslationParameters());
+
+        if ($label instanceof TranslatableInterface) {
+            $actionDto->setLabel(TranslatableMessageBuilder::withParameters($label, $translationParameters));
+        } else {
+            $translatableActionLabel = (null === $label || '' === $label) ? $label : t($label, $translationParameters, $translationDomain);
+            $actionDto->setLabel($translatableActionLabel);
+        }
     }
 
     private function generateActionUrl(Request $request, ActionDto $actionDto, ?EntityDto $entityDto = null): string

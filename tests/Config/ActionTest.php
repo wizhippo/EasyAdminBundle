@@ -3,18 +3,42 @@
 namespace EasyCorp\Bundle\EasyAdminBundle\Tests\Config;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
+use function Symfony\Component\Translation\t;
 
 class ActionTest extends TestCase
 {
-    public function testStringLabelForStaticLabelGeneration()
-    {
-        $actionConfig = Action::new(Action::DELETE)
-            ->setLabel('Delete Me!')
-            ->linkToCrudAction('');
+    use ExpectDeprecationTrait;
 
-        $this->assertSame('Delete Me!', $actionConfig->getAsDto()->getLabel());
+    /**
+     * @group legacy
+     */
+    public function testDeprecatedActionLabels()
+    {
+        $this->expectDeprecation('Since easycorp/easyadmin-bundle 4.0.5: Argument "$label" for "EasyCorp\Bundle\EasyAdminBundle\Config\Action::new" must be one of these types: "Symfony\Contracts\Translation\TranslatableInterface", "string", "callable", "false" or "null". Passing type "integer" will cause an error in 5.0.0.');
+
+        Action::new(Action::EDIT, 7);
+    }
+
+    /**
+     * @dataProvider provideAutomaticActionLabels
+     */
+    public function testActionWithAutomaticLabel(string $actionName, string $automaticLabel)
+    {
+        $actionConfig = Action::new($actionName)->linkToCrudAction('');
+
+        $this->assertSame($automaticLabel, $actionConfig->getAsDto()->getLabel());
+    }
+
+    /**
+     * @dataProvider provideActionLabels
+     */
+    public function testAllPossibleValuesForActionLabels($label)
+    {
+        $actionConfig = Action::new(Action::EDIT, $label)->linkToCrudAction('');
+
+        $this->assertSame($label, $actionConfig->getAsDto()->getLabel());
     }
 
     public function testCallableLabelForDynamicLabelGeneration()
@@ -29,11 +53,7 @@ class ActionTest extends TestCase
 
         $dto = $actionConfig->getAsDto();
 
-        $this->assertNull($dto->getLabel());
-
-        $dto->computeLabel($this->getEntityDto('1337'));
-
-        $this->assertSame('Delete #1337', $dto->getLabel());
+        $this->assertSame($callable, $dto->getLabel());
     }
 
     public function testDefaultCssClass()
@@ -80,28 +100,24 @@ class ActionTest extends TestCase
         $this->assertSame('bar1    bar2', $actionConfig->getAsDto()->getAddedCssClass());
     }
 
-    private function getEntityDto(string $entityId): EntityDto
+    public function provideAutomaticActionLabels(): iterable
     {
-        $entityDtoMock = $this->createMock(EntityDto::class);
-        $entityDtoMock
-            ->expects($this->any())
-            ->method('getInstance')
-            ->willReturn(
-                new class($entityId) {
-                    private $entityId;
+        // format: (action name, automatic label generated for the action)
+        yield ['Edit', 'Edit'];
+        yield ['FooBar', 'Foo Bar'];
+        yield ['fooBar', 'Foo Bar'];
+        yield ['foo_Bar', 'Foo Bar'];
+    }
 
-                    public function __construct(string $entityId)
-                    {
-                        $this->entityId = $entityId;
-                    }
-
-                    public function __toString(): string
-                    {
-                        return sprintf('#%s', $this->entityId);
-                    }
-                }
-            );
-
-        return $entityDtoMock;
+    public function provideActionLabels(): iterable
+    {
+        yield [false];
+        yield [''];
+        yield ['Edit'];
+        yield [fn (object $entity) => sprintf('Edit %s', $entity)];
+        yield [static function (object $entity) {
+            return sprintf('Edit %s', $entity);
+        }];
+        yield [t('Edit')];
     }
 }
