@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class EasyAdminBundle extends Bundle
 {
-    public const VERSION = '4.18.1-DEV';
+    public const VERSION = '4.19.0';
 
     public function build(ContainerBuilder $container): void
     {
