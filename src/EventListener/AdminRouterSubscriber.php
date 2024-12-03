@@ -138,8 +138,8 @@ class AdminRouterSubscriber implements EventSubscriberInterface
 
         // if the request is related to a CRUD controller, change the controller to be executed
         if (null !== $crudControllerInstance = $this->getCrudControllerInstance($request)) {
-            $symfonyControllerFqcnCallable = [$crudControllerInstance, $request->query->get(EA::CRUD_ACTION)];
-            $symfonyControllerStringCallable = [$crudControllerInstance::class, $request->query->get(EA::CRUD_ACTION)];
+            $symfonyControllerFqcnCallable = [$crudControllerInstance, $request->attributes->get(EA::CRUD_ACTION) ?? $request->query->get(EA::CRUD_ACTION)];
+            $symfonyControllerStringCallable = [$crudControllerInstance::class, $request->attributes->get(EA::CRUD_ACTION) ?? $request->query->get(EA::CRUD_ACTION)];
 
             // this makes Symfony believe that another controller is being executed
             // (e.g. this is needed for the autowiring of controller action arguments)
@@ -207,9 +207,9 @@ class AdminRouterSubscriber implements EventSubscriberInterface
 
     private function getCrudControllerInstance(Request $request): ?CrudControllerInterface
     {
-        $crudControllerFqcn = $request->query->get(EA::CRUD_CONTROLLER_FQCN);
-
-        $crudAction = $request->query->get(EA::CRUD_ACTION);
+        // when using pretty URLs, the data is in the request attributes instead of the query string
+        $crudControllerFqcn = $request->attributes->get(EA::CRUD_CONTROLLER_FQCN) ?? $request->query->get(EA::CRUD_CONTROLLER_FQCN);
+        $crudAction = $request->attributes->get(EA::CRUD_ACTION) ?? $request->query->get(EA::CRUD_ACTION);
 
         return $this->controllerFactory->getCrudControllerInstance($crudControllerFqcn, $crudAction, $request);
     }
