@@ -165,7 +165,7 @@ final class ActionFactory
             return;
         }
 
-        if (\is_callable($label)) {
+        if (\is_callable($label) && $label instanceof \Closure) {
             $label = \call_user_func_array($label, array_filter([$entityDto?->getInstance()]));
 
             if (!\is_string($label) && !$label instanceof TranslatableInterface) {
