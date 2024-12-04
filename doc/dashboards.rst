@@ -116,7 +116,7 @@ method of the controller.
 
 The name of the ``index()`` route will be used as the prefix of all the routes
 associated to this dashboard (e.g. if this route name is ``my_private_backend``,
-the generated routes will be like ```my_private_backend_product_index``). The path
+the generated routes will be like ``my_private_backend_product_index``). The path
 of this route will also be used by all the dasboard routes (e.g. if the path is
 ``/_secret/backend``, the generated routes paths will be like ``/_secret/backend/category/324``).
 
