@@ -1,7 +1,7 @@
 Upgrade between EasyAdmin 4.x versions
 ======================================
 
-EasyAdmin 4.18.1
+EasyAdmin 4.20.0
 ----------------
 
 ### Country Flags now Use a Flag Twig Component
