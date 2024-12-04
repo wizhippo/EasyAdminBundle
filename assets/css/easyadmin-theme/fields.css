@@ -170,11 +170,13 @@
 /* Country field */
 .field-country .country-flag {
   border-radius: 2px;
-  box-shadow: 0 0 0 1px var(--field-country-flag-border-color);
+  outline: 1px solid rgba(0, 0, 0, 0.2);
+  outline-offset: -1px;
   margin: 0 6px 1px 0;
   max-block-size: 17px;
   vertical-align: text-top;
 }
+.ea-dark-scheme .field-country .country-flag { outline-color: var(--border-secondary-color); outline-offset: 0; }
 .datagrid .field-country > span + span,
 .datalist .field-country dd > span + span {
   margin-inline-start: 10px;

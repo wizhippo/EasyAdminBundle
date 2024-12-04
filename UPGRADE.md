@@ -1,6 +1,27 @@
 Upgrade between EasyAdmin 4.x versions
 ======================================
 
+EasyAdmin 4.18.1
+----------------
+
+### Country Flags now Use a Flag Twig Component
+
+Instead of rendering country flags (in `CountryField`) using an `<img>` tag,
+they are now rendered as plain `<svg>` files using a Twig component. This change
+removes hundreds of lines in our `manifest.json` file and also removes a JavaScript
+dependency. Flags still look and work the same as before.
+
+If you used the included country flags in your own templates (which is rare and
+not documented) you need to do the following change:
+
+```twig
+{# Before #}
+<img class="country-flag" height="17" alt="{{ country_name }}" title="{{ country_name }}" src="{{ asset('images/flags/' ~ flag_code ~ '.svg', ea.assets.defaultAssetPackageName) }}">
+
+{# After #}
+<twig:ea:Flag countryCode="{{ flag_code }}" height="17" />
+```
+
 EasyAdmin 4.18.0
 ----------------
 
