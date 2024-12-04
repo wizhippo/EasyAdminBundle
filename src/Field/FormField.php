@@ -54,14 +54,15 @@ final class FormField implements FieldInterface
      * @param TranslatableInterface|string|false|null $label
      * @param string|null                             $icon  The full CSS classes of the FontAwesome icon to render (see https://fontawesome.com/v6/search?m=free)
      */
-    public static function addFieldset($label = false, ?string $icon = null): self
+    public static function addFieldset($label = false, ?string $icon = null, ?string $propertySuffix = null): self
     {
         $field = new self();
 
         return $field
             ->setFieldFqcn(__CLASS__)
             ->hideOnIndex()
-            ->setProperty('ea_form_fieldset_'.(new Ulid()))
+            ->setProperty('ea_form_fieldset')
+            ->setPropertySuffix($propertySuffix ?? Ulid::generate())
             ->setLabel($label)
             ->setFormType(EaFormFieldsetOpenType::class)
             ->addCssClass('field-form_fieldset')
@@ -76,7 +77,7 @@ final class FormField implements FieldInterface
      * @param string $breakpointName The name of the breakpoint where the new row is inserted
      *                               It must be a valid Bootstrap 5 name ('', 'sm', 'md', 'lg', 'xl', 'xxl')
      */
-    public static function addRow(string $breakpointName = ''): self
+    public static function addRow(string $breakpointName = '', ?string $propertySuffix = null): self
     {
         $field = new self();
 
@@ -88,7 +89,8 @@ final class FormField implements FieldInterface
         return $field
             ->setFieldFqcn(__CLASS__)
             ->hideOnIndex()
-            ->setProperty('ea_form_row_'.(new Ulid()))
+            ->setProperty('ea_form_row')
+            ->setPropertySuffix($propertySuffix ?? Ulid::generate())
             ->setFormType(EaFormRowType::class)
             ->addCssClass('field-form_row')
             ->setFormTypeOptions(['mapped' => false, 'required' => false])
@@ -99,14 +101,15 @@ final class FormField implements FieldInterface
     /**
      * @return static
      */
-    public static function addTab(TranslatableInterface|string|false|null $label = null, ?string $icon = null): self
+    public static function addTab(TranslatableInterface|string|false|null $label = null, ?string $icon = null, ?string $propertySuffix = null): self
     {
         $field = new self();
 
         return $field
             ->setFieldFqcn(__CLASS__)
             ->hideOnIndex()
-            ->setProperty('ea_form_tab_'.(new Ulid()))
+            ->setProperty('ea_form_tab')
+            ->setPropertySuffix($propertySuffix ?? Ulid::generate())
             ->setLabel($label)
             ->setFormType(EaFormTabPaneOpenType::class)
             ->addCssClass('field-form_tab')
@@ -122,14 +125,15 @@ final class FormField implements FieldInterface
      *                         (e.g. 'col-6', 'col-sm-3', 'col-md-6 col-xl-4', etc.)
      *                         (integer values are transformed like this: N -> 'col-N')
      */
-    public static function addColumn(int|string $cols = 'col', TranslatableInterface|string|false|null $label = null, ?string $icon = null, ?string $help = null): self
+    public static function addColumn(int|string $cols = 'col', TranslatableInterface|string|false|null $label = null, ?string $icon = null, ?string $help = null, ?string $propertySuffix = null): self
     {
         $field = new self();
 
         return $field
             ->setFieldFqcn(__CLASS__)
             ->hideOnIndex()
-            ->setProperty('ea_form_column_'.(new Ulid()))
+            ->setProperty('ea_form_column')
+            ->setPropertySuffix($propertySuffix ?? Ulid::generate())
             ->setLabel($label)
             ->setFormType(EaFormColumnOpenType::class)
             ->addCssClass(sprintf('field-form_column %s', \is_int($cols) ? 'col-md-'.$cols : $cols))
