@@ -40,6 +40,9 @@ class ActionsCrudController extends AbstractCrudController
 
         $action7 = Action::new('action7')->linkToCrudAction('')->setLabel(fn (Category $category) => t('Action %number%: %name%', ['%number%' => 7, '%name%' => $category->getName()]));
 
+        // this tests that the 'Reset' label is interpreted as a string and not as a callable to the PHP reset() function
+        $action8 = Action::new('action8')->linkToCrudAction('')->setLabel('Reset');
+
         return $actions
             ->add(Crud::PAGE_INDEX, $action1)
             ->add(Crud::PAGE_INDEX, $action2)
@@ -48,6 +51,7 @@ class ActionsCrudController extends AbstractCrudController
             ->add(Crud::PAGE_INDEX, $action5)
             ->add(Crud::PAGE_INDEX, $action6)
             ->add(Crud::PAGE_INDEX, $action7)
+            ->add(Crud::PAGE_INDEX, $action8)
             ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
                 return $action->setIcon('fa fa-fw fa-plus')->setLabel(false);
             })

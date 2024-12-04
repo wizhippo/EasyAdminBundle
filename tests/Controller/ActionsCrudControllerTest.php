@@ -47,8 +47,9 @@ class ActionsCrudControllerTest extends AbstractCrudTestCase
     {
         $crawler = $this->client->request('GET', $this->generateIndexUrl());
 
-        static::assertSame('Action 5: Category 0', $crawler->filter('a.dropdown-item:contains("Action 5")')->text());
-        static::assertSame('Action 6: Category 0', $crawler->filter('a.dropdown-item:contains("Action 6")')->text());
-        static::assertSame('Action 7: Category 0', $crawler->filter('a.dropdown-item:contains("Action 7")')->text());
+        static::assertSame('Action 5: Category 0', $crawler->filter('a.dropdown-item[data-action-name="action5"]')->text());
+        static::assertSame('Action 6: Category 0', $crawler->filter('a.dropdown-item[data-action-name="action6"]')->text());
+        static::assertSame('Action 7: Category 0', $crawler->filter('a.dropdown-item[data-action-name="action7"]')->text());
+        static::assertSame('Reset', $crawler->filter('a.dropdown-item[data-action-name="action8"]')->text());
     }
 }
