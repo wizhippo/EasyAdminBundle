@@ -44,7 +44,7 @@ allowMultipleChoices
 
 By default, the country selector allows to select zero (if the property is nullable)
 or one value. Set this option to ``true`` if you want to allow selecting any
-number of values:
+number of values::
 
     yield CountryField::new('...')->allowMultipleChoices();
 
