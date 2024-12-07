@@ -200,9 +200,9 @@ class MenuItemMatcher implements MenuItemMatcherInterface
 
             // compare the ending of the URL instead of a strict equality because link URLs can be absolute URLs
             if (str_ends_with($menuItemUrl, $currentRequestUriWithoutQueryString)
-                || str_ends_with($menuItemUrl, $currentRequestUriWithoutAction)
+                || ('' !== $currentRequestUriWithoutAction && str_ends_with($menuItemUrl, $currentRequestUriWithoutAction))
                 || str_ends_with($menuItemUrlWithoutQueryString, $currentRequestUriWithoutQueryString)
-                || str_ends_with($menuItemUrlWithoutQueryString, $currentRequestUriWithoutAction)) {
+                || ('' !== $currentRequestUriWithoutAction && str_ends_with($menuItemUrlWithoutQueryString, $currentRequestUriWithoutAction))) {
                 $menuItemDto->setSelected(true);
 
                 return $menuItems;
