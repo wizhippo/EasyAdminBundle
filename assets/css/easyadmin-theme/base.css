@@ -862,6 +862,7 @@ a.user-menu-wrapper .user-details:hover {
 }
 .alert {
     border-width: 0 0 var(--border-width);
+    margin-bottom: 0;
 }
 .alert .btn-close,
 .alert .btn-close:focus {

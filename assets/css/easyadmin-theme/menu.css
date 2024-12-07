@@ -73,6 +73,9 @@
 
 #main-menu .menu .menu-icon {
     color: var(--sidebar-menu-icon-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-inline-end: 10px;
     text-align: center;
     block-size: 16px;
