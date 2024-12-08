@@ -99,6 +99,37 @@ class PrettyUrlsControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h1', 'Welcome to EasyAdmin 4');
     }
 
+    // this test visits the two dashboards of the application to test that all
+    // the generated URLs are correct for the menu items and Dashboard links
+    public function testLinkToDashboard()
+    {
+        $client = static::createClient();
+        $client->followRedirects();
+
+        $crawler = $client->request('GET', '/admin/pretty/urls/category');
+
+        // assert the Dashboard link points to the right URL
+        $this->assertSame('/admin/pretty/urls', $crawler->filter('.menu-item a:contains("Dashboard")')->attr('href'));
+        // assert the main menu contains the right items pointing to the right URLs
+        $this->assertSelectorExists('.menu-item a:contains("Dashboard")');
+        $this->assertSelectorExists('.menu-item.active a:contains("Categories")');
+        $this->assertSame('http://localhost/admin/pretty/urls/category', $crawler->filter('.menu-item a:contains("Categories")')->attr('href'));
+        $this->assertSelectorExists('.menu-item a:contains("Blog Posts")');
+        $this->assertSame('http://localhost/admin/pretty/urls/blog-post', $crawler->filter('.menu-item a:contains("Blog Posts")')->attr('href'));
+        $this->assertSelectorNotExists('.menu-item a:contains("Users")');
+
+        $crawler = $client->request('GET', '/second/dashboard/user-editor/custom/path-for-index');
+
+        // assert the Dashboard link points to the right URL
+        $this->assertSame('/second/dashboard', $crawler->filter('.menu-item a:contains("Dashboard")')->attr('href'));
+        // assert the main menu contains the right items pointing to the right URLs
+        $this->assertSelectorExists('.menu-item a:contains("Dashboard")');
+        $this->assertSelectorNotExists('.menu-item.active a:contains("Categories")');
+        $this->assertSelectorNotExists('.menu-item a:contains("Blog Posts")');
+        $this->assertSelectorExists('.menu-item.active a:contains("Users")');
+        $this->assertSame('http://localhost/second/dashboard/user-editor/custom/path-for-index', $crawler->filter('.menu-item a:contains("Users")')->attr('href'));
+    }
+
     public function testDefaultCrudController()
     {
         $client = static::createClient();
