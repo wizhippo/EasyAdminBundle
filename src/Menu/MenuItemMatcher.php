@@ -2,10 +2,12 @@
 
 namespace EasyCorp\Bundle\EasyAdminBundle\Menu;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Menu\MenuItemMatcherInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\MenuItemDto;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -13,6 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class MenuItemMatcher implements MenuItemMatcherInterface
 {
+    public function __construct(
+        private AdminUrlGenerator $adminUrlGenerator,
+    ) {
+    }
+
     /**
      * Given the full list of menu items, this method finds which item should be
      * marked as 'selected' based on the current page being visited by the user.
@@ -158,11 +165,48 @@ class MenuItemMatcher implements MenuItemMatcherInterface
     {
         // the menu-item matching is a 2-phase process:
         // 1) traverse all menu items and try to find an exact match with the current URL
-        // 2) if no exact match is found, traverse all menu items again and try to find a partial match:
-        // 2.1) strip the query string from the current URL and the menu item URL and look for a match
-        // 2.2) if no match is found, strip the action from the request (e.g. /admin/post/new -> /admin/post) and try to match again
+        // 2) if no exact match is found, traverse all menu items again and try to find a partial match
+        $currentUrlWithoutHost = $request->getPathInfo();
+        $currentUrlQueryParams = $request->query->all();
+        unset($currentUrlQueryParams['sort'], $currentUrlQueryParams['page']);
+        // sort them because menu items always have their query parameters sorted
+        ksort($currentUrlQueryParams);
 
-        // try to find an exact match with the current URL
+        $normalizedCurrentUrl = $currentUrlWithoutHost;
+        if ([] !== $currentUrlQueryParams) {
+            $normalizedCurrentUrl .= '?'.http_build_query($currentUrlQueryParams);
+        }
+
+        foreach ($menuItems as $menuItemDto) {
+            if ($menuItemDto->isMenuSection()) {
+                continue;
+            }
+
+            if ([] !== $subItems = $menuItemDto->getSubItems()) {
+                $menuItemDto->setSubItems($this->doMarkSelectedPrettyUrlsMenuItem($subItems, $request));
+            }
+
+            if ($menuItemDto->getLinkUrl() === $normalizedCurrentUrl) {
+                $menuItemDto->setSelected(true);
+
+                return $menuItems;
+            }
+        }
+
+        // If the current URL is a CRUD URL and the action is not 'index', attempt
+        // to match the same URL with the 'index' action. This ensures e.g. that the
+        // /admin/post menu item is highlighted when visiting related URLs such as
+        // /admin/post/new, /admin/post/37/edit, etc.
+        if (null === $crudControllerFqcn = $request->attributes->get(EA::CRUD_CONTROLLER_FQCN)) {
+            return $menuItems;
+        }
+
+        $currentUrlWithIndexCrudAction = $this->adminUrlGenerator->setAll(array_merge($currentUrlQueryParams, [
+            EA::DASHBOARD_CONTROLLER_FQCN => $request->attributes->get(EA::DASHBOARD_CONTROLLER_FQCN),
+            EA::CRUD_CONTROLLER_FQCN => $crudControllerFqcn,
+            EA::CRUD_ACTION => Action::INDEX,
+        ]))->generateUrl();
+
         foreach ($menuItems as $menuItemDto) {
             if ($menuItemDto->isMenuSection()) {
                 continue;
@@ -173,36 +217,7 @@ class MenuItemMatcher implements MenuItemMatcherInterface
             }
 
             // compare the ending of the URL instead of a strict equality because link URLs can be absolute URLs
-            if (str_ends_with($menuItemDto->getLinkUrl(), $request->getRequestUri())) {
-                $menuItemDto->setSelected(true);
-
-                return $menuItems;
-            }
-        }
-
-        // if no exact match is found, try to find a partial match
-        $currentRequestUri = $request->getUri();
-        $currentRequestUriWithoutQueryString = parse_url($currentRequestUri, \PHP_URL_PATH);
-        // remove the last segment of the URL but keep the trailing slash (e.g. /admin/post/new -> /admin/post/)
-        $currentRequestUriWithoutAction = preg_replace('#/[^/]+$#', '', $currentRequestUriWithoutQueryString);
-        // the edit URL is '/admin/foo/{id}/edit' so we need to remove the two last segments of the URL
-        if (str_ends_with($currentRequestUriWithoutQueryString, '/edit')) {
-            $currentRequestUriWithoutAction = preg_replace('#/[^/]+$#', '', $currentRequestUriWithoutAction);
-        }
-
-        foreach ($menuItems as $menuItemDto) {
-            if ($menuItemDto->isMenuSection()) {
-                continue;
-            }
-
-            $menuItemUrl = $menuItemDto->getLinkUrl();
-            $menuItemUrlWithoutQueryString = parse_url($menuItemUrl, \PHP_URL_PATH);
-
-            // compare the ending of the URL instead of a strict equality because link URLs can be absolute URLs
-            if (str_ends_with($menuItemUrl, $currentRequestUriWithoutQueryString)
-                || ('' !== $currentRequestUriWithoutAction && str_ends_with($menuItemUrl, $currentRequestUriWithoutAction))
-                || str_ends_with($menuItemUrlWithoutQueryString, $currentRequestUriWithoutQueryString)
-                || ('' !== $currentRequestUriWithoutAction && str_ends_with($menuItemUrlWithoutQueryString, $currentRequestUriWithoutAction))) {
+            if ('' !== $menuItemDto->getLinkUrl() && str_ends_with($currentUrlWithIndexCrudAction, $menuItemDto->getLinkUrl())) {
                 $menuItemDto->setSelected(true);
 
                 return $menuItems;
