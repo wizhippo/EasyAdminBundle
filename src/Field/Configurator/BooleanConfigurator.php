@@ -35,13 +35,6 @@ final class BooleanConfigurator implements FieldConfiguratorInterface
         $isRenderedAsSwitch = true === $field->getCustomOption(BooleanField::OPTION_RENDER_AS_SWITCH);
 
         if ($isRenderedAsSwitch) {
-            // this happens when processing fields not for a specific entity (e.g. when
-            // rendering the filters from the 'index' page)
-            if (null === $entityDto->getPrimaryKeyValue()) {
-                $field->setCustomOption(BooleanField::OPTION_RENDER_AS_SWITCH, false);
-
-                return;
-            }
 
             $crudDto = $context->getCrud();
 
