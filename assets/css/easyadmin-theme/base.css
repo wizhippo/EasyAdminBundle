@@ -1,3 +1,7 @@
+:root {
+    color-scheme: light dark;
+}
+
 /* Reset styles
    ========================================================================= */
 html, body {
@@ -869,6 +873,14 @@ a.user-menu-wrapper .user-details:hover {
     box-shadow: none;
     outline: none;
     background-size: .75em;
+    padding: .5em;
+    top: .75em;
+    right: .5em;
+}
+.alert .btn-close:focus,
+.alert .btn-close:hover {
+    opacity: 1;
+    background-color: light-dark(rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.5));
 }
 
 .alert:last-of-type {
@@ -919,6 +931,9 @@ a.user-menu-wrapper .user-details:hover {
 .alert.alert-dark .btn-close,
 .ea-dark-scheme .modal-header .btn-close {
     filter: invert(1);
+}
+[data-bs-theme="dark"] .btn-close {
+    filter: none;
 }
 
 /* Utilities */
