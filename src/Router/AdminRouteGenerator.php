@@ -376,6 +376,20 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         // 2) $cache[dashboard][CRUD controller][action] => route_name
         $routeNameToFqcn = [];
         $fqcnToRouteName = [];
+
+        // first, add the routes of all the application dashboards; this is needed because in
+        // applications with multiple dashboards, EasyAdmin must be able to find the route data associated
+        // to each dashboard; otherwise, the URLs of the menu items when visiting the dashboard route will be wrong
+        foreach ($this->getDashboardsRouteConfig() as $dashboardFqcn => $dashboardRouteConfig) {
+            $routeNameToFqcn[$dashboardRouteConfig['routeName']] = [
+                EA::DASHBOARD_CONTROLLER_FQCN => $dashboardFqcn,
+                EA::CRUD_CONTROLLER_FQCN => null,
+                EA::CRUD_ACTION => null,
+            ];
+            $fqcnToRouteName[$dashboardFqcn][''][''] = $dashboardRouteConfig['routeName'];
+        }
+
+        // then, add all the generated admin routes
         foreach ($adminRoutes as $routeName => $route) {
             $routeNameToFqcn[$routeName] = [
                 EA::DASHBOARD_CONTROLLER_FQCN => $route->getOption(EA::DASHBOARD_CONTROLLER_FQCN),
