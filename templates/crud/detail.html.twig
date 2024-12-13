@@ -234,9 +234,9 @@
                         {% endset %}
 
                         {% if is_collapsible %}
-                            <a href="#content-{{ field.property }}" data-bs-toggle="collapse"
+                            <a href="#content-{{ field.propertyNameWithSuffix }}" data-bs-toggle="collapse"
                                class="form-fieldset-title-content form-fieldset-collapse {{ is_collapsed ? 'collapsed' }}"
-                               aria-expanded="{{ is_collapsed ? 'false' : 'true' }}" aria-controls="content-{{ field.property }}">
+                               aria-expanded="{{ is_collapsed ? 'false' : 'true' }}" aria-controls="content-{{ field.propertyNameWithSuffix }}">
                                 {{ fieldset_title_contents|raw }}
                             </a>
                         {% else %}
@@ -252,7 +252,7 @@
                 </div>
             {% endif %}
 
-            <div id="content-{{ field.property }}" class="form-fieldset-body {{ not fieldset_has_header ? 'without-header' }} {{ is_collapsible ? 'collapse' }} {{ not is_collapsed ? 'show'}}">
+            <div id="content-{{ field.propertyNameWithSuffix }}" class="form-fieldset-body {{ not fieldset_has_header ? 'without-header' }} {{ is_collapsible ? 'collapse' }} {{ not is_collapsed ? 'show'}}">
                 <div class="row">
 {% endmacro %}
 
