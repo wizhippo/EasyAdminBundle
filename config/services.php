@@ -82,6 +82,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Router\UrlSigner;
 use EasyCorp\Bundle\EasyAdminBundle\Security\AuthorizationChecker;
 use EasyCorp\Bundle\EasyAdminBundle\Security\SecurityVoter;
+use EasyCorp\Bundle\EasyAdminBundle\Twig\Component\Alert;
 use EasyCorp\Bundle\EasyAdminBundle\Twig\Component\Flag;
 use EasyCorp\Bundle\EasyAdminBundle\Twig\Component\Icon;
 use EasyCorp\Bundle\EasyAdminBundle\Twig\EasyAdminTwigExtension;
@@ -402,6 +403,9 @@ return static function (ContainerConfigurator $container) {
             ->tag('twig.component')
 
         ->set(Flag::class)
+            ->tag('twig.component')
+
+        ->set(Alert::class)
             ->tag('twig.component')
     ;
 };
