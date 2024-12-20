@@ -234,7 +234,7 @@
                         <div id="sidebar-resizer-handler" class="resizer-handler resizer-handler-left"></div>
                     </aside>
                 </div>
-
+                {% block main_content_wrapper %}
                 <section class="main-content">
                     {% set has_search = ea.crud is not null and ea.crud.isSearchEnabled %}
                     <aside class="content-top {{ has_search ? 'ea-search-enabled' : 'ea-search-disabled' }}">
@@ -376,6 +376,7 @@
                         <div id="content-resizer-handler" class="resizer-handler resizer-handler-right"></div>
                     </div>
                 </section>
+                {% endblock main_content_wrapper %}
             {% endblock wrapper %}
         </div>
     {% endblock wrapper_wrapper %}
