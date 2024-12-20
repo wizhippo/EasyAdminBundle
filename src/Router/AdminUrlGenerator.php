@@ -222,6 +222,8 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
             $this->initialize();
         }
 
+        $usePrettyUrls = $this->adminRouteGenerator->usesPrettyUrls();
+
         if (true === $this->includeReferrer) {
             $this->setRouteParameter(EA::REFERRER, $this->customPageReferrer ?? $this->currentPageReferrer);
         }
@@ -239,7 +241,9 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
             }
 
             $this->dashboardRoute = $dashboardRoute;
-            $this->unset(EA::DASHBOARD_CONTROLLER_FQCN);
+            if (!$usePrettyUrls) {
+                $this->unset(EA::DASHBOARD_CONTROLLER_FQCN);
+            }
         }
 
         // if the current action is 'index' and an entity ID is defined, remove the entity ID to prevent exceptions automatically
@@ -276,7 +280,6 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         }
 
         $context = $this->adminContextProvider->getContext();
-        $usePrettyUrls = null !== $context && $context->usePrettyUrls();
         $urlType = null !== $context && false === $context->getAbsoluteUrls() ? UrlGeneratorInterface::ABSOLUTE_PATH : UrlGeneratorInterface::ABSOLUTE_URL;
 
         if (null !== $this->get(EA::ROUTE_NAME)) {
@@ -284,12 +287,15 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         }
 
         if ($usePrettyUrls) {
-            $dashboardControllerFqcn = $this->get(EA::DASHBOARD_CONTROLLER_FQCN) ?? $context->getRequest()->attributes->get(EA::DASHBOARD_CONTROLLER_FQCN) ?? $this->dashboardControllerRegistry->getFirstDashboardFqcn();
-            $crudControllerFqcn = $this->get(EA::CRUD_CONTROLLER_FQCN) ?? $context->getRequest()->attributes->get(EA::CRUD_CONTROLLER_FQCN);
-            $actionName = $this->get(EA::CRUD_ACTION) ?? $context->getRequest()->attributes->get(EA::CRUD_ACTION);
+            $dashboardControllerFqcn = $this->get(EA::DASHBOARD_CONTROLLER_FQCN) ?? $context?->getRequest()->attributes->get(EA::DASHBOARD_CONTROLLER_FQCN) ?? $this->dashboardControllerRegistry->getFirstDashboardFqcn();
+            $crudControllerFqcn = $this->get(EA::CRUD_CONTROLLER_FQCN) ?? $context?->getRequest()->attributes->get(EA::CRUD_CONTROLLER_FQCN);
+            $actionName = $this->get(EA::CRUD_ACTION) ?? $context?->getRequest()->attributes->get(EA::CRUD_ACTION);
 
             if (null === $crudControllerFqcn || null === $routeName = $this->adminRouteGenerator->findRouteName($dashboardControllerFqcn, $crudControllerFqcn, $actionName)) {
                 $routeName = $this->dashboardRoute;
+                if (null === $crudControllerFqcn) {
+                    unset($routeParameters[EA::DASHBOARD_CONTROLLER_FQCN]);
+                }
             } else {
                 // remove these parameters so they don't appear in the query string when using pretty URLs
                 unset($routeParameters[EA::DASHBOARD_CONTROLLER_FQCN]);
