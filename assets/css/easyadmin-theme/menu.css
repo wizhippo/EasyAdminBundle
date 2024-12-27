@@ -45,7 +45,7 @@
 }
 
 #main-menu .menu .menu-item.active:not(.expanded) a,
-#main-menu .menu .menu-item.active:not(.expanded) .menu-icon svg {
+#main-menu .menu .menu-item.active:not(.expanded) .menu-icon {
     color: var(--sidebar-menu-active-item-color);
 }
 
