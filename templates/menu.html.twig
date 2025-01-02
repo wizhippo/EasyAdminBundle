@@ -59,7 +59,7 @@
                 {{ item.label|trans|raw }}
             </span>
             {% if item.hasSubItems %}<twig:ea:Icon name="internal:chevron-right" class="submenu-toggle-icon" />{% endif %}
-            {% if item.badge %}
+            {% if item.hasVisibleBadge %}
                 <span class="menu-item-badge rounded-pill badge {{ item.badge.cssClass }}" {{ _self.render_html_attributes(item.badge) }} style="{{ item.badge.htmlStyle }}">{{ item.badge.content }}</span>
             {% endif %}
         </a>
