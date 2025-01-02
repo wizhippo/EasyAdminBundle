@@ -2,6 +2,10 @@
 
 namespace EasyCorp\Bundle\EasyAdminBundle\Tests\Controller\PrettyUrls;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Tests\PrettyUrlsTestApplication\Controller\BlogPostCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Tests\PrettyUrlsTestApplication\Controller\DashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Tests\PrettyUrlsTestApplication\Kernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -254,6 +258,24 @@ class PrettyUrlsControllerTest extends WebTestCase
         $this->assertSame('http://localhost/second/dashboard/user-editor/custom/path-for-index?page=1&sort%5Bid%5D=DESC', $crawler->filter('th.searchable a')->eq(0)->attr('href'));
         $this->assertSame('http://localhost/second/dashboard/user-editor/custom/path-for-index?page=1&sort%5Bname%5D=DESC', $crawler->filter('th.searchable a')->eq(1)->attr('href'));
         $this->assertSame('http://localhost/second/dashboard/user-editor/custom/path-for-index?page=1&sort%5Bemail%5D=DESC', $crawler->filter('th.searchable a')->eq(2)->attr('href'));
+    }
+
+    public function testAdminUrlGeneratorUsePrettyUrls()
+    {
+        self::bootKernel();
+        $container = static::getContainer();
+        $adminUrlGenerator = $container->get(AdminUrlGenerator::class);
+
+        $this->assertInstanceOf(AdminUrlGenerator::class, $adminUrlGenerator);
+
+        $blogPostIndexUrl = $adminUrlGenerator
+            ->setDashboard(DashboardController::class)
+            ->setController(BlogPostCrudController::class)
+            ->setAction(Action::INDEX)
+            ->generateUrl()
+        ;
+
+        $this->assertSame('http://localhost/admin/pretty/urls/blog-post', $blogPostIndexUrl);
     }
 
     public static function provideActiveMenuUrls(): iterable
