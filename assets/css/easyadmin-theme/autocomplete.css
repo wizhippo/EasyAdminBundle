@@ -95,7 +95,8 @@
   margin: 2px 5px 2px 0;
   padding: 0 4px;
 }
-.ts-wrapper.plugin-remove_button .item .remove {
+.ts-wrapper.plugin-remove_button .item .remove,
+.ts-wrapper.plugin-remove_button:not(.rtl) .item .remove {
   border-inline-start: 1px solid var(--form-type-autocomplete-multi-item-border-color);
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
