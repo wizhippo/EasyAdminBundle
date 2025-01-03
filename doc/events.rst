@@ -77,4 +77,47 @@ property of the ``BlogPost`` entity before persisting it:
         }
     }
 
+JavaScript Events
+-----------------
+
+EasyAdmin triggers some `JavaScript events`_ when the user interacts with entity forms:
+
+================================  ==============================================  ================================  ==========
+Event type                        Occurs when                                     Event detail                      Cancelable
+================================  ==============================================  ================================  ==========
+``'ea.form.error'``               User submits a form that has validation errors  ``{page: pageName, form: form}``  true
+--------------------------------  ----------------------------------------------  --------------------------  ----------
+``'ea.form.submit'``              User submits a form                             ``{page: pageName, form: form}``  true
+--------------------------------  ----------------------------------------------  --------------------------------  ----------
+``'ea.collection.item-added'``    Item added to collection                        ``{newElement: element}``         false
+--------------------------------  ----------------------------------------------  --------------------------------  ----------
+``'ea.collection.item-removed'``  Item removed from collection                                                      false
+================================  ==============================================  ================================  ==========
+
+(see `CustomEvent: detail property
+<https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/detail>`_ for
+details on "Event detail" and `Event: cancelable property
+<https://developer.mozilla.org/en-US/docs/Web/API/Event/cancelable>`_ for
+details on "Cancelable".)
+
+Example usage:
+
+  .. code-block:: javascript
+
+     document.addEventListener('ea.form.error', (event) => {
+       const {page, form} = event.detail
+       alert(`The ${page} form contains errors. Please resolve these before submitting again.`)
+     })
+
+     document.addEventListener('ea.form.submit', (event) => {
+       const {page, form} = event.detail
+       console.debug(`${page} form submitted`, form)
+     })
+
+See :doc:`Collection Field JavaScript Events
+</fields/CollectionField#javascript-events>` for details on and example use of
+the ``'ea.collection.*'`` events.
+
+
 .. _`Symfony events`: https://symfony.com/doc/current/event_dispatcher.html
+.. _`JavaScript events`: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events
