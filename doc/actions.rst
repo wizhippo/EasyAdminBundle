@@ -433,8 +433,10 @@ The following example shows all kinds of actions in practice::
 
 .. tip::
 
-    ``renderInvoice()`` behave like ``Symfony controllers`_,
-    so you can do anything you usually do in a controller.
+    CRUD controllers in EasyAdmin extend the `Symfony base controller class`_.
+    When actions are defined as methods of CRUD controllers, they can use any
+    of the shortcuts and utilities available in regular `Symfony controllers`_,
+    such as ``$this->render()``, ``$this->redirect()``, and others.
 
 Custom actions can define the ``#[AdminAction]`` attribute to
 :ref:`customize their route name, path and methods <crud_routes>`::
@@ -725,4 +727,5 @@ by EasyAdmin::
     }
 
 .. _`FontAwesome`: https://fontawesome.com/
+.. _`Symfony base controller class`: https://symfony.com/doc/current/controller.html#the-base-controller-class-services
 .. _`Symfony controllers`: https://symfony.com/doc/current/controller.html
