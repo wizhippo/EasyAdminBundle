@@ -220,12 +220,11 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
             $reflectionClass = new \ReflectionClass($dashboardController);
             $indexMethod = $reflectionClass->getMethod('index');
 
-            if (class_exists(\Symfony\Component\Routing\Attribute\Route::class)) {
-                $attributes = $indexMethod->getAttributes(\Symfony\Component\Routing\Attribute\Route::class);
-            }
-
-            if (!isset($attributes) || [] === $attributes) {
-                $attributes = $indexMethod->getAttributes(\Symfony\Component\Routing\Annotation\Route::class);
+            // for BC reasons, the Symfony Route attribute is available under two different namespaces;
+            // true first the recommended namespace and then fall back to the legacy namespace
+            $attributes = $indexMethod->getAttributes('Symfony\Component\Routing\Attribute\Route');
+            if ([] === $attributes) {
+                $attributes = $indexMethod->getAttributes('Symfony\Component\Routing\Annotation\Route');
             }
 
             if ([] === $attributes) {
