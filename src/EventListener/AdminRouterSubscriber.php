@@ -172,11 +172,13 @@ class AdminRouterSubscriber implements EventSubscriberInterface
             }
 
             $prettyUrlRoute = $this->adminRouteGenerator->findRouteName($dashboardControllerFqcn, $crudControllerFqcn, $request->query->get(EA::CRUD_ACTION, ''));
-            $request->query->remove(EA::CRUD_CONTROLLER_FQCN);
+            if (null !== $prettyUrlRoute) {
+                $request->query->remove(EA::CRUD_CONTROLLER_FQCN);
 
-            $event->setResponse(new RedirectResponse($this->urlGenerator->generate($prettyUrlRoute, $request->query->all())));
+                $event->setResponse(new RedirectResponse($this->urlGenerator->generate($prettyUrlRoute, $request->query->all())));
 
-            return;
+                return;
+            }
         }
 
         if (null === $dashboardControllerInstance = $this->getDashboardControllerInstance($dashboardControllerFqcn, $request)) {
