@@ -20,7 +20,7 @@ class BatchActionDto
         $this->entityFqcn = $entityFqcn;
 
         // the $referrerUrl argument is deprecated; instead of removing it, do this:
-        //   * if the user pass 5 arguments to the constructor, trigger a deprecation message
+        //   * if the user passes 5 arguments to the constructor, trigger a deprecation message
         //     and assign the 4th argument to referrerUrl and the fifth to csrfToken;
         //   * if the user passes 4 arguments, skip the referrer and assign the 4th to csrfToken
         if (\func_num_args() > 4) {
