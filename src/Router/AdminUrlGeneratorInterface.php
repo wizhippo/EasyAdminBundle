@@ -47,8 +47,14 @@ interface AdminUrlGeneratorInterface
      */
     public function setReferrer(string $referrer): self;
 
+    /**
+     * @deprecated since 4.1.0, will be removed in 5.0.0. Signed URLs don't provide additional security in backends and have been removed without a replacement.
+     */
     public function addSignature(bool $addSignature = true): self;
 
+    /**
+     * @deprecated since 4.1.0, will be removed in 5.0.0. Signed URLs don't provide additional security in backends and have been removed without a replacement.
+     */
     public function getSignature(): string;
 
     public function generateUrl(): string;
