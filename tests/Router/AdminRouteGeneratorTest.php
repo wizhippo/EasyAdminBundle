@@ -8,7 +8,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Tests\PrettyUrlsTestApplication\Controller\C
 use EasyCorp\Bundle\EasyAdminBundle\Tests\PrettyUrlsTestApplication\Controller\DashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Tests\PrettyUrlsTestApplication\Controller\SecondDashboardController;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
@@ -16,8 +15,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class AdminRouteGeneratorTest extends WebTestCase
 {
-    use ExpectDeprecationTrait;
-
     /**
      * @dataProvider provideFindRouteData
      */
