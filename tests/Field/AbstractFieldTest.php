@@ -20,7 +20,7 @@ abstract class AbstractFieldTest extends KernelTestCase
     protected $adminContext;
     protected $configurator;
 
-    private function getEntityDto(): EntityDto
+    protected function getEntityDto(): EntityDto
     {
         $entityDtoMock = $this->createMock(EntityDto::class);
         $entityDtoMock
