@@ -2,6 +2,7 @@
 
 namespace EasyCorp\Bundle\EasyAdminBundle\Intl;
 
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Intl\IntlFormatterInterface;
 use Twig\Error\RuntimeError;
 
 /**
@@ -10,7 +11,7 @@ use Twig\Error\RuntimeError;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-final class IntlFormatter
+final class IntlFormatter implements IntlFormatterInterface
 {
     private const DATE_FORMATS = [
         'none' => \IntlDateFormatter::NONE,
@@ -146,7 +147,7 @@ final class IntlFormatter
     }
 
     /**
-     * @param \DateTimeZone|string|false|null $timezone The target timezone, null to use the default, false to leave unchanged
+     * @param \DateTimeZone|string|bool|null $timezone The target timezone, null to use the default, false to leave unchanged
      */
     public function formatDateTime(?\DateTimeInterface $date, ?string $dateFormat = 'medium', ?string $timeFormat = 'medium', string $pattern = '', $timezone = null, string $calendar = 'gregorian', ?string $locale = null): ?string
     {
@@ -161,7 +162,7 @@ final class IntlFormatter
     }
 
     /**
-     * @param \DateTimeZone|string|false|null $timezone The target timezone, null to use the default, false to leave unchanged
+     * @param \DateTimeZone|string|bool|null $timezone The target timezone, null to use the default, false to leave unchanged
      */
     public function formatDate(?\DateTimeInterface $date, ?string $dateFormat = 'medium', string $pattern = '', $timezone = null, string $calendar = 'gregorian', ?string $locale = null): ?string
     {
@@ -169,7 +170,7 @@ final class IntlFormatter
     }
 
     /**
-     * @param \DateTimeZone|string|false|null $timezone The target timezone, null to use the default, false to leave unchanged
+     * @param \DateTimeZone|string|bool|null $timezone The target timezone, null to use the default, false to leave unchanged
      */
     public function formatTime(?\DateTimeInterface $date, ?string $timeFormat = 'medium', string $pattern = '', $timezone = null, string $calendar = 'gregorian', ?string $locale = null): ?string
     {
