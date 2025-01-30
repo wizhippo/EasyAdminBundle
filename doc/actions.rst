@@ -581,7 +581,7 @@ Symfony controller called ``BusinessStatsController``::
             $this->businessStatsCalculator = $businessStatsCalculator;
         }
 
-        #[Route("/admin/business-stats", name="admin_business_stats")]
+        #[Route("/admin/business-stats", name: "admin_business_stats")]
         public function index()
         {
             return $this->render('admin/business_stats/index.html.twig', [
@@ -589,7 +589,7 @@ Symfony controller called ``BusinessStatsController``::
             ]);
         }
 
-        #[Route("/admin/business-stats/{id}", name="admin_business_stats_customer")]
+        #[Route("/admin/business-stats/{id}", name: "admin_business_stats_customer")]
         public function customer(Customer $customer)
         {
             return $this->render('admin/business_stats/customer.html.twig', [
