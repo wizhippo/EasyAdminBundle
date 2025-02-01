@@ -164,19 +164,19 @@ class MenuItemMatcher implements MenuItemMatcherInterface
      */
     private function doMarkSelectedPrettyUrlsMenuItem(array $menuItems, Request $request): array
     {
-        // the menu-item matching is a 3-phase process:
-        // 1) traverse all menu items and try to find an exact match with the current URL
-        // 2) if no exact match is found, traverse all menu items again and try to find a partial match
-        // 3) if still no match is found, traverse all menu items one last time and ignore the query string parameters
+        // the menu-item matching is a multi-phase process:
+        // 1) check all menu items for an exact match with the current URL
+        // 2) if no match, check again with the current URL action changed to 'index'
+        // 3) if still no match, check again with the current URL action changed to 'index' and no query parameters
         $currentUrlWithoutHost = $request->getPathInfo();
         $currentUrlQueryParams = $request->query->all();
         unset($currentUrlQueryParams['sort'], $currentUrlQueryParams['page'], $currentUrlQueryParams['query']);
         // sort them because menu items always have their query parameters sorted
         ksort($currentUrlQueryParams);
 
-        $normalizedCurrentUrl = $currentUrlWithoutHost;
+        $currentUrlWithoutHostAndWithNormalizedQueryString = $currentUrlWithoutHost;
         if ([] !== $currentUrlQueryParams) {
-            $normalizedCurrentUrl .= '?'.http_build_query($currentUrlQueryParams);
+            $currentUrlWithoutHostAndWithNormalizedQueryString .= '?'.http_build_query($currentUrlQueryParams);
         }
 
         foreach ($menuItems as $menuItemDto) {
@@ -188,17 +188,17 @@ class MenuItemMatcher implements MenuItemMatcherInterface
                 $menuItemDto->setSubItems($this->doMarkSelectedPrettyUrlsMenuItem($subItems, $request));
             }
 
-            // Remove host part from menu item link URL
+            // remove host part from the menu item link URL
             $urlParts = parse_url($menuItemDto->getLinkUrl());
-            $linkUrlWithoutHost = $urlParts['path'];
+            $menuItemUrlWithoutHost = $urlParts['path'];
             if (\array_key_exists('query', $urlParts)) {
-                $linkUrlWithoutHost .= '?'.$urlParts['query'];
+                $menuItemUrlWithoutHost .= '?'.$urlParts['query'];
             }
             if (\array_key_exists('fragment', $urlParts)) {
-                $linkUrlWithoutHost .= '#'.$urlParts['fragment'];
+                $menuItemUrlWithoutHost .= '#'.$urlParts['fragment'];
             }
 
-            if ($linkUrlWithoutHost === $normalizedCurrentUrl) {
+            if ($menuItemUrlWithoutHost === $currentUrlWithoutHostAndWithNormalizedQueryString) {
                 $menuItemDto->setSelected(true);
 
                 return $menuItems;
@@ -219,17 +219,17 @@ class MenuItemMatcher implements MenuItemMatcherInterface
             EA::CRUD_ACTION => Action::INDEX,
         ]))->generateUrl();
 
-        if ($this->traverseMenuItemsAndCheckCurrentUrl($menuItems, $currentUrlWithIndexCrudAction, $request)) {
+        if ($this->matchUrlInMenuItems($currentUrlWithIndexCrudAction, $menuItems, $request)) {
             return $menuItems;
         }
 
-        $currentUrlWithIndexCrudActionWithoutQueryParams = $this->adminUrlGenerator->unsetAll()->setAll([
+        $currentUrlWithIndexCrudActionAndWithoutQueryParams = $this->adminUrlGenerator->unsetAll()->setAll([
             EA::DASHBOARD_CONTROLLER_FQCN => $request->attributes->get(EA::DASHBOARD_CONTROLLER_FQCN),
             EA::CRUD_CONTROLLER_FQCN => $crudControllerFqcn,
             EA::CRUD_ACTION => Action::INDEX,
         ])->generateUrl();
 
-        $this->traverseMenuItemsAndCheckCurrentUrl($menuItems, $currentUrlWithIndexCrudActionWithoutQueryParams, $request);
+        $this->matchUrlInMenuItems($currentUrlWithIndexCrudActionAndWithoutQueryParams, $menuItems, $request);
 
         return $menuItems;
     }
@@ -237,11 +237,8 @@ class MenuItemMatcher implements MenuItemMatcherInterface
     /**
      * @param MenuItemDto[] $menuItems
      */
-    private function traverseMenuItemsAndCheckCurrentUrl(
-        array $menuItems,
-        string $currentUrlToCheck,
-        Request $request,
-    ): bool {
+    private function matchUrlInMenuItems(string $urlToMatch, array $menuItems, Request $request): bool
+    {
         foreach ($menuItems as $menuItemDto) {
             if ($menuItemDto->isMenuSection()) {
                 continue;
@@ -252,7 +249,7 @@ class MenuItemMatcher implements MenuItemMatcherInterface
             }
 
             // compare the ending of the URL instead of a strict equality because link URLs can be absolute URLs
-            if ('' !== $menuItemDto->getLinkUrl() && str_ends_with($currentUrlToCheck, $menuItemDto->getLinkUrl())) {
+            if ('' !== $menuItemDto->getLinkUrl() && str_ends_with($urlToMatch, $menuItemDto->getLinkUrl())) {
                 $menuItemDto->setSelected(true);
 
                 return true;
