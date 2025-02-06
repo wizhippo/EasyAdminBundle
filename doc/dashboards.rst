@@ -175,6 +175,11 @@ Legacy Admin URLs
     If you are using :ref:`pretty admin URLs <pretty-admin-urls>` in your application,
     you can skip this section entirely.
 
+.. caution::
+
+    Legacy admin URLs are deprecated and will no longer work in EasyAdmin 5.0.
+    Upgrade your application to use :ref:`pretty URLs <pretty-admin-urls>`.
+
 Before the introduction of :ref:`pretty admin URLs <pretty-admin-urls>`, EasyAdmin
 used a single Symfony route to serve all dashboard URLs. The needed information
 is passed using query string parameters. If you generated the dashboard with the
@@ -229,6 +234,12 @@ or PHP attributes (if the project requires PHP 8 or newer).
 
             // ...
         }
+
+.. caution::
+
+    In backends that don't use :ref:`pretty URLs <pretty-admin-urls>`, the ``Route``
+    annotation/attribute is the only recommended way to configure the dashboard route.
+    The ``#[AdminDashboard]`` attribute doesn't work with traditional (ugly) URLs.
 
 .. note::
 
