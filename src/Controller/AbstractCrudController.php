@@ -461,12 +461,11 @@ abstract class AbstractCrudController extends AbstractController implements Crud
 
         /** @var CrudControllerInterface $controller */
         $controller = $this->container->get(ControllerFactory::class)->getCrudControllerInstance($autocompleteContext[EA::CRUD_CONTROLLER_FQCN], Action::INDEX, $context->getRequest());
-        /** @var FieldDto|null $field */
         $fields = FieldCollection::new($controller->configureFields($autocompleteContext['originatingPage']));
         $this->container->get(EntityFactory::class)->processFields($context->getEntity(), $fields);
+        /** @var FieldDto|null $field */
+        $field = $fields->getByProperty($autocompleteContext['propertyName']);
         /** @var \Closure|null $queryBuilderCallable */
-        $field  = $fields->getByProperty($autocompleteContext['propertyName']);
-
         $queryBuilderCallable = $field?->getCustomOption(AssociationField::OPTION_QUERY_BUILDER_CALLABLE);
 
         if (null !== $queryBuilderCallable) {
