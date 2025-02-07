@@ -289,7 +289,7 @@ class AdminRouterSubscriber implements EventSubscriberInterface
     {
         $routeName = $request->query->get(EA::ROUTE_NAME);
         $routeParams = $request->query->all()[EA::ROUTE_PARAMS] ?? [];
-        $url = $this->urlGenerator->generate($routeName, $routeParams);
+        $url = $this->urlGenerator->generate($routeName, $routeParams, UrlGeneratorInterface::RELATIVE_PATH);
 
         $newRequest = $request->duplicate();
         $newRequest->attributes->remove('_controller');
