@@ -470,7 +470,7 @@ abstract class AbstractCrudController extends AbstractController implements Crud
             Action::INDEX,
             $context->getRequest()
         );
-        $entityFqcn = $controller->getEntityFqcn();
+        $entityFqcn = $controller::getEntityFqcn();
         $entityDto = new EntityDto(
             $entityFqcn,
             $this->container->get(EntityFactory::class)->getEntityMetadata($entityFqcn)
