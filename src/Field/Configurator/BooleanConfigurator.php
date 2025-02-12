@@ -39,7 +39,7 @@ final class BooleanConfigurator implements FieldConfiguratorInterface
 
             $hasEditPermission = $this->authChecker->isGranted(Permission::EA_EXECUTE_ACTION, ['action' => Action::EDIT, 'entity' => $entityDto]);
 
-            if (null !== $crudDto && null !== $entityDto->getPrimaryKeyValue() && $hasEditPermission) {
+            if ($hasEditPermission && null !== $crudDto && null !== $entityDto->getPrimaryKeyValue()) {
                 $toggleUrl = $this->adminUrlGenerator
                     ->setController($crudDto->getControllerFqcn())
                     ->setAction(Action::EDIT)
@@ -50,7 +50,7 @@ final class BooleanConfigurator implements FieldConfiguratorInterface
                 $field->setCustomOption(BooleanField::OPTION_TOGGLE_URL, $toggleUrl);
             }
 
-            if (Action::INDEX === $crudDto->getCurrentAction() && !$hasEditPermission) {
+            if (!$hasEditPermission && Action::INDEX === $crudDto->getCurrentAction()) {
                 $field->setFormTypeOptionIfNotSet('disabled', true);
             }
 
