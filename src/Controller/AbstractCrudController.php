@@ -387,7 +387,7 @@ abstract class AbstractCrudController extends AbstractController implements Crud
             return $event->getResponse();
         }
 
-        if (null !== $referrer = $context->getRequest()->headers->get('referrer')) {
+        if (null !== $referrer = $context->getRequest()->headers->get('referer')) {
             return $this->redirect($referrer);
         }
 
@@ -450,7 +450,8 @@ abstract class AbstractCrudController extends AbstractController implements Crud
             return $event->getResponse();
         }
 
-        return $this->redirect($context->getRequest()->headers->get('referer'));
+        // resetting the page number is needed because after deleting some entities, the pagination will change
+        return $this->redirect($this->container->get(AdminUrlGenerator::class)->setAction(Action::INDEX)->set(EA::PAGE, 1)->generateUrl());
     }
 
     public function autocomplete(AdminContext $context): JsonResponse
