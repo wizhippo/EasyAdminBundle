@@ -144,7 +144,7 @@ Defining the Route in the ``index()`` Method
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Using the ``#[AdminDashboard]`` attribute is the recommended way to define the
-dashboard route. However, you can also define the dashboard route aplying the
+dashboard route. However, you can also define the dashboard route applying the
 ``#[Route]`` attribute on the ``index()`` method::
 
     // ...
