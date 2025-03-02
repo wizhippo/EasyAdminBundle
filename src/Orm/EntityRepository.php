@@ -309,10 +309,22 @@ final class EntityRepository implements EntityRepositoryInterface
                     ? $associatedEntityDto->getFqcn()
                     : $entityDto->getFqcn()
                 ;
+
                 /** @var \ReflectionNamedType|\ReflectionUnionType|null $idClassType */
-                $idClassType = (new \ReflectionProperty($entityFqcn, $propertyName))->getType();
+                $idClassType = null;
+                $reflectionClass = new \ReflectionClass($entityFqcn);
+
+                while (false !== $reflectionClass) {
+                    if ($reflectionClass->hasProperty($propertyName)) {
+                        $reflection = $reflectionClass->getProperty($propertyName);
+                        $idClassType = $reflection->getType();
+                        break;
+                    }
+                    $reflectionClass = $reflectionClass->getParentClass();
+                }
 
                 if (null !== $idClassType) {
+                    /** @var \ReflectionNamedType|\ReflectionUnionType|null $idClassType */
                     $idClassName = $idClassType->getName();
 
                     if (class_exists($idClassName)) {
