@@ -314,6 +314,7 @@ final class EntityRepository implements EntityRepositoryInterface
                 $idClassType = null;
                 $reflectionClass = new \ReflectionClass($entityFqcn);
 
+                // this is needed to handle inherited properties
                 while (false !== $reflectionClass) {
                     if ($reflectionClass->hasProperty($propertyName)) {
                         $reflection = $reflectionClass->getProperty($propertyName);
