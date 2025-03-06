@@ -325,7 +325,7 @@ final class EntityRepository implements EntityRepositoryInterface
                 }
 
                 if (null !== $idClassType) {
-                    /** @var \ReflectionNamedType|\ReflectionUnionType|null $idClassType */
+                    /** @var \ReflectionNamedType|\ReflectionUnionType $idClassType */
                     $idClassName = $idClassType->getName();
 
                     if (class_exists($idClassName)) {
