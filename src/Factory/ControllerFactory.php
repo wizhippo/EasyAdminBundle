@@ -50,6 +50,7 @@ final class ControllerFactory
             return null;
         }
 
+        $controllerFqcn = str_replace('%5C', '\\', $controllerFqcn);
         $newRequest = $request->duplicate(null, null, ['_controller' => [$controllerFqcn, $controllerAction]]);
         try {
             $controllerCallable = $this->controllerResolver->getController($newRequest);
