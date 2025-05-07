@@ -157,9 +157,10 @@ final class ActionFactory
     private function processActionLabel(ActionDto $actionDto, ?EntityDto $entityDto, string $translationDomain, array $defaultTranslationParameters): void
     {
         $label = $actionDto->getLabel();
+        $title = $actionDto->getHtmlAttributes()['title'] ?? '';
 
         // FALSE means that action doesn't show a visible label in the interface
-        if (false === $label) {
+        if (false === $label && '' === trim($title)) {
             $actionDto->setHtmlAttribute('title', $actionDto->getName());
 
             return;
