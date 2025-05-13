@@ -34,6 +34,13 @@ final class EntityFilter implements FilterInterface
             ->setFormTypeOption('translation_domain', 'EasyAdminBundle');
     }
 
+    public function autocomplete(): self
+    {
+        $this->dto->setFormTypeOption('value_type_options.attr.autocomplete', true);
+
+        return $this;
+    }
+
     public function canSelectMultiple(bool $selectMultiple = true): self
     {
         $this->dto->setFormTypeOption('value_type_options.multiple', $selectMultiple);

@@ -39,6 +39,7 @@ class CrudAutocompleteType extends AbstractType implements DataMapperInterface
             'multiple' => false,
             // force display errors on this form field
             'error_bubbling' => false,
+            'placeholder' => '',
         ]);
 
         $resolver->setRequired(['class']);

@@ -305,6 +305,7 @@ return static function (ContainerConfigurator $container) {
         ->set(DateTimeFilterConfigurator::class)
 
         ->set(EntityFilterConfigurator::class)
+            ->arg(0, service(AdminUrlGenerator::class))
 
         ->set(NullFilterConfigurator::class)
 
