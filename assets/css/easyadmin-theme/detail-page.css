@@ -56,7 +56,7 @@
 .ea-detail .field-group.field-text_editor .field-value {
   max-block-size: 350px;
   max-inline-size: 80ch;
-  overflow-y: auto;
+  overflow-block: auto;
 }
 
 /* for boolean fields, flip the label <-> value order because the label is
