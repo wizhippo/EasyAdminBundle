@@ -6,39 +6,6 @@ on:
     pull_request:
 
 jobs:
-    linter:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-
-            - name: Setup PHP, with composer and extensions
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: 8.2
-                  coverage: none
-
-            - name: Install dependencies
-              run: |
-                  composer install
-                  vendor/bin/simple-phpunit install
-
-            - name: DOCtor-RST
-              uses: docker://oskarstark/doctor-rst
-              with:
-                  args: --short
-              env:
-                  DOCS_DIR: "doc/"
-
-            # see https://github.com/OskarStark/php-cs-fixer-ga
-            - name: PHP-CS-Fixer
-              uses: docker://oskarstark/php-cs-fixer-ga
-              with:
-                  args: --diff --dry-run
-
-            - name: Lint logical CSS properties
-              run: |
-                  php ./src/Resources/bin/logical-css-properties-linter.php
-
     phpstan:
         runs-on: ubuntu-latest
         steps:
@@ -159,3 +126,45 @@ jobs:
                   SYMFONY_DEPRECATIONS_HELPER: "max[total]=999999&ignoreFile=./tests/baseline-ignore.txt"
               run: |
                   ./vendor/bin/simple-phpunit tests/Controller/PrettyUrls/PrettyUrlsControllerTest.php
+
+    php-linter:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            # see https://github.com/OskarStark/php-cs-fixer-ga
+            - name: PHP-CS-Fixer
+              uses: docker://oskarstark/php-cs-fixer-ga
+              with:
+                  args: --diff --dry-run
+
+    doc-linter:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: DOCtor-RST
+              uses: docker://oskarstark/doctor-rst
+              with:
+                  args: --short
+              env:
+                  DOCS_DIR: "doc/"
+
+    css-linter:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP, with composer and extensions
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 8.2
+                  coverage: none
+
+            - name: Install dependencies
+              run: |
+                  composer install
+
+            -   name: Lint logical CSS properties
+                run: |
+                    php ./src/Resources/bin/logical-css-properties-linter.php
