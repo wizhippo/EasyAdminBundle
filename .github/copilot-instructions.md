@@ -4,6 +4,10 @@ Welcome, 🤖 AI assistant! Please follow these guidelines when contributing to 
 
 ## General Guidelines
 
+- This project is a standalone third-party bundle for Symfony applications
+- This project is used to create admin backends
+- Follow secure coding practices to prevent common web vulnerabilities (XSS, CSRF, injections, auth bypass, open redirects, etc.)
+- Code must be compatible with Symfony 5.4, 6.x and 7.x versions
 - Add code comments only for complex or unintuitive code
 - Error messages must be concise but very precise
 - In code or docs, never use typographic quotes, only ' and "
@@ -33,15 +37,17 @@ Welcome, 🤖 AI assistant! Please follow these guidelines when contributing to 
 
 ## Commands
 
-- Run "composer install" to install PHP dependencies
-- Run "php-cs-fixer fix" to fix PHP code style issues
-- Run "yarn install" to install JavaScript dependencies
-- Run "make build-assets" to recompile assets whenever you make any change in assets/ directory
-- Run "./vendor/bin/simple-phpunit" to run PHPUnit tests via Symfony's PHPUnitBridge wrapper
+- Run `composer install` to install PHP dependencies
+- Run `php-cs-fixer fix` to fix PHP code style issues
+- Run `yarn install` to install JavaScript dependencies
+- Run `make build-assets` to recompile assets whenever you make any change in assets/ directory
+- Run `./vendor/bin/simple-phpunit` to run PHPUnit tests via Symfony's PHPUnitBridge wrapper
+- Run `./vendor/bin/phpstan analyse` to run PHPStan checks
 
 ## PHP Code
 
 - Use modern PHP 8.1 syntax and features
+- Avoid using deprecated Symfony or PHP features
 - Apply these Symfony coding standards and best practices:
   - Follow PSR-1, PSR-2, PSR-4, and PSR-12 coding standards.
   - Use Yoda conditions for comparisons (e.g. `if (null === $value)`).
@@ -70,8 +76,10 @@ Welcome, 🤖 AI assistant! Please follow these guidelines when contributing to 
     - Group annotations by type.
     - Put `null` last in union types.
 - For database code, only use Doctrine ORM entities and repositories
-- Services configuration must use PHP format (config/services.php)
-- Translations must be in PHP format (translations/*.php
+- Don't use service autowiring; configure all services explicitly
+- Services configuration must use PHP format (`config/services.php`)
+- Translations must be in PHP format (`translations/*.php`)
+- Handle exceptions explicitly and avoid silent catch blocks
 
 ## Twig Templates
 
@@ -79,11 +87,14 @@ Welcome, 🤖 AI assistant! Please follow these guidelines when contributing to 
 - Always use the most modern Twig syntax and features
 - Icon names must be from the FontAwesome 6.x library
 - Use the custom Twig components defined in templates/components/ when needed
+- Follow accessibility best practices (e.g. `aria-*, semantic tags, labels)
+- Use trans for all user-facing strings; never hardcode text in templates
 
 ## JavaScript
 
 - Use modern JavaScript ES6+ syntax and features
 - Indent code with 4 spaces
+- Follow naming conventions: camelCase for variables/functions
 
 ## CSS
 
@@ -91,6 +102,8 @@ Welcome, 🤖 AI assistant! Please follow these guidelines when contributing to 
 - Use only standard CSS properties and values (no SCSS or LESS)
 - Indent code with 4 spaces
 - Use Bootstrap 5.3 classes and utilities
+- Use logical CSS properties (e.g. `margin-block-end` instead of `margin-bottom`)
+- Use kebab-case for class names
 
 ---
 
