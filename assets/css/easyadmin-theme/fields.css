@@ -43,7 +43,7 @@
 }
 .field-code_editor dt {
    max-block-size: 480px;
-   overflow-y: auto;
+   overflow-block: auto;
  }
 
 /* Collection field */
@@ -224,5 +224,5 @@
 /* Text editor field */
 .field-text_editor dt {
   max-block-size: 480px;
-  overflow-y: auto;
+  overflow-block: auto;
 }

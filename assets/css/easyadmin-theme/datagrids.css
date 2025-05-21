@@ -10,7 +10,7 @@ table.datagrid {
 }
 table.datagrid:not(.datagrid-empty) tr:not(.empty-row) td.actions,
 table.datagrid:not(.datagrid-empty) tr:not(.empty-row) td.actions.actions-as-dropdown {
-  min-width: 50px;
+  min-inline-size: 50px;
 }
 @media (max-width: 767px) {
   table.datagrid:not(.datagrid-empty) tbody,
@@ -269,7 +269,12 @@ table.datagrid:not(.datagrid-empty) tr:not(.empty-row) td.actions.actions-as-dro
   padding: 0 10px;
 }
 .datagrid .empty-row td:nth-child(1) { inline-size: 20%; }
-.datagrid .empty-row td:nth-child(2) { display: none; @media (min-width: 992px) { inline-size: 5%; } }
+.datagrid .empty-row td:nth-child(2) { display: none; }
+@media (min-width: 992px) {
+  .datagrid .empty-row td:nth-child(2) {
+    inline-size: 5%;
+  }
+}
 .datagrid .empty-row td:nth-child(3) { inline-size: 10%; }
 .datagrid .empty-row td:nth-child(4) { inline-size: 25%; }
 .datagrid .empty-row td:nth-child(5) { inline-size: 10%; }
