@@ -43,6 +43,8 @@ Welcome, 🤖 AI assistant! Please follow these guidelines when contributing to 
 - Run `make build-assets` to recompile assets whenever you make any change in assets/ directory
 - Run `./vendor/bin/simple-phpunit` to run PHPUnit tests via Symfony's PHPUnitBridge wrapper
 - Run `./vendor/bin/phpstan analyse` to run PHPStan checks
+- Run `yarn ci` to run JavaScript/CSS linters
+- Run `yarn biome check --write` to apply the safe formatting fixes in JSS/CSS files
 
 ## PHP Code
 
