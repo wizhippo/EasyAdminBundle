@@ -168,3 +168,14 @@ jobs:
             -   name: Lint logical CSS properties
                 run: |
                     php ./src/Resources/bin/logical-css-properties-linter.php
+
+    js-linter:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - run: npm i -g corepack && corepack enable
+            - uses: actions/setup-node@v4
+              with:
+                  cache: 'yarn'
+            - run: yarn --immutable
+            - run: yarn ci
