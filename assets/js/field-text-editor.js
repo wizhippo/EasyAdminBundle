@@ -7,7 +7,7 @@ import Trix from 'trix/dist/trix.esm';
 window.Trix = Trix;
 
 // Listening to the DOMLoadedContent event is too late because the Trix editor is already initialized.
-// To be sure to handle properly the custom configuration, we have to to listen to the trix-before-initialize event.
+// To be sure to handle properly the custom configuration, we have to listen to the trix-before-initialize event.
 document.addEventListener('trix-before-initialize', () => {
     new TextEditorField();
 });
