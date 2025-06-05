@@ -982,8 +982,8 @@ user locale. You can also use ``TranslatableMessage`` objects to define any text
 content in your backends (e.g. the label of some field, the help contents of
 some page, etc.)::
 
-    use function Symfony\Component\Translation\t;
     use Symfony\Component\Translation\TranslatableMessage;
+    use function Symfony\Component\Translation\t;
 
     // creating translatable messages using objects
     TextField::new('firstName', new TranslatableMessage('Name'))
