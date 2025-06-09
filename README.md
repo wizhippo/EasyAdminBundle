@@ -42,7 +42,7 @@ Dev Environment
 ---------------
 
 EasyAdmin ships a DDEV environment, which allows you to run EasyAdmin in a Symfony Framework project
-providing example entities and CRUD Controllers. 
+providing example entities and CRUD Controllers.
 
 **Requirements:**
 
