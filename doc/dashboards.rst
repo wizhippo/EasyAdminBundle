@@ -1045,9 +1045,7 @@ Twig Template Path: ``@EasyAdmin/page/login.html.twig``
 
 It displays a simple username + password login form that matches the style of
 the rest of the backend. The template defines lots of config options, but most
-applications can rely on its default values:
-
-.. code-block:: php
+applications can rely on its default values::
 
     namespace App\Controller;
 
