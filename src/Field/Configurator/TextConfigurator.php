@@ -32,11 +32,11 @@ final class TextConfigurator implements FieldConfiguratorInterface
             return;
         }
 
-        // check if the given value is an enum
+        // if it's an enum, transform it into its text form
         if (\is_object($value) && \enum_exists(\get_class($value))) {
-            $value = $value->value;    
+            $value = $value instanceof \BackedEnum ? $value->value : $value->name;
         }
-        
+
         if (!\is_string($value) && !(\is_object($value) && method_exists($value, '__toString'))) {
             throw new \RuntimeException(sprintf('The value of the "%s" field of the entity with ID = "%s" can\'t be converted into a string, so it cannot be represented by a TextField or a TextareaField.', $field->getProperty(), $entityDto->getPrimaryKeyValue()));
         }
