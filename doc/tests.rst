@@ -98,7 +98,7 @@ asserts for EasyAdmin web testing:
     it needs both:
 
     * a class property ``client``: instance of ``Symfony\Bundle\FrameworkBundle\KernelBrowser``
-    * a class property ``entitytManager``: instance of ``Doctrine\ORM\EntityManagerInterface``
+    * a class property ``entityManager``: instance of ``Doctrine\ORM\EntityManagerInterface``
 
 CrudTestIndexAsserts
 ~~~~~~~~~~~~~~~~~~~~
