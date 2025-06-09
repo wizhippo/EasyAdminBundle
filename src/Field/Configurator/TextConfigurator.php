@@ -33,7 +33,7 @@ final class TextConfigurator implements FieldConfiguratorInterface
         }
 
         // if it's an enum, transform it into its text form
-        if (\is_object($value) && \enum_exists(\get_class($value))) {
+        if (\is_object($value) && enum_exists($value::class)) {
             $value = $value instanceof \BackedEnum ? $value->value : $value->name;
         }
 
