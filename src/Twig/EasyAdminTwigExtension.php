@@ -97,9 +97,17 @@ class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterfa
     public function fileSize(int $bytes): string
     {
         $size = ['B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
-        $factor = (int) floor(log($bytes) / log(1024));
 
-        return (int) ($bytes / (1024 ** $factor)).@$size[$factor];
+        if (0 === $bytes) {
+            return '0B';
+        }
+
+        $factor = (int) floor(log($bytes) / log(1024));
+        $factor = min($factor, \count($size) - 1);
+
+        $scaledValue = (int) ($bytes / (1024 ** $factor));
+
+        return sprintf('%d%s', $scaledValue, $size[$factor]);
     }
 
     /**
