@@ -66,8 +66,14 @@ interface CrudControllerInterface
 
     public function configureResponseParameters(KeyValueStore $responseParameters): KeyValueStore;
 
+    /**
+     * @param EntityDto<TEntity> $entityDto
+     */
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder;
 
+    /**
+     * @param class-string<TEntity> $entityFqcn
+     */
     public function createEntity(string $entityFqcn);
 
     /**
@@ -85,11 +91,23 @@ interface CrudControllerInterface
      */
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void;
 
+    /**
+     * @param EntityDto<TEntity> $entityDto
+     */
     public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface;
 
+    /**
+     * @param EntityDto<TEntity> $entityDto
+     */
     public function createEditForm(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormInterface;
 
+    /**
+     * @param EntityDto<TEntity> $entityDto
+     */
     public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface;
 
+    /**
+     * @param EntityDto<TEntity> $entityDto
+     */
     public function createNewForm(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormInterface;
 }
