@@ -21,16 +21,16 @@ class AuthorizationChecker implements AuthorizationCheckerInterface
         $this->authorizationChecker = $authorizationChecker;
     }
 
-    public function isGranted($permission, $subject = null, ?AccessDecision $accessDecision = null): bool
+    public function isGranted(mixed $attribute, mixed $subject = null, ?AccessDecision $accessDecision = null): bool
     {
-        // this check is needed for performance reasons because most of the times permissions
+        // this check is needed for performance reasons because most of the time permissions
         // won't be set, so this function must return as early as possible in those cases
-        if (null === $permission || '' === $permission) {
+        if (null === $attribute || '' === $attribute) {
             return true;
         }
 
         try {
-            return $this->authorizationChecker->isGranted($permission, $subject);
+            return $this->authorizationChecker->isGranted($attribute, $subject);
         } catch (AuthenticationCredentialsNotFoundException) {
             // this exception happens when there's no security configured in the application
             // that's a valid scenario for EasyAdmin, where security is not required (although very common)
