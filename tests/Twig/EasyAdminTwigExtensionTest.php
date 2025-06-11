@@ -70,9 +70,15 @@ class EasyAdminTwigExtensionTest extends KernelTestCase
     {
         yield [0, '0B'];
         yield [1, '1B'];
+        yield [1023, '1023B'];
         yield [1024, '1K'];
+        yield [999_900, '976K'];
+        yield [1024 ** 2 - 100, '1023K'];
         yield [1024 ** 2, '1M'];
+        yield [1024 ** 2 + 100, '1M'];
+        yield [1024 ** 3 - 1, '1023M'];
         yield [1024 ** 3, '1G'];
+        yield [1024 ** 3 + 1, '1G'];
         yield [1024 ** 4, '1T'];
         yield [1024 ** 5, '1P'];
         yield [1024 ** 6, '1E'];
