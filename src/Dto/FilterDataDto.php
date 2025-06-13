@@ -10,6 +10,7 @@ final class FilterDataDto
     private int $index;
     private string $entityAlias;
     private FilterDto $filterDto;
+    /** @var string */
     private $comparison;
     private mixed $value;
     private mixed $value2;
@@ -41,7 +42,7 @@ final class FilterDataDto
         return $this->filterDto->getProperty();
     }
 
-    public function getFormTypeOption(string $optionName)
+    public function getFormTypeOption(string $optionName): mixed
     {
         return $this->filterDto->getFormTypeOption($optionName);
     }

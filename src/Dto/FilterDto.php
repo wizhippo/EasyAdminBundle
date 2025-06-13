@@ -15,7 +15,9 @@ final class FilterDto
     private ?string $formType = null;
     private KeyValueStore $formTypeOptions;
     private ?string $propertyName = null;
+    /** @var TranslatableInterface|string|false|null */
     private $label;
+    /** @var callable */
     private $applyCallable;
 
     public function __construct()
@@ -43,7 +45,7 @@ final class FilterDto
         return $this->formTypeOptions->all();
     }
 
-    public function getFormTypeOption(string $optionName)
+    public function getFormTypeOption(string $optionName): mixed
     {
         return $this->formTypeOptions->get($optionName);
     }

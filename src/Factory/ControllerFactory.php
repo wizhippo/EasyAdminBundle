@@ -44,7 +44,7 @@ final class ControllerFactory
         return $this->getController(CrudControllerInterface::class, $crudControllerFqcn, $crudAction, $request);
     }
 
-    private function getController(string $controllerInterface, ?string $controllerFqcn, ?string $controllerAction, Request $request)
+    private function getController(string $controllerInterface, ?string $controllerFqcn, ?string $controllerAction, Request $request): ?object
     {
         if (null === $controllerFqcn || null === $controllerAction) {
             return null;

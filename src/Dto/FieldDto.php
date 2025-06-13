@@ -30,7 +30,9 @@ final class FieldDto
     private ?string $propertyNameSuffix = null;
     private mixed $value = null;
     private mixed $formattedValue = null;
+    /** @var callable|null */
     private $formatValueCallable;
+    /** @var TranslatableInterface|string|false|null */
     private $label;
     private ?string $formType = null;
     private KeyValueStore $formTypeOptions;
@@ -38,6 +40,7 @@ final class FieldDto
     private ?bool $virtual = null;
     private string|Expression|null $permission = null;
     private ?string $textAlign = null;
+    /** @var TranslatableInterface|string|null */
     private $help;
     private string $cssClass = '';
     // how many columns the field takes when rendering
@@ -52,7 +55,11 @@ final class FieldDto
     private AssetsDto $assets;
     private KeyValueStore $customOptions;
     private KeyValueStore $doctrineMetadata;
-    /** @internal */
+    /**
+     * @internal
+     *
+     * @var string|Ulid
+     */
     private $uniqueId;
     private KeyValueStore $displayedOn;
     private array $htmlAttributes = [];
@@ -261,7 +268,7 @@ final class FieldDto
         return $this->formTypeOptions->all();
     }
 
-    public function getFormTypeOption(string $optionName)
+    public function getFormTypeOption(string $optionName): mixed
     {
         return $this->formTypeOptions->get($optionName);
     }
