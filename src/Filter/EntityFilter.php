@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Form\Filter\Type\EntityFilterType;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\ComparisonType;
 use Symfony\Component\Uid\Ulid;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Contracts\Translation\TranslatableInterface;
 
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
@@ -24,6 +25,9 @@ final class EntityFilter implements FilterInterface
 {
     use FilterTrait;
 
+    /**
+     * @param TranslatableInterface|string|false|null $label
+     */
     public static function new(string $propertyName, $label = null): self
     {
         return (new self())

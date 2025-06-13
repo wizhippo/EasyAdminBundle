@@ -68,6 +68,9 @@ trait FieldTrait
         return $this;
     }
 
+    /**
+     * @param mixed $value
+     */
     public function setValue($value): self
     {
         $this->dto->setValue($value);
@@ -75,6 +78,9 @@ trait FieldTrait
         return $this;
     }
 
+    /**
+     * @param mixed $value
+     */
     public function setFormattedValue($value): self
     {
         $this->dto->setFormattedValue($value);
@@ -110,6 +116,9 @@ trait FieldTrait
         return $this;
     }
 
+    /**
+     * @param mixed $emptyData
+     */
     public function setEmptyData($emptyData = null): self
     {
         $this->dto->setFormTypeOption('empty_data', $emptyData);
@@ -132,7 +141,8 @@ trait FieldTrait
     }
 
     /**
-     * @param string $optionName You can use "dot" notation to set nested options (e.g. 'attr.class')
+     * @param string $optionName  You can use "dot" notation to set nested options (e.g. 'attr.class')
+     * @param mixed  $optionValue
      */
     public function setFormTypeOption(string $optionName, $optionValue): self
     {
@@ -142,7 +152,8 @@ trait FieldTrait
     }
 
     /**
-     * @param string $optionName You can use "dot" notation to set nested options (e.g. 'attr.class')
+     * @param string $optionName  You can use "dot" notation to set nested options (e.g. 'attr.class')
+     * @param mixed  $optionValue
      */
     public function setFormTypeOptionIfNotSet(string $optionName, $optionValue): self
     {
@@ -156,6 +167,8 @@ trait FieldTrait
      * E.g. setHtmlAttribute('data-foo', 'bar') will render a 'data-foo="bar"' attribute in HTML.
      * On 'index' and 'detail' pages, the attribute is added to the field container (<td> and div.field-group respectively).
      * On 'new' and 'edit' pages, the attribute is added to the form field; it's a shortcut for the equivalent setFormTypeOption('attr.data-foo', 'bar).
+     *
+     * @param bool|int|float|string $attributeValue
      */
     public function setHtmlAttribute(string $attributeName, $attributeValue): self
     {
@@ -342,6 +355,9 @@ trait FieldTrait
         return $this;
     }
 
+    /**
+     * @param mixed $optionValue
+     */
     public function setCustomOption(string $optionName, $optionValue): self
     {
         $this->dto->setCustomOption($optionName, $optionValue);
