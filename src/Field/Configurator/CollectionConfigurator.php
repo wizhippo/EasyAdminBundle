@@ -115,7 +115,7 @@ final class CollectionConfigurator implements FieldConfiguratorInterface
         }
     }
 
-    private function formatCollection(FieldDto $field, AdminContext $context)
+    private function formatCollection(FieldDto $field, AdminContext $context): int|string
     {
         $doctrineMetadata = $field->getDoctrineMetadata();
         if ('array' !== $doctrineMetadata->get('type') && !$field->getValue() instanceof PersistentCollection) {
@@ -136,7 +136,7 @@ final class CollectionConfigurator implements FieldConfiguratorInterface
         return u(', ')->join($collectionItemsAsText)->truncate($isDetailAction ? 512 : 32, '…')->toString();
     }
 
-    private function countNumElements($collection): int
+    private function countNumElements(mixed $collection): int
     {
         if (null === $collection) {
             return 0;
