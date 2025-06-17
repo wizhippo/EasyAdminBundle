@@ -10,15 +10,15 @@ class AdminDashboard
 {
     public function __construct(
         /**
-         * @param string|null $routePath The path of the Symfony route that will be created for the dashboard (e.g. '/admin)
+         * @var string|null $routePath The path of the Symfony route that will be created for the dashboard (e.g. '/admin)
          */
         public /* ?string */ $routePath = null,
         /**
-         * @param string|null $routeName The name of the Symfony route that will be created for the dashboard (e.g. 'admin')
+         * @var string|null $routeName The name of the Symfony route that will be created for the dashboard (e.g. 'admin')
          */
         public /* ?string */ $routeName = null,
         /**
-         * @param array{
+         * @var array{
          *     requirements?: array,
          *     options?: array,
          *     defaults?: array,

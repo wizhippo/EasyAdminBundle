@@ -23,7 +23,9 @@ final class CrudDto
     private ?ActionConfigDto $actionConfigDto = null;
     private ?FilterConfigDto $filters = null;
     private ?string $entityFqcn = null;
+    /** @var TranslatableInterface|string|callable|null */
     private $entityLabelInSingular;
+    /** @var TranslatableInterface|string|callable|null */
     private $entityLabelInPlural;
     private array $defaultPageTitles = [
         Crud::PAGE_DETAIL => 'page_title.detail',
@@ -57,7 +59,7 @@ final class CrudDto
     private bool $autofocusSearch = false;
     private bool $showEntityActionsAsDropdown = true;
     private ?PaginatorDto $paginatorDto = null;
-    private $overriddenTemplates;
+    private array $overriddenTemplates;
     private array $formThemes = ['@EasyAdmin/crud/form_theme.html.twig'];
     private KeyValueStore $newFormOptions;
     private KeyValueStore $editFormOptions;
@@ -114,6 +116,10 @@ final class CrudDto
         $this->entityFqcn = $entityFqcn;
     }
 
+    /**
+     * @param object|null $entityInstance
+     * @param string|null $pageName
+     */
     public function getEntityLabelInSingular(/* ?object */ $entityInstance = null, /* ?string */ $pageName = null): TranslatableInterface|string|null
     {
         if (null === $this->entityLabelInSingular) {
@@ -138,6 +144,10 @@ final class CrudDto
         $this->entityLabelInSingular = $label;
     }
 
+    /**
+     * @param object|null $entityInstance
+     * @param string|null $pageName
+     */
     public function getEntityLabelInPlural(/* ?object */ $entityInstance = null, /* ?string */ $pageName = null): TranslatableInterface|string|null
     {
         if (null === $this->entityLabelInPlural) {
@@ -162,6 +172,9 @@ final class CrudDto
         $this->entityLabelInPlural = $label;
     }
 
+    /**
+     * @param object|null $entityInstance
+     */
     public function getCustomPageTitle(?string $pageName = null, /* ?object */ $entityInstance = null, array $translationParameters = [], ?string $domain = null): ?TranslatableInterface
     {
         $title = $this->customPageTitles[$pageName ?? $this->pageName];
@@ -200,6 +213,9 @@ final class CrudDto
         $this->customPageTitles[$pageName] = $pageTitle;
     }
 
+    /**
+     * @param object|null $entityInstance
+     */
     public function getDefaultPageTitle(?string $pageName = null, /* ?object */ $entityInstance = null, array $translationParameters = []): ?TranslatableInterface
     {
         if (!\is_object($entityInstance)

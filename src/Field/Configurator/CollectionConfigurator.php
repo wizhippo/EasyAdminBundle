@@ -153,6 +153,10 @@ final class CollectionConfigurator implements FieldConfiguratorInterface
         return 0;
     }
 
+    /**
+     * @param class-string $targetEntityFqcn
+     * @param class-string $targetCrudControllerFqcn
+     */
     private function createEntityDto(string $targetEntityFqcn, string $targetCrudControllerFqcn, string $crudAction, string $pageName): EntityDto
     {
         $entityDto = $this->entityFactory->create($targetEntityFqcn);

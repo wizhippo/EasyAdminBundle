@@ -226,7 +226,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
         $field->setFormattedValue($this->countNumElements($field->getValue()));
     }
 
-    private function formatAsString($entityInstance, EntityDto $entityDto): ?string
+    private function formatAsString(mixed $entityInstance, EntityDto $entityDto): ?string
     {
         if (null === $entityInstance) {
             return null;
@@ -266,7 +266,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
             ->generateUrl();
     }
 
-    private function countNumElements($collection): int
+    private function countNumElements(mixed $collection): int
     {
         if (null === $collection) {
             return 0;
@@ -283,6 +283,10 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
         return 0;
     }
 
+    /**
+     * @param class-string $targetEntityFqcn
+     * @param class-string $targetCrudControllerFqcn
+     */
     private function configureCrudForm(FieldDto $field, EntityDto $entityDto, string $propertyName, string $targetEntityFqcn, string $targetCrudControllerFqcn): void
     {
         $field->setFormType(CrudFormType::class);
@@ -310,6 +314,10 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
         );
     }
 
+    /**
+     * @param class-string $entityFqcn
+     * @param class-string $crudControllerFqcn
+     */
     private function createEntityDto(string $entityFqcn, string $crudControllerFqcn, string $crudControllerAction, string $crudControllerPageName): EntityDto
     {
         $entityDto = $this->entityFactory->create($entityFqcn);

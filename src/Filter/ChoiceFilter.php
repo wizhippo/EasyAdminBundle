@@ -69,7 +69,7 @@ final class ChoiceFilter implements FilterInterface
         $comparison = $filterDataDto->getComparison();
         $parameterName = $filterDataDto->getParameterName();
         $value = $filterDataDto->getValue();
-        $isMultiple = $filterDataDto->getFormTypeOption('value_type_options.multiple');
+        $isMultiple = (bool) $filterDataDto->getFormTypeOption('value_type_options.multiple');
 
         if (null === $value || ($isMultiple && 0 === \count($value))) {
             $queryBuilder->andWhere(sprintf('%s.%s %s', $alias, $property, $comparison));

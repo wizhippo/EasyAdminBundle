@@ -8,7 +8,7 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Dto;
 final class I18nDto
 {
     private string $locale;
-    private $language;
+    private string $language;
     private string $textDirection;
     private string $translationDomain;
     private array $translationParameters;

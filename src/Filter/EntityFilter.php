@@ -52,7 +52,7 @@ final class EntityFilter implements FilterInterface
         $comparison = $filterDataDto->getComparison();
         $parameterName = $filterDataDto->getParameterName();
         $value = $filterDataDto->getValue();
-        $isMultiple = $filterDataDto->getFormTypeOption('value_type_options.multiple');
+        $isMultiple = (bool) $filterDataDto->getFormTypeOption('value_type_options.multiple');
 
         if ($entityDto->isToManyAssociation($property)) {
             // the 'ea_' prefix is needed to avoid errors when using reserved words as assocAlias ('order', 'group', etc.)

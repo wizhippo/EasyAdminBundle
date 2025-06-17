@@ -73,6 +73,8 @@ interface CrudControllerInterface
 
     /**
      * @param class-string<TEntity> $entityFqcn
+     *
+     * @return TEntity
      */
     public function createEntity(string $entityFqcn);
 

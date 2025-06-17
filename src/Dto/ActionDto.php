@@ -23,10 +23,12 @@ final class ActionDto
     private ?string $templatePath = null;
     private ?string $crudActionName = null;
     private ?string $routeName = null;
+    /** @var array|callable */
     private $routeParameters = [];
-    /* @var callable|string|null */
+    /** @var callable|string|null */
     private $url;
     private array $translationParameters = [];
+    /** @var callable|null */
     private $displayCallable;
 
     public function getType(): string
