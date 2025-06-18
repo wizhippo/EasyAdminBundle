@@ -29,6 +29,9 @@ interface FieldTraitAwareInterface extends FieldInterface
 
     public function setFormType(string $formTypeFqcn): self;
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function setFormTypeOptions(array $options): self;
 
     /**
@@ -56,6 +59,9 @@ interface FieldTraitAwareInterface extends FieldInterface
 
     public function setCssClass(string $cssClass): self;
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function setTranslationParameters(array $parameters): self;
 
     public function setTemplateName(string $name): self;
@@ -76,6 +82,9 @@ interface FieldTraitAwareInterface extends FieldInterface
 
     public function setCustomOption(string $optionName, mixed $optionValue): self;
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function setCustomOptions(array $options): self;
 
     public function hideOnDetail(): self;

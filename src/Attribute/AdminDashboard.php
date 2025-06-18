@@ -19,12 +19,12 @@ class AdminDashboard
         public /* ?string */ $routeName = null,
         /**
          * @var array{
-         *     requirements?: array,
-         *     options?: array,
-         *     defaults?: array,
+         *     requirements?: array<string, string>,
+         *     options?: array<string, mixed>,
+         *     defaults?: array<string, mixed>,
          *     host?: string,
-         *     methods?: array|string,
-         *     schemes?: array|string,
+         *     methods?: array<string>|string,
+         *     schemes?: array<string>|string,
          *     condition?: string,
          *     locale?: string,
          *     format?: string,

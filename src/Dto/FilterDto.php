@@ -40,6 +40,9 @@ final class FilterDto
         return $this->formType;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getFormTypeOptions(): array
     {
         return $this->formTypeOptions->all();
@@ -50,6 +53,9 @@ final class FilterDto
         return $this->formTypeOptions->get($optionName);
     }
 
+    /**
+     * @param array<string, mixed> $formTypeOptions
+     */
     public function setFormTypeOptions(array $formTypeOptions): void
     {
         $this->formTypeOptions->setAll($formTypeOptions);
