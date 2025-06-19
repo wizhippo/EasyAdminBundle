@@ -48,9 +48,11 @@ final class FieldDto
     private ?string $columns = null;
     // same as $columns but used when the user doesn't define columns explicitly
     private string $defaultColumns = '';
+    /** @var array<string, mixed> */
     private array $translationParameters = [];
     private ?string $templateName = 'crud/field/text';
     private ?string $templatePath = null;
+    /** @var array<string> */
     private array $formThemePaths = [];
     private AssetsDto $assets;
     private KeyValueStore $customOptions;
@@ -62,6 +64,7 @@ final class FieldDto
      */
     private $uniqueId;
     private KeyValueStore $displayedOn;
+    /** @var array<string, bool|int|float|string> */
     private array $htmlAttributes = [];
 
     public function __construct()
@@ -263,6 +266,9 @@ final class FieldDto
         $this->formType = $formTypeFqcn;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getFormTypeOptions(): array
     {
         return $this->formTypeOptions->all();
@@ -273,6 +279,9 @@ final class FieldDto
         return $this->formTypeOptions->get($optionName);
     }
 
+    /**
+     * @param array<string, mixed> $formTypeOptions
+     */
     public function setFormTypeOptions(array $formTypeOptions): void
     {
         foreach ($formTypeOptions as $optionName => $optionValue) {
@@ -376,11 +385,17 @@ final class FieldDto
         $this->defaultColumns = $columnCssClasses;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getTranslationParameters(): array
     {
         return $this->translationParameters;
     }
 
+    /**
+     * @param array<string, mixed> $translationParameters
+     */
     public function setTranslationParameters(array $translationParameters): void
     {
         $this->translationParameters = $translationParameters;
@@ -411,11 +426,17 @@ final class FieldDto
         $this->formThemePaths[] = $formThemePath;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getFormThemes(): array
     {
         return $this->formThemePaths;
     }
 
+    /**
+     * @param array<string> $formThemePaths
+     */
     public function setFormThemes(array $formThemePaths): void
     {
         $this->formThemePaths = $formThemePaths;
@@ -471,6 +492,9 @@ final class FieldDto
         return $this->customOptions->get($optionName);
     }
 
+    /**
+     * @param array<string, mixed> $customOptions
+     */
     public function setCustomOptions(array $customOptions): void
     {
         $this->customOptions = KeyValueStore::new($customOptions);
@@ -506,11 +530,17 @@ final class FieldDto
         return $this->displayedOn->has($pageName);
     }
 
+    /**
+     * @return array<string, bool|int|float|string>
+     */
     public function getHtmlAttributes(): array
     {
         return $this->htmlAttributes;
     }
 
+    /**
+     * @param array<string, bool|int|float|string> $htmlAttributes
+     */
     public function setHtmlAttributes(array $htmlAttributes): self
     {
         $this->htmlAttributes = $htmlAttributes;
@@ -518,6 +548,9 @@ final class FieldDto
         return $this;
     }
 
+    /**
+     * @param bool|int|float|string $value
+     */
     public function setHtmlAttribute(string $attribute, mixed $value): self
     {
         $this->htmlAttributes[$attribute] = $value;

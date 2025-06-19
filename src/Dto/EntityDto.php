@@ -179,6 +179,8 @@ final class EntityDto
     /**
      * Returns the names of all properties defined in the entity, no matter
      * if they are used or not in the application.
+     *
+     * @return array<string>
      */
     public function getAllPropertyNames(): array
     {

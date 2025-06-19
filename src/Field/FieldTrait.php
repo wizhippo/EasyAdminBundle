@@ -133,6 +133,9 @@ trait FieldTrait
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function setFormTypeOptions(array $options): self
     {
         $this->dto->setFormTypeOptions($options);
@@ -186,6 +189,9 @@ trait FieldTrait
         return $this;
     }
 
+    /**
+     * @param array<string, bool|int|float|string> $attributes
+     */
     public function setHtmlAttributes(array $attributes): self
     {
         foreach ($attributes as $attributeName => $attributeValue) {
@@ -245,6 +251,9 @@ trait FieldTrait
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function setTranslationParameters(array $parameters): self
     {
         $this->dto->setTranslationParameters($parameters);
@@ -365,6 +374,9 @@ trait FieldTrait
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function setCustomOptions(array $options): self
     {
         $this->dto->setCustomOptions($options);

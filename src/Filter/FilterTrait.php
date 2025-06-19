@@ -60,6 +60,9 @@ trait FilterTrait
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function setFormTypeOptions(array $options): self
     {
         $this->dto->setFormTypeOptions($options);

@@ -225,6 +225,9 @@ class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterfa
         return $function->getCallable()(...$functionArguments);
     }
 
+    /**
+     * @param array<string, mixed> $queryParameters
+     */
     public function getAdminUrlGenerator(array $queryParameters = []): AdminUrlGeneratorInterface
     {
         return $this->serviceLocator->get(AdminUrlGenerator::class)->setAll($queryParameters);
@@ -250,6 +253,9 @@ class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterfa
     /**
      * We need to recreate the 'importmap()' Twig function from Symfony because calling it
      * via 'ea_call_function_if_exists('importmap', '...')' doesn't work.
+     *
+     * @param string|array<string>       $entryPoint
+     * @param array<string, string|true> $attributes
      */
     public function renderImportmap(string|array $entryPoint = 'app', array $attributes = []): string
     {
@@ -263,6 +269,8 @@ class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterfa
     /**
      * We need to recreate the 'ux_icon()' Twig function from Symfony because calling it
      * via 'ea_call_function_if_exists('ux_icon', '...')' doesn't work.
+     *
+     * @param array<string, string|bool|int|float> $attributes
      */
     public function renderIcon(string $name, array $attributes = []): string
     {

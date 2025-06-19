@@ -47,19 +47,24 @@ final class CrudDto
     ];
     private ?string $datePattern = 'medium';
     private ?string $timePattern = 'medium';
+    /** @var array{string, string} */
     private array $dateTimePattern = ['medium', 'medium'];
     private string $dateIntervalFormat = '%%y Year(s) %%m Month(s) %%d Day(s)';
     private ?string $timezone = null;
     private ?string $numberFormat = null;
     private ?string $thousandsSeparator = null;
     private ?string $decimalSeparator = null;
+    /** @var array<string, 'ASC'|'DESC'> */
     private array $defaultSort = [];
+    /** @var array<string>|null */
     private ?array $searchFields = [];
     private string $searchMode = SearchMode::ALL_TERMS;
     private bool $autofocusSearch = false;
     private bool $showEntityActionsAsDropdown = true;
     private ?PaginatorDto $paginatorDto = null;
+    /** @var array<string, string> */
     private array $overriddenTemplates;
+    /** @var array<string> */
     private array $formThemes = ['@EasyAdmin/crud/form_theme.html.twig'];
     private KeyValueStore $newFormOptions;
     private KeyValueStore $editFormOptions;
@@ -283,6 +288,9 @@ final class CrudDto
         $this->timePattern = $format;
     }
 
+    /**
+     * @return array{string, string}
+     */
     public function getDateTimePattern(): array
     {
         return $this->dateTimePattern;
@@ -343,11 +351,17 @@ final class CrudDto
         $this->decimalSeparator = $separator;
     }
 
+    /**
+     * @return array<string, 'ASC'|'DESC'>
+     */
     public function getDefaultSort(): array
     {
         return $this->defaultSort;
     }
 
+    /**
+     * @param array<string, 'ASC'|'DESC'> $defaultSort
+     */
     public function setDefaultSort(array $defaultSort): void
     {
         $this->defaultSort = $defaultSort;
@@ -363,11 +377,17 @@ final class CrudDto
         $this->searchMode = $searchMode;
     }
 
+    /**
+     * @return array<string>|null
+     */
     public function getSearchFields(): ?array
     {
         return $this->searchFields;
     }
 
+    /**
+     * @param array<string>|null $searchFields
+     */
     public function setSearchFields(?array $searchFields): void
     {
         $this->searchFields = $searchFields;
@@ -408,6 +428,9 @@ final class CrudDto
         $this->paginatorDto = $paginatorDto;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getOverriddenTemplates(): array
     {
         return $this->overriddenTemplates;
@@ -418,6 +441,9 @@ final class CrudDto
         $this->overriddenTemplates[$templateName] = $templatePath;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getFormThemes(): array
     {
         return $this->formThemes;
@@ -429,6 +455,9 @@ final class CrudDto
         $this->formThemes = array_merge($this->formThemes, [$formThemePath]);
     }
 
+    /**
+     * @param array<string> $formThemes
+     */
     public function setFormThemes(array $formThemes): void
     {
         $this->formThemes = $formThemes;
