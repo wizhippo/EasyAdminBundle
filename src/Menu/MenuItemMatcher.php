@@ -168,7 +168,7 @@ class MenuItemMatcher implements MenuItemMatcherInterface
         // 1) check all menu items for an exact match with the current URL
         // 2) if no match, check again with the current URL action changed to 'index'
         // 3) if still no match, check again with the current URL action changed to 'index' and no query parameters
-        $currentUrlWithoutHost = $request->getPathInfo();
+        $currentUrlWithoutHost = $request->getBasePath().$request->getPathInfo();
         $currentUrlQueryParams = $request->query->all();
         unset($currentUrlQueryParams['sort'], $currentUrlQueryParams['page'], $currentUrlQueryParams['query']);
         // sort them because menu items always have their query parameters sorted
