@@ -43,7 +43,7 @@ interface CrudControllerInterface
     /**
      * @return FieldInterface[]|string[]
      *
-     * @psalm-return iterable<FieldInterface|string>
+     * @phpstan-return iterable<FieldInterface|string>
      */
     public function configureFields(string $pageName): iterable;
 
@@ -74,7 +74,9 @@ interface CrudControllerInterface
     /**
      * @param class-string<TEntity> $entityFqcn
      *
-     * @return TEntity
+     * @return object
+     *
+     * @phpstan-return TEntity
      */
     public function createEntity(string $entityFqcn);
 
