@@ -102,7 +102,7 @@ function lintFileCssProperties(string $file, array $logicalCssProperties): int
             }
 
             $pattern = '/(?<!-)\b'.preg_quote($forbidden, '/').'\s*:/';
-            if (preg_match($pattern, $line)) {
+            if (1 === preg_match($pattern, $line)) {
                 echo sprintf("File: %s\n", $file);
                 echo sprintf("Line: %d\n", $lineNumber + 1);
                 echo sprintf("Issue: you can't use the property '%s' because it's not safe for different writing systems; use instead the logical property '%s'\n", $forbidden, $alternative);

@@ -22,6 +22,7 @@ final class CrudDto
     private ?string $actionName = null;
     private ?ActionConfigDto $actionConfigDto = null;
     private ?FilterConfigDto $filters = null;
+    /** @var class-string|null */
     private ?string $entityFqcn = null;
     /** @var TranslatableInterface|string|callable|null */
     private $entityLabelInSingular;
@@ -111,11 +112,17 @@ final class CrudDto
         $this->fieldAssetsDto = $assets;
     }
 
+    /**
+     * @return class-string
+     */
     public function getEntityFqcn(): string
     {
         return $this->entityFqcn;
     }
 
+    /**
+     * @param class-string $entityFqcn
+     */
     public function setEntityFqcn(string $entityFqcn): void
     {
         $this->entityFqcn = $entityFqcn;

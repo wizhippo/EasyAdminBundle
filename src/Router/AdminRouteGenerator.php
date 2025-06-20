@@ -6,6 +6,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminCrud;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\CrudControllerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\DashboardControllerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Router\AdminRouteGeneratorInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -215,7 +217,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
                 throw new \RuntimeException(sprintf('In the #[AdminDashboard] attribute of the "%s" dashboard controller, the route configuration for the "%s" action defines some unsupported keys. You can only define these keys: "routePath" and "routeName".', $dashboardFqcn, $action));
             }
 
-            if (isset($customRouteConfig['routeName']) && !preg_match('/^[a-zA-Z0-9_-]+$/', $customRouteConfig['routeName'])) {
+            if (isset($customRouteConfig['routeName']) && 1 !== preg_match('/^[a-zA-Z0-9_-]+$/', $customRouteConfig['routeName'])) {
                 throw new \RuntimeException(sprintf('In the #[AdminDashboard] attribute of the "%s" dashboard controller, the route name "%s" for the "%s" action is not valid. It can only contain letter, numbers, dashes, and underscores.', $dashboardFqcn, $customRouteConfig['routeName'], $action));
             }
 
@@ -298,6 +300,11 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         return $config;
     }
 
+    /**
+     * @param class-string<CrudControllerInterface> $crudControllerFqcn
+     *
+     * @return array{routeName: string, routePath: string}
+     */
     private function getCrudControllerRouteConfig(string $crudControllerFqcn): array
     {
         $crudControllerConfig = [];
@@ -320,7 +327,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
             }
 
             if (null !== $attributeInstance->routeName) {
-                if (!preg_match('/^[a-zA-Z0-9_-]+$/', $attributeInstance->routeName)) {
+                if (1 !== preg_match('/^[a-zA-Z0-9_-]+$/', $attributeInstance->routeName)) {
                     throw new \RuntimeException(sprintf('In the #[AdminCrud] attribute of the "%s" CRUD controller, the route name "%s" is not valid. It can only contain letter, numbers, dashes, and underscores.', $crudControllerFqcn, $attributeInstance->routeName));
                 }
 
@@ -340,6 +347,11 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         return $crudControllerConfig;
     }
 
+    /**
+     * @param class-string<CrudControllerInterface> $crudControllerFqcn
+     *
+     * @return array<string, array{routeName?: string, routePath?: string, methods?: array<string>}>
+     */
     private function getCustomActionsConfig(string $crudControllerFqcn): array
     {
         $customActionsConfig = [];
@@ -370,7 +382,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
             }
 
             if (null !== $attributeInstance->routeName) {
-                if (!preg_match('/^[a-zA-Z0-9_-]+$/', $attributeInstance->routeName)) {
+                if (1 !== preg_match('/^[a-zA-Z0-9_-]+$/', $attributeInstance->routeName)) {
                     throw new \RuntimeException(sprintf('In the "%s" CRUD controller, the #[AdminAction] attribute applied to the "%s()" action defines an invalid route name: "%s". Valid route names can only contain letters, numbers, dashes, and underscores.', $crudControllerFqcn, $action, $attributeInstance->routeName));
                 }
 
@@ -397,6 +409,8 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
     }
 
     /**
+     * @param class-string<DashboardControllerInterface> $dashboardFqcn
+     *
      * @return array{routeName: string, route: Route}|null
      */
     private function createDashboardRoute(string $dashboardFqcn): ?array

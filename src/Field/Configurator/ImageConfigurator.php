@@ -53,7 +53,7 @@ final class ImageConfigurator implements FieldConfiguratorInterface
         }
         $relativeUploadDir = u($relativeUploadDir)->trimStart(\DIRECTORY_SEPARATOR)->ensureEnd(\DIRECTORY_SEPARATOR)->toString();
         $isStreamWrapper = filter_var($relativeUploadDir, \FILTER_VALIDATE_URL);
-        if ($isStreamWrapper) {
+        if (false !== $isStreamWrapper) {
             $absoluteUploadDir = $relativeUploadDir;
         } else {
             $absoluteUploadDir = u($relativeUploadDir)->ensureStart($this->projectDir.\DIRECTORY_SEPARATOR)->toString();
