@@ -85,8 +85,13 @@ function lintFileCssProperties(string $file, array $logicalCssProperties): int
 {
     $numErrors = 0;
     $lines = file($file);
-    $insideMediaQuery = false;
+    if (false === $lines) {
+        echo sprintf('Cannot read file %s.', $file).\PHP_EOL;
 
+        return $numErrors;
+    }
+
+    $insideMediaQuery = false;
     foreach ($lines as $lineNumber => $line) {
         if (str_contains($line, '@media')) {
             $insideMediaQuery = true;

@@ -140,7 +140,8 @@ final class IntlFormatter implements IntlFormatterInterface
 
         $formatter = $this->createNumberFormatter($locale, $style, $attrs);
 
-        if (false === $ret = $formatter->format($number, self::NUMBER_TYPES[$type])) {
+        $ret = $formatter->format($number, self::NUMBER_TYPES[$type]);
+        if (!\is_string($formatter->format($number, self::NUMBER_TYPES[$type]))) {
             throw new RuntimeError('Unable to format the given number.');
         }
 

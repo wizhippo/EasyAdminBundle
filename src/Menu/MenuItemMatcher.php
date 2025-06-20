@@ -327,7 +327,7 @@ class MenuItemMatcher implements MenuItemMatcherInterface
 
             $controllerFqcn = $menuItemQueryParameters[EA::CRUD_CONTROLLER_FQCN] ?? null;
             $crudAction = $menuItemQueryParameters[EA::CRUD_ACTION] ?? null;
-            if (null === $controllerFqcn || null === $crudAction) {
+            if (!\is_string($controllerFqcn) || !\is_string($crudAction)) {
                 continue;
             }
 
