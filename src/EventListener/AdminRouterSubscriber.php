@@ -250,6 +250,8 @@ class AdminRouterSubscriber implements EventSubscriberInterface
      * Because of how EasyAdmin works, all backend requests are handled via the
      * Dashboard controller, so its enough to check if the request controller implements
      * the DashboardControllerInterface.
+     *
+     * @return class-string|null
      */
     private function getDashboardControllerFqcn(Request $request): ?string
     {

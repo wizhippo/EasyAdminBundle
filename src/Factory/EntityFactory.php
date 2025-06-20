@@ -143,6 +143,9 @@ final class EntityFactory
         return $entityDto;
     }
 
+    /**
+     * @param class-string $entityFqcn
+     */
     private function getEntityManager(string $entityFqcn): ObjectManager
     {
         if (null === $entityManager = $this->doctrine->getManagerForClass($entityFqcn)) {
@@ -171,6 +174,10 @@ final class EntityFactory
      * Code copied from Symfony\Bridge\Doctrine\Form\DoctrineOrmTypeGuesser
      * because Doctrine ORM 3.x removed the ClassUtil class where this method was defined
      * (c) Fabien Potencier <fabien@symfony.com> - MIT License.
+     *
+     * @param class-string $class
+     *
+     * @return class-string
      */
     private function getRealClass(string $class): string
     {
