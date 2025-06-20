@@ -9,11 +9,11 @@ final class CrudControllerRegistry
 {
     /** @var array<class-string, class-string> */
     private array $crudFqcnToEntityFqcnMap;
-    /** @var array<class-string, string> */
-    private array $entityFqcnToCrudFqcnMap;
-    /** @var array<string, class-string> */
-    private array $crudFqcnToCrudIdMap;
     /** @var array<class-string, class-string> */
+    private array $entityFqcnToCrudFqcnMap;
+    /** @var array<class-string, string> */
+    private array $crudFqcnToCrudIdMap;
+    /** @var array<string, class-string> */
     private array $crudIdToCrudFqcnMap;
 
     /**

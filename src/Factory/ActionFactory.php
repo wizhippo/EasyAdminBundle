@@ -154,6 +154,9 @@ final class ActionFactory
         return $actionDto;
     }
 
+    /**
+     * @param array<string, mixed> $defaultTranslationParameters
+     */
     private function processActionLabel(ActionDto $actionDto, ?EntityDto $entityDto, string $translationDomain, array $defaultTranslationParameters): void
     {
         $label = $actionDto->getLabel();

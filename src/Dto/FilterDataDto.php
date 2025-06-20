@@ -19,6 +19,9 @@ final class FilterDataDto
     {
     }
 
+    /**
+     * @param array{comparison: string, value: mixed, value2?: mixed} $formData
+     */
     public static function new(int $index, FilterDto $filterDto, string $entityAlias, array $formData): self
     {
         $filterData = new self();

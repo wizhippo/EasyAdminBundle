@@ -11,8 +11,12 @@ final class I18nDto
     private string $language;
     private string $textDirection;
     private string $translationDomain;
+    /** @var array<string, mixed> */
     private array $translationParameters;
 
+    /**
+     * @param array<string, mixed> $translationParameters
+     */
     public function __construct(string $locale, string $textDirection, string $translationDomain, array $translationParameters)
     {
         $this->locale = $locale;
@@ -63,6 +67,9 @@ final class I18nDto
         return $this->translationDomain;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getTranslationParameters(): array
     {
         return $this->translationParameters;

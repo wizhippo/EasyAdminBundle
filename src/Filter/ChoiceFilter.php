@@ -33,6 +33,9 @@ final class ChoiceFilter implements FilterInterface
             ->setFormTypeOption('translation_domain', 'EasyAdminBundle');
     }
 
+    /**
+     * @param array<mixed> $choices
+     */
     public function setChoices(array $choices): self
     {
         $this->dto->setFormTypeOption('value_type_options.choices', $choices);
@@ -40,6 +43,9 @@ final class ChoiceFilter implements FilterInterface
         return $this;
     }
 
+    /**
+     * @param array<string|TranslatableInterface> $choiceGenerator
+     */
     public function setTranslatableChoices(array $choiceGenerator): self
     {
         $this->dto->setFormTypeOption('value_type_options.choices', array_keys($choiceGenerator));

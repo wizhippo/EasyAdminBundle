@@ -13,7 +13,7 @@ final class UserMenuDto
     private bool $displayAvatar = true;
     private ?string $name = null;
     private ?string $avatarUrl = null;
-    /** @var MenuItemDto[] */
+    /** @var MenuItemInterface[]|MenuItemDto[] */
     private array $items = [];
 
     public function isNameDisplayed(): bool
@@ -56,6 +56,9 @@ final class UserMenuDto
         $this->avatarUrl = $url;
     }
 
+    /**
+     * @return MenuItemInterface[]|MenuItemDto[]
+     */
     public function getItems(): array
     {
         return $this->items;

@@ -238,6 +238,21 @@ final class EntityRepository implements EntityRepositoryInterface
         }
     }
 
+    /**
+     * @return array<array{
+     *     entity_name: string,
+     *     property_data_type: string,
+     *     property_name: string,
+     *     is_boolean: bool,
+     *     is_small_integer: bool,
+     *     is_integer: bool,
+     *     is_numeric: bool,
+     *     is_text: bool,
+     *     is_guid: bool,
+     *     is_ulid: bool,
+     *     is_json: bool,
+     * }>
+     */
     private function getSearchablePropertiesConfig(QueryBuilder $queryBuilder, SearchDto $searchDto, EntityDto $entityDto): array
     {
         $searchablePropertiesConfig = [];
