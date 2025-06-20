@@ -99,7 +99,9 @@ final class EntityDto
     }
 
     /**
-     * @return TEntity|null
+     * @return object|null
+     *
+     * @phpstan-return TEntity|null
      */
     public function getInstance()/* : ?object */
     {
