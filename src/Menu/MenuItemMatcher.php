@@ -297,6 +297,8 @@ class MenuItemMatcher implements MenuItemMatcherInterface
      *     'App\Controller\Admin\UserCrudController' => ['index', 'new'],
      * ].
      *
+     * @param array<MenuItemDto> $menuItems
+     *
      * @return array<string, array<string>>
      */
     private function getControllersAndActionsLinkedInTheMenu(array $menuItems): array
@@ -339,7 +341,7 @@ class MenuItemMatcher implements MenuItemMatcherInterface
         return $controllersAndActionsLinkedInTheMenu;
     }
 
-    /*
+    /**
      * Sorts an array recursively by its keys. This is needed because some values
      * of the array with the query string parameters can be arrays too, and we must
      * sort those before the comparison.
@@ -361,6 +363,10 @@ class MenuItemMatcher implements MenuItemMatcherInterface
      * Removes from the given list of query parameters all the parameters that
      * should be ignored when deciding if some menu item matches the current page
      * (such as the applied filters or sorting, the listing page number, etc.).
+     *
+     * @param array<string, mixed> $queryStringParameters
+     *
+     * @return array<string, mixed>
      */
     private function filterIrrelevantQueryParameters(array $queryStringParameters): array
     {

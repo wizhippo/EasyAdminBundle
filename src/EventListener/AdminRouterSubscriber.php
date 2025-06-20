@@ -314,6 +314,9 @@ class AdminRouterSubscriber implements EventSubscriberInterface
         return $parameters['_controller'] ?? null;
     }
 
+    /**
+     * @param array<string, mixed> $routeParams
+     */
     private function getSymfonyControllerInstance(string $controllerFqcn, array $routeParams): callable|false
     {
         $newRequest = new Request([], [], ['_controller' => $controllerFqcn, '_route_params' => $routeParams], [], [], []);

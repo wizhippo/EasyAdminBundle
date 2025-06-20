@@ -64,6 +64,10 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 
     private ?bool $applicationUsesPrettyUrls = null;
 
+    /**
+     * @param iterable<DashboardControllerInterface> $dashboardControllers
+     * @param iterable<CrudControllerInterface>      $crudControllers
+     */
     public function __construct(
         private iterable $dashboardControllers,
         private iterable $crudControllers,
@@ -202,6 +206,9 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         return [$attribute->allowedControllers, $attribute->deniedControllers];
     }
 
+    /**
+     * @return array<string, array{routeName: string, routePath: string, methods?: array<string>}>
+     */
     private function getDefaultRoutesConfig(string $dashboardFqcn): array
     {
         if (null === $dashboardAttribute = $this->getPhpAttributeInstance($dashboardFqcn, AdminDashboard::class)) {
@@ -229,6 +236,9 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         return array_replace_recursive(self::DEFAULT_ROUTES_CONFIG, $customRoutesConfig);
     }
 
+    /**
+     * @return array<string, array{routeName: string, routePath: string}>
+     */
     private function getDashboardsRouteConfig(): array
     {
         $config = [];
@@ -475,6 +485,13 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         return ['routeName' => $routeName, 'route' => $route];
     }
 
+    /**
+     * @template T of object
+     *
+     * @param class-string<T> $attributeFqcn
+     *
+     * @return T|null
+     */
     private function getPhpAttributeInstance(string $classFqcn, string $attributeFqcn): ?object
     {
         $reflectionClass = new \ReflectionClass($classFqcn);

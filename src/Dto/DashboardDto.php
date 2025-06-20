@@ -189,6 +189,9 @@ final class DashboardDto
         return $this;
     }
 
+    /**
+     * @return LocaleDto[]
+     */
     public function getLocales(): array
     {
         return $this->locales;

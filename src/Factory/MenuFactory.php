@@ -86,6 +86,9 @@ final class MenuFactory implements MenuFactoryInterface
         return $builtItems;
     }
 
+    /**
+     * @param MenuItemDto[] $subItems
+     */
     private function buildMenuItem(MenuItemDto $menuItemDto, array $subItems, string $translationDomain): MenuItemDto
     {
         if (!$menuItemDto->getLabel() instanceof TranslatableInterface) {

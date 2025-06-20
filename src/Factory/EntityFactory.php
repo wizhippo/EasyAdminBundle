@@ -81,6 +81,9 @@ final class EntityFactory
         return $this->doCreate(null, null, null, $entityInstance);
     }
 
+    /**
+     * @param iterable<object>|null $entityInstances
+     */
     public function createCollection(EntityDto $entityDto, ?iterable $entityInstances): EntityCollection
     {
         $entityDtos = [];

@@ -28,18 +28,21 @@ final class CrudDto
     private $entityLabelInSingular;
     /** @var TranslatableInterface|string|callable|null */
     private $entityLabelInPlural;
+    /** @var array<Crud::PAGE_*, string> */
     private array $defaultPageTitles = [
         Crud::PAGE_DETAIL => 'page_title.detail',
         Crud::PAGE_EDIT => 'page_title.edit',
         Crud::PAGE_INDEX => 'page_title.index',
         Crud::PAGE_NEW => 'page_title.new',
     ];
+    /** @var array<string, TranslatableInterface|string|callable|null> */
     private array $customPageTitles = [
         Crud::PAGE_DETAIL => null,
         Crud::PAGE_EDIT => null,
         Crud::PAGE_INDEX => null,
         Crud::PAGE_NEW => null,
     ];
+    /** @var array<string, string|TranslatableInterface|null> */
     private array $helpMessages = [
         Crud::PAGE_DETAIL => null,
         Crud::PAGE_EDIT => null,
@@ -185,7 +188,8 @@ final class CrudDto
     }
 
     /**
-     * @param object|null $entityInstance
+     * @param object|null          $entityInstance
+     * @param array<string, mixed> $translationParameters
      */
     public function getCustomPageTitle(?string $pageName = null, /* ?object */ $entityInstance = null, array $translationParameters = [], ?string $domain = null): ?TranslatableInterface
     {
@@ -226,7 +230,8 @@ final class CrudDto
     }
 
     /**
-     * @param object|null $entityInstance
+     * @param object|null          $entityInstance
+     * @param array<string, mixed> $translationParameters
      */
     public function getDefaultPageTitle(?string $pageName = null, /* ?object */ $entityInstance = null, array $translationParameters = []): ?TranslatableInterface
     {
@@ -253,7 +258,7 @@ final class CrudDto
             }
         }
 
-        if (!$this->defaultPageTitles[$pageName ?? $this->pageName]) {
+        if (!isset($this->defaultPageTitles[$pageName ?? $this->pageName])) {
             return null;
         }
 
@@ -265,6 +270,9 @@ final class CrudDto
         return $this->helpMessages[$pageName ?? $this->pageName] ?? '';
     }
 
+    /**
+     * @return array<string|TranslatableInterface|null>
+     */
     public function getHelpMessages(): array
     {
         return $this->helpMessages;

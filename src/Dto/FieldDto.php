@@ -510,6 +510,9 @@ final class FieldDto
         return $this->doctrineMetadata;
     }
 
+    /**
+     * @param array<string, mixed> $metadata
+     */
     public function setDoctrineMetadata(array $metadata): void
     {
         $this->doctrineMetadata = KeyValueStore::new($metadata);

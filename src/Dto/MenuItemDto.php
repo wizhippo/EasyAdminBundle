@@ -230,6 +230,9 @@ final class MenuItemDto
         return $this->badge;
     }
 
+    /**
+     * @param array<string, mixed> $htmlAttributes
+     */
     public function setBadge(mixed $content, string $style, array $htmlAttributes = []): void
     {
         $this->badge = new MenuItemBadgeDto($content, trim($style), $htmlAttributes);
