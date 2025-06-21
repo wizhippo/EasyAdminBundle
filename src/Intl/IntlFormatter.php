@@ -276,7 +276,7 @@ final class IntlFormatter implements IntlFormatterInterface
     }
 
     /**
-     * @param \DateTimeZone|string|bool|null $timezone $timezone
+     * @param \DateTimeZone|string|bool|null $timezone
      */
     private function convertDate(?\DateTimeInterface $date, $timezone = null): ?\DateTimeInterface
     {
@@ -286,8 +286,10 @@ final class IntlFormatter implements IntlFormatterInterface
 
         if (null === $timezone) {
             $timezone = new \DateTimeZone(date_default_timezone_get());
-        } elseif (!$timezone instanceof \DateTimeZone) {
+        } elseif (\is_string($timezone)) {
             $timezone = new \DateTimeZone($timezone);
+        } elseif (!$timezone instanceof \DateTimeZone) {
+            return $date;
         }
 
         if ($date instanceof \DateTimeImmutable) {
