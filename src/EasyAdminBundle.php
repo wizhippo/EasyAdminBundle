@@ -21,8 +21,8 @@ class EasyAdminBundle extends Bundle
     public function getPath(): string
     {
         $reflected = new \ReflectionObject($this);
+        /** @var string $fileName */
         $fileName = $reflected->getFileName();
-        \assert(\is_string($fileName));
 
         return \dirname($fileName, 2);
     }

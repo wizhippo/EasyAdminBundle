@@ -51,8 +51,8 @@ class EasyAdminExtension extends Extension implements PrependExtensionInterface
             ],
         ]);
 
+        /** @var string $projectDir */
         $projectDir = $builder->getParameter('kernel.project_dir');
-        \assert(\is_string($projectDir));
 
         $bundleTemplatesOverrideDir = $projectDir.'/templates/bundles/EasyAdminBundle/';
         $builder->prependExtensionConfig('twig', [

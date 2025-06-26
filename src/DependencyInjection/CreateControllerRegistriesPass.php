@@ -26,8 +26,8 @@ class CreateControllerRegistriesPass implements CompilerPassInterface
     {
         $dashboardControllersFqcn = array_keys($container->findTaggedServiceIds(EasyAdminExtension::TAG_DASHBOARD_CONTROLLER, true));
 
+        /** @var string $secret */
         $secret = $container->getParameter('kernel.secret');
-        \assert(\is_string($secret));
 
         $controllerFqcnToContextIdMap = [];
         foreach ($dashboardControllersFqcn as $controllerFqcn) {

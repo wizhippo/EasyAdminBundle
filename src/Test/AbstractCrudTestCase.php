@@ -28,12 +28,12 @@ abstract class AbstractCrudTestCase extends WebTestCase
         $this->client = static::createClient();
         $container = static::getContainer();
 
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get(EntityManagerInterface::class);
-        \assert($entityManager instanceof EntityManagerInterface);
         $this->entityManager = $entityManager;
 
+        /** @var AdminUrlGenerator $adminUrlGenerator */
         $adminUrlGenerator = $container->get(AdminUrlGenerator::class);
-        \assert($adminUrlGenerator instanceof AdminUrlGenerator);
         $this->adminUrlGenerator = $adminUrlGenerator;
     }
 
