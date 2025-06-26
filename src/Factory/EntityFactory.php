@@ -102,12 +102,16 @@ final class EntityFactory
     }
 
     /**
-     * @param class-string $entityFqcn
+     * @template TEntity of object
+     *
+     * @param class-string<TEntity> $entityFqcn
+     *
+     * @return ClassMetadata<TEntity>
      */
     public function getEntityMetadata(string $entityFqcn): ClassMetadata
     {
         $entityManager = $this->getEntityManager($entityFqcn);
-        /** @var ClassMetadata $entityMetadata */
+        /** @var ClassMetadata<TEntity> $entityMetadata */
         $entityMetadata = $entityManager->getClassMetadata($entityFqcn);
 
         if (1 !== \count($entityMetadata->getIdentifierFieldNames())) {
@@ -188,6 +192,9 @@ final class EntityFactory
             return $class;
         }
 
-        return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
+        /** @var class-string $realClass */
+        $realClass = substr($class, $pos + Proxy::MARKER_LENGTH + 2);
+
+        return $realClass;
     }
 }

@@ -191,6 +191,8 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
     }
 
     /**
+     * @param class-string<DashboardControllerInterface> $dashboardFqcn
+     *
      * @return array{0: class-string[]|null, 1: class-string[]|null}
      */
     private function getAllowedAndDeniedControllers(string $dashboardFqcn): array
@@ -207,6 +209,8 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
     }
 
     /**
+     * @param class-string<DashboardControllerInterface> $dashboardFqcn
+     *
      * @return array<string, array{routeName: string, routePath: string, methods?: array<string>}>
      */
     private function getDefaultRoutesConfig(string $dashboardFqcn): array
@@ -488,6 +492,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
     /**
      * @template T of object
      *
+     * @param class-string    $classFqcn
      * @param class-string<T> $attributeFqcn
      *
      * @return T|null
@@ -502,7 +507,11 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         return $attributes[0]->newInstance();
     }
 
-    // transforms 'App\Controller\Admin\FooBarBazCrudController' into 'foo-bar-baz'
+    /**
+     * Transforms 'App\Controller\Admin\FooBarBazCrudController' into 'foo-bar-baz'.
+     *
+     * @param class-string<CrudControllerInterface> $crudControllerFqcn
+     */
     private function transformCrudControllerNameToKebabCase(string $crudControllerFqcn): string
     {
         $cleanShortName = str_replace(['CrudController', 'Controller'], '', (new \ReflectionClass($crudControllerFqcn))->getShortName());
@@ -511,7 +520,11 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
         return $snakeCaseName;
     }
 
-    // transforms 'App\Controller\Admin\FooBarBazCrudController' into 'foo_bar_baz'
+    /**
+     * Transforms 'App\Controller\Admin\FooBarBazCrudController' into 'foo_bar_baz'.
+     *
+     * @param class-string<CrudControllerInterface> $crudControllerFqcn
+     */
     private function transformCrudControllerNameToSnakeCase(string $crudControllerFqcn): string
     {
         $shortName = str_replace(['CrudController', 'Controller'], '', (new \ReflectionClass($crudControllerFqcn))->getShortName());

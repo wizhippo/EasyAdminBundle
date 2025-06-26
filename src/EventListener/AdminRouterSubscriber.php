@@ -225,7 +225,7 @@ class AdminRouterSubscriber implements EventSubscriberInterface
         // if the request is related to a custom action, change the controller to be executed
         if (null !== $request->query->get(EA::ROUTE_NAME)) {
             $symfonyControllerAsString = $this->getSymfonyControllerFqcn($request);
-            $symfonyControllerCallable = $this->getSymfonyControllerInstance($symfonyControllerAsString, $request->query->all()[EA::ROUTE_PARAMS] ?? []);
+            $symfonyControllerCallable = $this->getSymfonyControllerInstance($symfonyControllerAsString, $request->query->all(EA::ROUTE_PARAMS));
             if (false !== $symfonyControllerCallable) {
                 // this makes Symfony believe that another controller is being executed
                 // (e.g. this is needed for the autowiring of controller action arguments)
@@ -234,7 +234,7 @@ class AdminRouterSubscriber implements EventSubscriberInterface
                 $event->getRequest()->attributes->set('_controller', $symfonyControllerAsString);
                 // route params must be added as route attribute; otherwise, param converters don't work
                 $event->getRequest()->attributes->replace(array_merge(
-                    $request->query->all()[EA::ROUTE_PARAMS] ?? [],
+                    $request->query->all(EA::ROUTE_PARAMS),
                     $event->getRequest()->attributes->all()
                 ));
 
@@ -251,7 +251,7 @@ class AdminRouterSubscriber implements EventSubscriberInterface
      * Dashboard controller, so its enough to check if the request controller implements
      * the DashboardControllerInterface.
      *
-     * @return class-string|null
+     * @return class-string<DashboardControllerInterface>|null
      */
     private function getDashboardControllerFqcn(Request $request): ?string
     {
@@ -262,7 +262,7 @@ class AdminRouterSubscriber implements EventSubscriberInterface
             [$controllerFqcn, ] = explode('::', $controller);
         }
 
-        if (\is_array($controller)) {
+        if (\is_array($controller) && isset($controller[0]) && \is_string($controller[0])) {
             $controllerFqcn = $controller[0];
         }
 
@@ -290,7 +290,7 @@ class AdminRouterSubscriber implements EventSubscriberInterface
     private function getSymfonyControllerFqcn(Request $request): ?string
     {
         $routeName = $request->query->get(EA::ROUTE_NAME);
-        $routeParams = $request->query->all()[EA::ROUTE_PARAMS] ?? [];
+        $routeParams = $request->query->all(EA::ROUTE_PARAMS);
         $url = $this->urlGenerator->generate($routeName, $routeParams, UrlGeneratorInterface::ABSOLUTE_PATH);
 
         $newRequest = $request->duplicate();

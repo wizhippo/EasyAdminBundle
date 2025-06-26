@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Contracts\Provider\AdminContextProviderInter
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector as BaseDataCollector;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 /**
  * Collects information about the requests related to EasyAdmin and displays
@@ -47,9 +48,9 @@ class DataCollector extends BaseDataCollector
     }
 
     /**
-     * @return array<mixed>
+     * @return array<mixed>|Data
      */
-    public function getData(): array
+    public function getData(): array|Data
     {
         return $this->data;
     }

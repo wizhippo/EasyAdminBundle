@@ -228,7 +228,21 @@ class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterfa
             return '';
         }
 
-        return $function->getCallable()(...$functionArguments);
+        $callback = $function->getCallable();
+        if (\is_callable($callback)) {
+            return \call_user_func($callback, ...$functionArguments);
+        }
+
+        if (\is_array($callback) && 2 === \count($callback)) {
+            $callback = [$environment->getRuntime(array_shift($callback)), array_pop($callback)];
+            if (!\is_callable($callback)) {
+                throw new RuntimeError(sprintf('Unable to load runtime for function: "%s"', $functionName));
+            }
+
+            return \call_user_func($callback, ...$functionArguments);
+        }
+
+        throw new RuntimeError(sprintf('Invalid callback for function: "%s"', $functionName));
     }
 
     /**

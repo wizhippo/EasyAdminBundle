@@ -231,7 +231,10 @@ final class EntityRepository implements EntityRepositoryInterface
                 ];
             }
 
-            $filterDataDto = FilterDataDto::new($i, $filter, current($queryBuilder->getRootAliases()), $submittedData);
+            $rootAlias = current($queryBuilder->getRootAliases());
+            \assert(false !== $rootAlias);
+
+            $filterDataDto = FilterDataDto::new($i, $filter, $rootAlias, $submittedData);
             $filter->apply($queryBuilder, $filterDataDto, $fields->getByProperty($propertyName), $entityDto);
 
             ++$i;
