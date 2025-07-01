@@ -19,7 +19,7 @@ enum AlertVariant: string
     {
         return 'alert-'.match ($this) {
             self::Primary, self::Secondary, self::Success, self::Danger, self::Warning, self::Info, self::Light, self::Dark => $this->value,
-            self::Notice => 'success',
+            self::Notice => 'info',
             self::Error => 'danger',
         };
     }
