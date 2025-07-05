@@ -72,7 +72,7 @@ final class UserMenuDto
                 trigger_deprecation(
                     'easycorp/easyadmin-bundle',
                     '4.25.0',
-                    'Argument "%s" for "%s" must be one of these types: %s. Passing type %s will cause an error in 5.0.0.',
+                    'Argument "%s" for "%s" must be one of type: %s. Passing type %s will cause an error in 5.0.0.',
                     '$items',
                     __METHOD__,
                     '"array<MenuItemDto>"',
