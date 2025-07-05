@@ -14,6 +14,24 @@ of the EasyAdmin application.
     // After
     {{ ea().i18n.translationDomain }}
 
+
+EasyAdmin 4.24.8
+----------------
+
+PHPStan will report an error if a class extends `AbstractCrudController` without declaring the type of the entity:
+
+> Class App\Controller\Admin\UserCrudController extends generic class EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController but does not specify its types: TEntity
+
+To avoid this issue, update the controller like this:
+
+```diff
++ /**
++  * @extends AbstractCrudController<User>
++  */
+  class UserCrudController extends AbstractCrudController
+  {
+```
+
 EasyAdmin 4.22.0
 ----------------
 
