@@ -15,6 +15,7 @@ final class AvatarField implements FieldInterface
     use FieldTrait;
 
     public const OPTION_IS_GRAVATAR_EMAIL = 'isGravatarEmail';
+    public const OPTION_GRAVATAR_DEFAULT_IMAGE = 'gravatarDefaultImage';
     public const OPTION_HEIGHT = 'height';
 
     /**
@@ -61,6 +62,13 @@ final class AvatarField implements FieldInterface
     public function setIsGravatarEmail(bool $isGravatar = true): self
     {
         $this->setCustomOption(self::OPTION_IS_GRAVATAR_EMAIL, $isGravatar);
+
+        return $this;
+    }
+
+    public function setGravatarDefaultImage(string $gravatarDefaultImage = 'mp'): self
+    {
+        $this->setCustomOption(self::OPTION_GRAVATAR_DEFAULT_IMAGE, $gravatarDefaultImage);
 
         return $this;
     }
