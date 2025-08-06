@@ -182,6 +182,29 @@ add them explicitly::
     // values via Doctrine; it's equivalent to calling: ->setChoices(BlogPostStatus::cases())
     yield ChoiceField::new('status');
 
+Also, if you want to have human-readable values from your enum in your admin, add a dedicated method to your enum (here ``getLabel()``)::
+
+    namespace App\Config;
+
+    enum BlogPostStatus: string {
+        case Draft = 'draft';
+        case Published = 'published';
+        case Deleted = 'deleted';
+
+        public function getLabel(): string
+        {
+            return match($this) {
+                self::Draft => 'Draft 📝',
+                self::Published => 'Published ✅',
+                self::Deleted => 'Deleted ❌',
+            };
+        }
+    }
+
+Then, configure your field to use it with ``setFormTypeOption()``:: 
+  
+    yield ChoiceField::new('status')->setFormTypeOption('choice_label', fn ($value) => $value->getLabel());
+
 setTranslatableChoices
 ~~~~~~~~~~~~~~~~~~~~~~
 
