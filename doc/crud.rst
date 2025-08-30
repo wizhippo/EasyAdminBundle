@@ -111,20 +111,26 @@ Admin route name                Admin route path
 ==============================  =====================================
 
 You can also customize the path and/or route name of CRUD controllers using the
-``#[AdminCrud]`` attribute with the following options:
+``#[AdminRoute]`` attribute with the following options:
 
 * ``routePath``: the value that represents the controller in the entire route path
   (e.g. a ``/foo`` path will result in ``/admin`` + ``/foo`` + ``/<action>``);
 * ``routeName``: the value that represents the controller in the full route name
   (e.g. a ``foo_bar`` route name will result in ``admin_`` + ``foo_bar`` + ``_<action>``).
 
+.. deprecated:: 4.25.0
+
+    In EasyAdmin versions prior to 4.25.0, instead of ``#[AdminRoute]`` you
+    had to use the ``#[AdminCrud]`` attribute, which is now deprecated and will
+    be removed in EasyAdmin 5.0.0.
+
 Using the same example as above, you can configure the route names and paths of
 the controller as follows::
 
-    use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminCrud;
+    use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
     // ...
 
-    #[AdminCrud(routePath: '/stock/current', routeName: 'stock')]
+    #[AdminRoute(routePath: '/stock/current', routeName: 'stock')]
     class ProductCrudController extends AbstractCrudController
     {
         // ...
@@ -146,16 +152,16 @@ Admin route name                Admin route path
 ==============================  =====================================
 
 Finally, you can also customize the route name and/or path of each CRUD controller
-action using the ``#[AdminAction]`` attribute::
+action using the ``#[AdminRoute]`` attribute::
 
-    use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
+    use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
     // ...
 
     class ProductCrudController extends AbstractCrudController
     {
         // ...
 
-        #[AdminAction(routePath: '/latest-products', routeName: 'latest')]
+        #[AdminRoute(routePath: '/latest-products', routeName: 'latest')]
         public function index(AdminContext $context)
         {
             // ...
@@ -168,8 +174,14 @@ will be ``admin_product_latest`` and the path will be ``/admin/product/latest-pr
 
 .. tip::
 
-    You can combine the ``#[AdminDashboard]``, ``#[AdminCrud]``, and ``#[AdminAction]``
+    You can combine the ``#[AdminDashboard]``, and ``#[AdminRoute]``
     attributes to customize some or all route names and paths.
+
+.. deprecated:: 4.25.0
+
+    In EasyAdmin versions prior to 4.25.0, instead of ``#[AdminRoute]`` you
+    had to use the ``#[AdminAction]`` attribute, which is now deprecated and
+    will be removed in EasyAdmin 5.0.0.
 
 Page Names and Constants
 ~~~~~~~~~~~~~~~~~~~~~~~~

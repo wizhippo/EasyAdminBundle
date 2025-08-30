@@ -19,6 +19,7 @@ class EasyAdminExtension extends Extension implements PrependExtensionInterface
 {
     public const TAG_CRUD_CONTROLLER = 'ea.crud_controller';
     public const TAG_DASHBOARD_CONTROLLER = 'ea.dashboard_controller';
+    public const TAG_ADMIN_ROUTE_CONTROLLER = 'ea.admin_route_controller';
     public const TAG_FIELD_CONFIGURATOR = 'ea.field_configurator';
     public const TAG_FILTER_CONFIGURATOR = 'ea.filter_configurator';
 

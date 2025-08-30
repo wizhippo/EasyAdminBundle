@@ -2,7 +2,9 @@
 
 namespace EasyCorp\Bundle\EasyAdminBundle;
 
+use EasyCorp\Bundle\EasyAdminBundle\DependencyInjection\Compiler\AdminRoutePass;
 use EasyCorp\Bundle\EasyAdminBundle\DependencyInjection\CreateControllerRegistriesPass;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -16,6 +18,8 @@ class EasyAdminBundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new CreateControllerRegistriesPass());
+        // run AdminRoutePass after autoconfiguration to ensure services are registered
+        $container->addCompilerPass(new AdminRoutePass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -10);
     }
 
     public function getPath(): string
