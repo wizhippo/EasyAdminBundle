@@ -438,14 +438,14 @@ The following example shows all kinds of actions in practice::
     of the shortcuts and utilities available in regular `Symfony controllers`_,
     such as ``$this->render()``, ``$this->redirect()``, and others.
 
-Custom actions can define the ``#[AdminAction]`` attribute to
+Custom actions can define the ``#[AdminRoute]`` attribute to
 :ref:`customize their route name, path and methods <crud_routes>`::
 
-    use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
+    use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
     // ...
 
 
-    #[AdminAction(routePath: '/invoice', routeName: 'view_invoice', methods: ['GET', 'POST'])]
+    #[AdminRoute(routePath: '/invoice', routeName: 'view_invoice')]
     public function renderInvoice(AdminContext $context)
     {
         // ...
