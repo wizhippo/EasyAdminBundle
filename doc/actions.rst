@@ -127,11 +127,11 @@ Generating Dynamic Action Labels
 
 Action labels can be dynamically generated based on the related entity they
 belong to. For example, an ``Invoice`` entity can be paid with multiple payments.
-On the top of each ``Invoice`` details page, administrators want to have an action
+At the top of each ``Invoice`` detail page, administrators want to have an action
 link (or button) that brings them to a custom page that shows the received payments
 for that invoice. In order to provide a better user experience, the action link
 (or button) label must display the current number of received payments
-(i.e: ``3 payments``)::
+(e.g.: ``3 payments``)::
 
         use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
         use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -155,7 +155,7 @@ for that invoice. In order to provide a better user experience, the action link
 When the related entity object isn't enough for computing the action label,
 then any more specific service object can be used as a delegator. For example,
 a Doctrine repository service object can be used for counting the related number
-of payments for the administrated invoice::
+of payments for the administered invoice::
 
     use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
     use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -289,7 +289,7 @@ Dropdown and Inline Entity Actions
 
 In the ``index`` page, the entity actions (``edit``, ``delete``, etc.) are
 displayed by default in a dropdown. This is done to better display the field
-contents on each row. If you prefer to display all the actions *inlined*
+contents on each row. If you prefer to display all the actions *inline*
 (that is, without a dropdown) use the ``showEntityActionsInlined()`` method::
 
     namespace App\Controller\Admin;
@@ -365,7 +365,7 @@ that will represent the action::
     manually to make your actions look as expected.
 
 Once you've configured the basics, use one of the following methods to define
-which method is executed when clicking on the action:
+which method runs when you click the action:
 
 * ``linkToCrudAction()``: to execute some method of the current CRUD controller;
 * ``linkToRoute()``: to execute some regular Symfony controller via its route;
@@ -631,7 +631,7 @@ integrate Symfony actions.
 Instead of the expected ``/admin/business-stats`` clean URL, the generated URL
 is ``/admin?menuIndex=...&submenuIndex=...&routeName=admin_business_stats``.
 This is an admin URL, so EasyAdmin can create the :ref:`admin context <admin-context>`,
-load the appropriate menu, etc. However, thanks to the ``routeName`` query string
+load the appropriate menu, etc. However, thanks to the ``routeName`` query
 parameter, EasyAdmin knows that it must forward the request to the Symfony
 controller that serves that route, and does that transparently to you.
 
