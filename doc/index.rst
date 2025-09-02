@@ -2,7 +2,7 @@ EasyAdmin
 =========
 
 `EasyAdmin`_ creates beautiful administration backends for your Symfony
-applications. It's free, fast and fully documented.
+applications. It's free, fast, and fully documented.
 
 .. admonition:: Screencast
     :class: screencast
@@ -52,7 +52,7 @@ Manual Configuration for Applications Not Using Symfony Flex
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In most Symfony applications **you don't need to make any of the following changes**.
-These steps are only required for applications that have opted not to use Symfony Flex.
+These steps are only required for applications that do not use Symfony Flex.
 
 First, register two bundles in your application. Edit the ``config/bundles.php``
 file and add the following::

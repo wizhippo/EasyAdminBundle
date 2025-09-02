@@ -76,7 +76,7 @@ Admin route name                Admin route path
 
     By default, EasyAdmin generates routes for all CRUD controllers on all
     dashboards. You can :ref:`restrict which controllers are accessible <security-controllers>`
-    on each dahboard to not generate all these routes.
+    on each dashboard to not generate all these routes.
 
 You can customize the route names and/or paths of the actions of all the CRUD controllers
 served by some dashboard using the ``routes`` option of the ``#[AdminDashboard]`` attribute::
@@ -463,7 +463,7 @@ Search, Order, and Pagination Options
 
     When using `Doctrine filters`_, listings may not include some items because
     they were removed by those global Doctrine filters. Use the dashboard route
-    name to not apply the filters when the request URL belongs to the dashboard
+    name to avoid applying those filters when the request URL belongs to the dashboard.
     You can also get the dashboard route name via the :ref:`application context variable <admin-context>`.
 
 The default Doctrine query executed to get the list of entities displayed in the
@@ -529,7 +529,7 @@ Other Options
 Custom Redirect After Creating or Editing Entities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By default, when clicking on "Save" button when creating or editing entities
+By default, when you click the "Save" button when creating or editing entities
 you are redirected to the previous page. If you want to change this behavior,
 override the ``getRedirectResponseAfterSave()`` method.
 
@@ -620,7 +620,7 @@ that listing, it's better to override the ``createIndexQueryBuilder()`` method
 instead of the entire ``index()`` method. There are many of these methods, so
 you should check the ``EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController`` class.
 
-The other alternative to customize CRUD actions is to use the
+Another way to customize CRUD actions is to use the
 :doc:`events triggered by EasyAdmin </events>`, such as ``BeforeCrudActionEvent``
 and ``AfterCrudActionEvent``.
 
@@ -781,10 +781,10 @@ If you don't use :ref:`pretty admin URLs <pretty-admin-urls>` or if you need to
 build routes dynamically, you can use the ``AdminUrlGenerator`` provided by
 EasyAdmin to build the admin URLs.
 
-When generating a URL this way, you don't start from scratch. EasyAdmin reuses all
-the query parameters existing in the current request. This is done on purpose because
-generating new URLs based on the current URL is the most common scenario. Use
-the ``unsetAll()`` method to remove all existing query parameters::
+When you generate a URL this way, you don't start from scratch. EasyAdmin reuses
+all the query parameters existing in the current request. This is done on purpose
+because generating new URLs based on the current URL is the most common scenario.
+Use the ``unsetAll()`` method to remove all existing query parameters::
 
     namespace App\Controller\Admin;
 
