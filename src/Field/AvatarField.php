@@ -18,6 +18,11 @@ final class AvatarField implements FieldInterface
     public const OPTION_GRAVATAR_DEFAULT_IMAGE = 'gravatarDefaultImage';
     public const OPTION_HEIGHT = 'height';
 
+    // see https://docs.gravatar.com/sdk/images/#default-image
+    private const ALLOWED_GRAVATAR_DEFAULT_IMAGES = [
+        'initials', 'color', '404', 'mp', 'identicon', 'monsterid', 'wavatar', 'retro', 'robohash', 'blank',
+    ];
+
     /**
      * @param TranslatableInterface|string|false|null $label
      */
@@ -66,8 +71,17 @@ final class AvatarField implements FieldInterface
         return $this;
     }
 
-    public function setGravatarDefaultImage(string $gravatarDefaultImage = 'mp'): self
+    public function setGravatarDefaultImage(string $gravatarDefaultImage): self
     {
+        $gravatarDefaultImage = trim($gravatarDefaultImage);
+
+        if (
+            !\in_array($gravatarDefaultImage, self::ALLOWED_GRAVATAR_DEFAULT_IMAGES, true)
+            && !(str_starts_with($gravatarDefaultImage, 'http://') || str_starts_with($gravatarDefaultImage, 'https://'))
+        ) {
+            throw new \InvalidArgumentException(sprintf('The argument of the "%s()" method must be an image URL or one of these values: %s ("%s" given).', __METHOD__, implode(', ', self::ALLOWED_GRAVATAR_DEFAULT_IMAGES), $gravatarDefaultImage));
+        }
+
         $this->setCustomOption(self::OPTION_GRAVATAR_DEFAULT_IMAGE, $gravatarDefaultImage);
 
         return $this;
