@@ -13,7 +13,7 @@ final class ActionConfigDto
 {
     private ?string $pageName = null;
     /**
-     * @var array<string,array<string,ActionDto>>
+     * @var array<string,array<string,ActionDto|ActionGroupDto>>
      */
     private array $actions = [
         Crud::PAGE_DETAIL => [],
@@ -34,8 +34,8 @@ final class ActionConfigDto
     public function __clone()
     {
         foreach ($this->actions as $pageName => $actions) {
-            foreach ($actions as $actionName => $actionDto) {
-                $this->actions[$pageName][$actionName] = clone $actionDto;
+            foreach ($actions as $actionName => $item) {
+                $this->actions[$pageName][$actionName] = clone $item;
             }
         }
     }
@@ -58,22 +58,22 @@ final class ActionConfigDto
         $this->actionPermissions = $permissions;
     }
 
-    public function prependAction(string $pageName, ActionDto $actionDto): void
+    public function prependAction(string $pageName, ActionDto|ActionGroupDto $item): void
     {
-        $this->actions[$pageName] = array_merge([$actionDto->getName() => $actionDto], $this->actions[$pageName]);
+        $this->actions[$pageName] = array_merge([$item->getName() => $item], $this->actions[$pageName]);
     }
 
-    public function appendAction(string $pageName, ActionDto $actionDto): void
+    public function appendAction(string $pageName, ActionDto|ActionGroupDto $item): void
     {
-        $this->actions[$pageName][$actionDto->getName()] = $actionDto;
+        $this->actions[$pageName][$item->getName()] = $item;
     }
 
-    public function setAction(string $pageName, ActionDto $actionDto): void
+    public function setAction(string $pageName, ActionDto|ActionGroupDto $item): void
     {
-        $this->actions[$pageName][$actionDto->getName()] = $actionDto;
+        $this->actions[$pageName][$item->getName()] = $item;
     }
 
-    public function getAction(string $pageName, string $actionName): ?ActionDto
+    public function getAction(string $pageName, string $actionName): ActionDto|ActionGroupDto|null
     {
         return $this->actions[$pageName][$actionName] ?? null;
     }
@@ -109,7 +109,7 @@ final class ActionConfigDto
     }
 
     /**
-     * @return ActionCollection|array<string,array<string,ActionDto>>
+     * @return ActionCollection|array<string,array<string,ActionDto|ActionGroupDto>>
      */
     public function getActions(): ActionCollection|array
     {
@@ -117,7 +117,7 @@ final class ActionConfigDto
     }
 
     /**
-     * @param array<string, ActionDto> $newActions
+     * @param array<string, ActionDto|ActionGroupDto> $newActions
      */
     public function setActions(string $pageName, array $newActions): void
     {
