@@ -294,9 +294,7 @@ final class AdminUrlGenerator implements AdminUrlGeneratorInterface
         if (null !== $routeName = $this->get(EA::ROUTE_NAME)) {
             $adminRoutes = $this->cache->getItem(AdminRouteGenerator::CACHE_KEY_ROUTE_TO_FQCN)->get();
             if (null !== $adminRoutes && \array_key_exists($routeName, $adminRoutes)) {
-                unset($routeParameters[EA::ROUTE_NAME]);
-
-                return $this->urlGenerator->generate($routeName, $routeParameters, $urlType);
+                return $this->urlGenerator->generate($routeName, $routeParameters[EA::ROUTE_PARAMS] ?? [], $urlType);
             }
 
             return $this->urlGenerator->generate($this->dashboardRoute, $routeParameters, $urlType);
