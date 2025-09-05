@@ -10,15 +10,15 @@ use Symfony\Component\HttpFoundation\Response;
  * Test case 2: Controller with class-level prefix and method-level routes.
  */
 #[AdminRoute(
-    routePath: '/foo',
-    routeName: 'foo',
+    path: '/foo',
+    name: 'foo',
     allowedDashboards: [DashboardController::class]
 )]
 class FooController extends AbstractController
 {
     #[AdminRoute(
-        routePath: '/list',
-        routeName: 'list'
+        path: '/list',
+        name: 'list'
     )]
     public function list(): Response
     {
@@ -26,9 +26,9 @@ class FooController extends AbstractController
     }
 
     #[AdminRoute(
-        routePath: '/export/csv',
-        routeName: 'export_csv',
-        routeOptions: ['methods' => ['GET', 'POST']]
+        path: '/export/csv',
+        name: 'export_csv',
+        options: ['methods' => ['GET', 'POST']]
     )]
     public function exportCsv(): Response
     {
@@ -39,8 +39,8 @@ class FooController extends AbstractController
      * This method overrides the class-level dashboard restrictions.
      */
     #[AdminRoute(
-        routePath: '/public-export',
-        routeName: 'public_export',
+        path: '/public-export',
+        name: 'public_export',
         allowedDashboards: null,
     )]
     public function publicExport(): Response
