@@ -216,7 +216,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
                 // Only create a route for the class itself if:
                 // 1. Both routeName and routePath are defined AND
                 // 2. There are no method-level routes (otherwise it acts as a prefix)
-                if (null !== $classAdminRoute->routeName && null !== $classAdminRoute->routePath && !$hasMethodRoutes) {
+                if (null !== $classAdminRoute->name && null !== $classAdminRoute->path && !$hasMethodRoutes) {
                     if (!method_exists($controller, '__invoke')) {
                         throw new \RuntimeException(sprintf('When applying the #[AdminRoute] attribute only to the controller class (as in "%s"), the controller must be invokable (i.e. it must define the "__invoke()" method).', $controllerFqcn));
                     }
@@ -239,8 +239,8 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 
                         $dashboardRouteConfig = $this->getDashboardsRouteConfig()[$dashboardFqcn];
 
-                        $adminRoutePath = rtrim(sprintf('%s/%s', $dashboardRouteConfig['routePath'], ltrim($classAdminRoute->routePath, '/')), '/');
-                        $adminRouteName = sprintf('%s_%s', $dashboardRouteConfig['routeName'], ltrim($classAdminRoute->routeName, '_'));
+                        $adminRoutePath = rtrim(sprintf('%s/%s', $dashboardRouteConfig['routePath'], ltrim($classAdminRoute->path, '/')), '/');
+                        $adminRouteName = sprintf('%s_%s', $dashboardRouteConfig['routeName'], ltrim($classAdminRoute->name, '_'));
 
                         if (\in_array($adminRouteName, $addedRouteNames, true)) {
                             throw new \RuntimeException(sprintf('The #[AdminRoute] attribute applied to the "%s" controller would create an admin route called "%s", which already exists. You must change the "routeName" argument to generate a different route name.', $controllerFqcn, $adminRouteName));
@@ -295,21 +295,21 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 
                     // Build the route path: dashboard + class prefix (if any) + method path
                     $routePathParts = [$dashboardRouteConfig['routePath']];
-                    if (null !== $classAdminRoute?->routePath) {
-                        $routePathParts[] = ltrim($classAdminRoute->routePath, '/');
+                    if (null !== $classAdminRoute?->path) {
+                        $routePathParts[] = ltrim($classAdminRoute->path, '/');
                     }
-                    if (null !== $methodAdminRoute->routePath) {
-                        $routePathParts[] = ltrim($methodAdminRoute->routePath, '/');
+                    if (null !== $methodAdminRoute->path) {
+                        $routePathParts[] = ltrim($methodAdminRoute->path, '/');
                     }
                     $adminRoutePath = rtrim(implode('/', $routePathParts), '/');
 
                     // Build the route name: dashboard + class prefix (if any) + method name
                     $routeNameParts = [$dashboardRouteConfig['routeName']];
-                    if (null !== $classAdminRoute?->routeName) {
-                        $routeNameParts[] = ltrim($classAdminRoute->routeName, '_');
+                    if (null !== $classAdminRoute?->name) {
+                        $routeNameParts[] = ltrim($classAdminRoute->name, '_');
                     }
-                    if (null !== $methodAdminRoute->routeName) {
-                        $routeNameParts[] = ltrim($methodAdminRoute->routeName, '_');
+                    if (null !== $methodAdminRoute->name) {
+                        $routeNameParts[] = ltrim($methodAdminRoute->name, '_');
                     }
                     $adminRouteName = implode('_', $routeNameParts);
 
@@ -319,15 +319,15 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 
                     // Merge route options: method options override class options
                     $mergedRouteOptions = array_merge(
-                        $classAdminRoute->routeOptions ?? [],
-                        $methodAdminRoute->routeOptions
+                        $classAdminRoute->options ?? [],
+                        $methodAdminRoute->options
                     );
 
                     // Create a new AdminRoute with merged configuration
                     $mergedAdminRoute = new AdminRoute(
-                        routePath: $methodAdminRoute->routePath,
-                        routeName: $methodAdminRoute->routeName,
-                        routeOptions: $mergedRouteOptions,
+                        path: $methodAdminRoute->path,
+                        name: $methodAdminRoute->name,
+                        options: $mergedRouteOptions,
                         allowedDashboards: $allowedDashboards,
                         deniedDashboards: $deniedDashboards
                     );
@@ -347,7 +347,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
     {
         $route = new Route($routePath);
 
-        $routeOptions = $adminRouteAttribute->routeOptions;
+        $routeOptions = $adminRouteAttribute->options;
 
         if (isset($routeOptions['requirements'])) {
             $route->setRequirements($routeOptions['requirements']);
@@ -533,16 +533,16 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
             /** @var AdminRoute $adminRouteInstance */
             $adminRouteInstance = $adminRouteAttributes[0]->newInstance();
 
-            if (null !== $adminRouteInstance->routePath) {
-                $crudControllerConfig['routePath'] = trim($adminRouteInstance->routePath, '/');
+            if (null !== $adminRouteInstance->path) {
+                $crudControllerConfig['routePath'] = trim($adminRouteInstance->path, '/');
             }
 
-            if (null !== $adminRouteInstance->routeName) {
-                if (1 !== preg_match('/^[a-zA-Z0-9_-]+$/', $adminRouteInstance->routeName)) {
-                    throw new \RuntimeException(sprintf('In the #[AdminRoute] attribute of the "%s" CRUD controller, the route name "%s" is not valid. It can only contain letters, numbers, dashes, and underscores.', $crudControllerFqcn, $adminRouteInstance->routeName));
+            if (null !== $adminRouteInstance->name) {
+                if (1 !== preg_match('/^[a-zA-Z0-9_-]+$/', $adminRouteInstance->name)) {
+                    throw new \RuntimeException(sprintf('In the #[AdminRoute] attribute of the "%s" CRUD controller, the route name "%s" is not valid. It can only contain letters, numbers, dashes, and underscores.', $crudControllerFqcn, $adminRouteInstance->name));
                 }
 
-                $crudControllerConfig['routeName'] = trim($adminRouteInstance->routeName, '_');
+                $crudControllerConfig['routeName'] = trim($adminRouteInstance->name, '_');
             }
         } else {
             // fallback to deprecated #[AdminCrud] attribute for backward compatibility
@@ -610,24 +610,24 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
                 /** @var AdminRoute $adminRouteInstance */
                 $adminRouteInstance = $adminRouteAttributes[0]->newInstance();
 
-                if (null !== $adminRouteInstance->routePath) {
-                    if (\in_array($action, ['edit', 'detail', 'delete'], true) && !str_contains($adminRouteInstance->routePath, '{entityId}')) {
+                if (null !== $adminRouteInstance->path) {
+                    if (\in_array($action, ['edit', 'detail', 'delete'], true) && !str_contains($adminRouteInstance->path, '{entityId}')) {
                         throw new \RuntimeException(sprintf('In the "%s" CRUD controller, the #[AdminRoute] attribute applied to the "%s()" action is missing the "{entityId}" placeholder in its route path.', $crudControllerFqcn, $action));
                     }
 
-                    $customActionsConfig[$action]['routePath'] = trim($adminRouteInstance->routePath, '/');
+                    $customActionsConfig[$action]['routePath'] = trim($adminRouteInstance->path, '/');
                 }
 
-                if (null !== $adminRouteInstance->routeName) {
-                    if (1 !== preg_match('/^[a-zA-Z0-9_-]+$/', $adminRouteInstance->routeName)) {
-                        throw new \RuntimeException(sprintf('In the "%s" CRUD controller, the #[AdminRoute] attribute applied to the "%s()" action defines an invalid route name: "%s". Valid route names can only contain letters, numbers, dashes, and underscores.', $crudControllerFqcn, $action, $adminRouteInstance->routeName));
+                if (null !== $adminRouteInstance->name) {
+                    if (1 !== preg_match('/^[a-zA-Z0-9_-]+$/', $adminRouteInstance->name)) {
+                        throw new \RuntimeException(sprintf('In the "%s" CRUD controller, the #[AdminRoute] attribute applied to the "%s()" action defines an invalid route name: "%s". Valid route names can only contain letters, numbers, dashes, and underscores.', $crudControllerFqcn, $action, $adminRouteInstance->name));
                     }
 
-                    $customActionsConfig[$action]['routeName'] = trim($adminRouteInstance->routeName, '_');
+                    $customActionsConfig[$action]['routeName'] = trim($adminRouteInstance->name, '_');
                 }
 
                 // handle methods from routeOptions or use smart defaults
-                $methods = $adminRouteInstance->routeOptions['methods'] ?? null;
+                $methods = $adminRouteInstance->options['methods'] ?? null;
                 if (null === $methods) {
                     // smart defaults: built-in actions have fixed methods, custom actions default to GET and POST
                     if (\in_array($action, ['index', 'detail'], true)) {

@@ -152,7 +152,7 @@ for that invoice. In order to provide a better user experience, the action link
                 ->add(Crud::PAGE_DETAIL, $viewPayments);
         }
 
-When the related entity object isn't enough for computing the action label,
+If the related entity object is not enough for computing the action label,
 then any more specific service object can be used as a delegator. For example,
 a Doctrine repository service object can be used for counting the related number
 of payments for the administered invoice::
@@ -445,7 +445,7 @@ Custom actions can define the ``#[AdminRoute]`` attribute to
     // ...
 
 
-    #[AdminRoute(routePath: '/invoice', routeName: 'view_invoice')]
+    #[AdminRoute(path: '/invoice', name: 'view_invoice')]
     public function renderInvoice(AdminContext $context)
     {
         // ...

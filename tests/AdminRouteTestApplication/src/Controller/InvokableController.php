@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
  * Test case 1: Invokable controller with complete route definition.
  */
 #[AdminRoute(
-    routePath: '/custom-invokable',
-    routeName: 'custom_invokable',
-    routeOptions: ['defaults' => ['_locale' => 'en']]
+    path: '/custom-invokable',
+    name: 'custom_invokable',
+    options: ['defaults' => ['_locale' => 'en']]
 )]
 class InvokableController extends AbstractController
 {

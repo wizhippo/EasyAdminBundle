@@ -11,14 +11,14 @@ use Symfony\Component\HttpFoundation\Response;
  * The class only defines the route path prefix, not the name.
  */
 #[AdminRoute(
-    routePath: '/reports',
+    path: '/reports',
     allowedDashboards: [SecondDashboardController::class]
 )]
 class ReportsController extends AbstractController
 {
     #[AdminRoute(
-        routePath: '/sales',
-        routeName: 'sales_report'
+        path: '/sales',
+        name: 'sales_report'
     )]
     public function salesReport(): Response
     {
@@ -26,8 +26,8 @@ class ReportsController extends AbstractController
     }
 
     #[AdminRoute(
-        routePath: '/inventory',
-        routeName: 'inventory_report'
+        path: '/inventory',
+        name: 'inventory_report'
     )]
     public function inventoryReport(): Response
     {

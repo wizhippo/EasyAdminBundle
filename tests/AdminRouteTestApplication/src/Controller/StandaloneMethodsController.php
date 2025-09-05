@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 class StandaloneMethodsController extends AbstractController
 {
     #[AdminRoute(
-        routePath: '/standalone/action1',
-        routeName: 'standalone_action1'
+        path: '/standalone/action1',
+        name: 'standalone_action1'
     )]
     public function action1(): Response
     {
@@ -21,9 +21,9 @@ class StandaloneMethodsController extends AbstractController
     }
 
     #[AdminRoute(
-        routePath: '/standalone/action2',
-        routeName: 'standalone_action2',
-        routeOptions: ['methods' => ['POST']]
+        path: '/standalone/action2',
+        name: 'standalone_action2',
+        options: ['methods' => ['POST']]
     )]
     public function action2(): Response
     {

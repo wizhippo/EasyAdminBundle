@@ -84,7 +84,7 @@ served by some dashboard using the ``routes`` option of the ``#[AdminDashboard]`
     use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
     // ...
 
-    #[AdminDashboard(routePath: '/admin', routeName: 'admin', routes: [
+    #[(routePath: '/admin', routeName: 'admin', routes: [
         'index' => ['routePath' => '/all'],
         'new' => ['routePath' => '/create', 'routeName' => 'create'],
         'edit' => ['routePath' => '/editing-{entityId}', 'routeName' => 'editing'],
@@ -113,10 +113,10 @@ Admin route name                Admin route path
 You can also customize the path and/or route name of CRUD controllers using the
 ``#[AdminRoute]`` attribute with the following options:
 
-* ``routePath``: the value that represents the controller in the entire route path
-  (e.g. a ``/foo`` path will result in ``/admin`` + ``/foo`` + ``/<action>``);
-* ``routeName``: the value that represents the controller in the full route name
-  (e.g. a ``foo_bar`` route name will result in ``admin_`` + ``foo_bar`` + ``_<action>``).
+* ``path``: the value that represents the controller in the entire route path
+  (e.g. a ``/foo`` path here will result in a route with the path ``/admin`` + ``/foo`` + ``/<action>``);
+* ``name``: the value that represents the controller in the full route name
+  (e.g. a ``foo_bar`` name here will result in a route named``admin_`` + ``foo_bar`` + ``_<action>``).
 
 .. deprecated:: 4.25.0
 
@@ -130,7 +130,7 @@ the controller as follows::
     use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
     // ...
 
-    #[AdminRoute(routePath: '/stock/current', routeName: 'stock')]
+    #[AdminRoute(path: '/stock/current', name: 'stock')]
     class ProductCrudController extends AbstractCrudController
     {
         // ...
@@ -161,7 +161,7 @@ action using the ``#[AdminRoute]`` attribute::
     {
         // ...
 
-        #[AdminRoute(routePath: '/latest-products', routeName: 'latest')]
+        #[AdminRoute(path: '/latest-products', name: 'latest')]
         public function index(AdminContext $context)
         {
             // ...
