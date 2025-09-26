@@ -129,7 +129,7 @@
                         {%- if tab.getCustomOption('icon')|default(false) -%}
                             <twig:ea:Icon name="{{ tab.getCustomOption('icon') }}" class="tab-nav-item-icon"/>
                         {%- endif -%}
-                        {{ tab.label|trans(domain = ea.i18n.translationDomain)|raw }}
+                        {{ tab.label|trans(domain = ea().i18n.translationDomain)|raw }}
 
                         {% set tab_error_count = tab.getCustomOption(tab_error_count_option_name)  %}
                         {%- if tab_error_count > 0 -%}
@@ -161,7 +161,7 @@
     <div id="{{ field.getCustomOption(tab_id_option_name) }}" class="tab-pane {% if field.getCustomOption(tab_is_active_option_name) %}active{% endif %} {{ field.cssClass }}" {% for key, value in field.getFormTypeOption('attr') %}{{ key }}="{{ value|e('html') }}"{% endfor %}>
         {% if field.help %}
             <div class="content-header-help tab-help">
-                {{ field.help|trans(domain = ea.i18n.translationDomain)|raw }}
+                {{ field.help|trans(domain = ea().i18n.translationDomain)|raw }}
             </div>
         {% endif %}
 
@@ -188,6 +188,7 @@
 {% endmacro %}
 
 {% macro render_column_open(field) %}
+    {% set ea = ea() %}
     {% set field_icon = field.getCustomOption('icon') %}
     {% set column_has_title = field_icon != null or field.label != false or field.label != null or field.label != '' or field.help != null %}
 
@@ -267,6 +268,8 @@
 
 {% macro render_detail_fields_with_tabs(entity, field_layout) %}
     {% deprecated 'The "render_detail_fields_with_tabs" macro is deprecated because the layout building logic has been revamped for the "detail" page. Check EasyAdmin\'s `detail.html.page` for more details.' %}
+
+    {% set ea = ea() %}
 
     <div class="col-12">
         <div class="nav-tabs-custom form-tabs">
