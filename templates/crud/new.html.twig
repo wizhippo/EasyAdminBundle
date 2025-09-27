@@ -50,7 +50,7 @@
 {% endblock %}
 
 {% block page_actions %}
-    {% for action in entity.actions %}
+    {% for action in entity.actions|reverse %}
         {{ include(action.templatePath, { action: action }, with_context = false) }}
     {% endfor %}
 {% endblock %}

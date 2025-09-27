@@ -733,11 +733,15 @@ a.user-menu-wrapper .user-details:hover {
 .dropdown-menu i,
 .dropdown-menu .icon {
     color: var(--dropdown-icon-color);
-    margin: 0 10px 0 4px;
+    margin: 0 8px 0 0;
     font-size: 15px;
+}
+.dropdown-menu .icon i {
+    margin: 0;
 }
 .dropdown-menu .icon {
     display: inline-flex;
+    justify-content: center;
 }
 
 .dropdown-menu .dropdown-item,

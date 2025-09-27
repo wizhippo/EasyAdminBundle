@@ -13,6 +13,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use EasyCorp\Bundle\EasyAdminBundle\Translation\TranslatableMessageBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Twig\Component\Option\ButtonStyle;
+use EasyCorp\Bundle\EasyAdminBundle\Twig\Component\Option\ButtonVariant;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -64,6 +66,10 @@ final class ActionFactory
             $entityActions[$actionDto->getName()] = $this->processAction($currentPage, $actionDto, $entityDto);
         }
 
+        if ($actionsDto->getUseAutomaticOrdering()) {
+            $entityActions = $this->sortActionsByPriority($entityActions);
+        }
+
         $entityDto->setActions(ActionCollection::new($entityActions));
     }
 
@@ -104,6 +110,10 @@ final class ActionFactory
             }
 
             $globalActions[$actionDto->getName()] = $this->processAction($currentPage, $actionDto);
+        }
+
+        if ($actionsDto->getUseAutomaticOrdering()) {
+            $globalActions = $this->sortActionsByPriority($globalActions);
         }
 
         return ActionCollection::new($globalActions);
@@ -236,5 +246,65 @@ final class ActionFactory
         }
 
         return $this->adminUrlGenerator->unsetAllExcept(...$urlParametersToKeep)->setAll($requestParameters)->generateUrl();
+    }
+
+    /**
+     * @param array<string, ActionDto> $actions
+     *
+     * @return array<string, ActionDto>
+     */
+    private function sortActionsByPriority(array $actions): array
+    {
+        $indexed = [];
+        $index = 0;
+        foreach ($actions as $name => $action) {
+            $indexed[] = [
+                'name' => $name,
+                'action' => $action,
+                'index' => $index++,
+            ];
+        }
+
+        /**
+         * @param array{name: string, action: ActionDto, index: int} $a
+         * @param array{name: string, action: ActionDto, index: int} $b
+         */
+        usort($indexed, function (array $a, array $b): int {
+            $priorityA = $this->getActionPriority($a['action']);
+            $priorityB = $this->getActionPriority($b['action']);
+
+            $primaryComparison = $priorityB <=> $priorityA;
+            if (0 !== $primaryComparison) {
+                return $primaryComparison;
+            }
+
+            // if actions have the same priority, keep the original order
+            return $a['index'] <=> $b['index'];
+        });
+
+        $sorted = [];
+        foreach ($indexed as $item) {
+            $sorted[$item['name']] = $item['action'];
+        }
+
+        return $sorted;
+    }
+
+    private function getActionPriority(ActionDto $action): int
+    {
+        $style = $action->getStyle();
+        $variant = $action->getVariant();
+
+        $baseWeight = ButtonStyle::Solid === $style ? 1000 : 0;
+
+        $variantWeight = match ($variant) {
+            ButtonVariant::Primary => 100,
+            ButtonVariant::Default => 90,
+            ButtonVariant::Success => 80,
+            ButtonVariant::Warning => 70,
+            ButtonVariant::Danger => 60,
+        };
+
+        return $baseWeight + $variantWeight;
     }
 }

@@ -25,6 +25,7 @@ final class ActionConfigDto
     private array $disabledActions = [];
     /** @var array<string, string|Expression> */
     private array $actionPermissions = [];
+    private bool $useAutomaticOrdering = true;
 
     public function __construct()
     {
@@ -59,12 +60,12 @@ final class ActionConfigDto
 
     public function prependAction(string $pageName, ActionDto $actionDto): void
     {
-        $this->actions[$pageName][$actionDto->getName()] = $actionDto;
+        $this->actions[$pageName] = array_merge([$actionDto->getName() => $actionDto], $this->actions[$pageName]);
     }
 
     public function appendAction(string $pageName, ActionDto $actionDto): void
     {
-        $this->actions[$pageName] = array_merge([$actionDto->getName() => $actionDto], $this->actions[$pageName]);
+        $this->actions[$pageName][$actionDto->getName()] = $actionDto;
     }
 
     public function setAction(string $pageName, ActionDto $actionDto): void
@@ -137,5 +138,15 @@ final class ActionConfigDto
     public function getActionPermissions(): array
     {
         return $this->actionPermissions;
+    }
+
+    public function getUseAutomaticOrdering(): bool
+    {
+        return $this->useAutomaticOrdering;
+    }
+
+    public function setUseAutomaticOrdering(bool $useAutomaticOrdering): void
+    {
+        $this->useAutomaticOrdering = $useAutomaticOrdering;
     }
 }

@@ -258,8 +258,25 @@ Permissions are defined globally; you cannot define different permissions per pa
 Reordering Actions
 ------------------
 
-Use the ``reorder()`` to define the order in which actions are displayed
-in some page::
+By default, actions are ordered by type: "primary" actions are displayed first,
+followed by "default", "success", "warning", and, lastly, "danger" actions. This
+ordering also applies to your :ref:`custom actions <actions-custom>`, as explained below.
+
+This ordering usually produces the best visual result. However, you can disable
+this behavior in your application by calling the following method::
+
+    use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // ...
+            ->disableAutomaticOrdering();
+    }
+}
+
+You can also use the ``reorder()`` method to define an explicit order in which
+actions are displayed on a page::
 
     use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
     use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -283,6 +300,11 @@ in some page::
             ->reorder(Crud::PAGE_INDEX, [Action::DETAIL, 'viewInvoice'])
         ;
     }
+
+.. note::
+
+    When using the ``reorder()`` method, the smart sorting feature is
+    automatically disabled.
 
 Dropdown and Inline Entity Actions
 ----------------------------------
@@ -370,7 +392,7 @@ that will represent the action::
         ->setHtmlAttributes(['data-foo' => 'bar', 'target' => '_blank'])
 
         // by default, actions are shown as `btn-secondary` elements; use the
-        // following actions to change their style accordingly
+        // following actions to change their style and priority accordingly
         ->asDefaultAction()
         ->asPrimaryAction()
         ->asSuccessAction()
