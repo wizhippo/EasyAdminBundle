@@ -65,7 +65,7 @@
 
     {% block global_actions %}
         <div class="global-actions">
-            {% for action in global_actions %}
+            {% for action in global_actions|reverse %}
                 {{ include(action.templatePath, { action: action }, with_context = false) }}
             {% endfor %}
         </div>
@@ -170,7 +170,7 @@
                                                 <twig:ea:ActionMenu:ActionList>
                                                     {% for action in entity.actions %}
                                                         <twig:ea:ActionMenu:ActionList:Item
-                                                            class="{{ action.cssClass }}" url="{{ action.linkUrl }}"
+                                                            class="{{ action.cssClass }} dropdown-item-variant-{{ action.variant.value }}" url="{{ action.linkUrl }}"
                                                             icon="{{ action.icon }}" icon:class="action-icon"
                                                             htmlAttributes="{{ action.htmlAttributes }}"
                                                             renderAsForm="{{ action.isRenderedAsForm }}"

@@ -179,6 +179,12 @@ table.datagrid:not(.datagrid-empty) tr:not(.empty-row) td.actions.actions-as-dro
     font-size: var(--font-size-base);
     margin-inline-end: 2px;
 }
+.datagrid td.actions .dropdown-item-variant-danger:hover {
+    --dropdown-icon-color: var(--dropdown-item-danger-color);
+
+    background: var(--dropdown-item-danger-bg);
+    color: var(--dropdown-item-danger-color);
+}
 
 @media (min-width: 992px) {
     .datagrid td.actions-as-dropdown {

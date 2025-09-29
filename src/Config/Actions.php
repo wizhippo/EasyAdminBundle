@@ -102,6 +102,9 @@ final class Actions
 
         $this->dto->reorderActions($pageName, $newActionOrder);
 
+        // disable automatic ordering when reorder is called explicitly
+        $this->dto->setUseAutomaticOrdering(false);
+
         return $this;
     }
 
@@ -136,6 +139,13 @@ final class Actions
         return $this;
     }
 
+    public function disableAutomaticOrdering(bool $disable = true): self
+    {
+        $this->dto->setUseAutomaticOrdering(!$disable);
+
+        return $this;
+    }
+
     public function getAsDto(?string $pageName): ActionConfigDto
     {
         $this->dto->setPageName($pageName);
@@ -164,7 +174,7 @@ final class Actions
         }
 
         if (Action::EDIT === $actionName) {
-            return Action::new(Action::EDIT, t('action.edit', domain: 'EasyAdminBundle'), null)
+            return Action::new(Action::EDIT, t('action.edit', domain: 'EasyAdminBundle'), Crud::PAGE_INDEX === $pageName ? 'internal:edit' : null)
                 ->linkToCrudAction(Action::EDIT)
                 ->asPrimaryAction(Crud::PAGE_DETAIL === $pageName);
         }
@@ -180,7 +190,7 @@ final class Actions
         }
 
         if (Action::DELETE === $actionName) {
-            return Action::new(Action::DELETE, t('action.delete', domain: 'EasyAdminBundle'), Crud::PAGE_INDEX === $pageName ? null : 'internal:delete')
+            return Action::new(Action::DELETE, t('action.delete', domain: 'EasyAdminBundle'), 'internal:delete')
                 ->linkToCrudAction(Action::DELETE)
                 ->asDangerAction()
                 ->asTextLink()
@@ -226,11 +236,7 @@ final class Actions
             $actionDto->setType(Action::TYPE_BATCH);
         }
 
-        if (Crud::PAGE_INDEX === $pageName && Action::DELETE === $actionName) {
-            $this->dto->prependAction($pageName, $actionDto);
-        } else {
-            $this->dto->appendAction($pageName, $actionDto);
-        }
+        $this->dto->appendAction($pageName, $actionDto);
 
         return $this;
     }
