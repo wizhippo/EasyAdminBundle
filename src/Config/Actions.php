@@ -25,8 +25,14 @@ final class Actions
         return new self($dto);
     }
 
-    public function add(string $pageName, Action|string $actionNameOrObject): self
+    public function add(string $pageName, Action|ActionGroup|string $actionNameOrObject): self
     {
+        if ($actionNameOrObject instanceof ActionGroup) {
+            $this->dto->appendAction($pageName, $actionNameOrObject->getAsDto());
+
+            return $this;
+        }
+
         return $this->doAddAction($pageName, $actionNameOrObject);
     }
 
