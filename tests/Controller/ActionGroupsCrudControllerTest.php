@@ -5,6 +5,7 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Tests\Controller;
 use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Test\AbstractCrudTestCase;
 use EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Controller\ActionGroupsCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Controller\ActionGroupsInlineCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Controller\SecureDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Entity\Category;
 
@@ -406,5 +407,27 @@ class ActionGroupsCrudControllerTest extends AbstractCrudTestCase
         static::assertGreaterThan(0, $splitDropdown->filter('[data-action-group-name-main-action]')->count()); // Main action
         static::assertCount(1, $splitDropdown->filter('button.dropdown-toggle-split')); // Dropdown toggle
         static::assertCount(1, $splitDropdown->filter('.dropdown-menu'));
+    }
+
+    public function testActionGroupsWithInlineEntityActions(): void
+    {
+        $url = $this->generateIndexUrl(
+            controllerFqcn: ActionGroupsInlineCrudController::class,
+        );
+        $crawler = $this->client->request('GET', $url);
+
+        $entityRows = $crawler->filter('table.datagrid tbody tr[data-id]');
+        static::assertGreaterThan(0, $entityRows->count(), 'Should have entity rows');
+
+        $firstRow = $entityRows->first();
+        $inlineActions = $firstRow->filter('.actions:not(.actions-as-dropdown)');
+        static::assertCount(1, $inlineActions, 'Actions should be displayed inline');
+
+        $actionGroups = $firstRow->filter('.actions .action-group');
+        static::assertGreaterThan(0, $actionGroups->count(), 'Should have action groups in inline actions');
+
+        $firstGroup = $actionGroups->first();
+        static::assertCount(1, $firstGroup->filter('button.dropdown-toggle'), 'Action group should have dropdown toggle');
+        static::assertCount(1, $firstGroup->filter('.dropdown-menu'), 'Action group should have dropdown menu');
     }
 }
