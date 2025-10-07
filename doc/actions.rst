@@ -823,6 +823,7 @@ for the actions using the ``#[AdminRoute]`` attribute::
     namespace App\Controller;
 
     use App\Stats\BusinessStatsCalculator;
+    use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\Routing\Attribute\Route;
     use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -883,6 +884,7 @@ the following options::
 
     use App\Controller\Admin\DashboardController;
     use App\Controller\Admin\GuestDashboardController;
+    use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
 
     // Use the 'allowedDashboards' option to NOT generate a route for ANY dashboards
     // except those listed explicitly:
