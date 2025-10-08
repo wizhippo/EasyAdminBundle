@@ -30,6 +30,19 @@ final class ActionGroupDto
     private ButtonStyle $style = ButtonStyle::Solid;
     private bool $hasAnyActionWithIcon = false;
 
+    public function __clone(): void
+    {
+        if (null !== $this->mainAction) {
+            $this->mainAction = clone $this->mainAction;
+        }
+
+        foreach ($this->items as $index => $item) {
+            if ($item instanceof ActionDto) {
+                $this->items[$index] = clone $item;
+            }
+        }
+    }
+
     // A utility method for Twig templates that deal with actions and action groups
     public function isActionGroup(): bool
     {
