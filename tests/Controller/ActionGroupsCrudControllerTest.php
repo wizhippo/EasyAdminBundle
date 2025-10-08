@@ -256,6 +256,19 @@ class ActionGroupsCrudControllerTest extends AbstractCrudTestCase
             });
             static::assertFalse($hasGroup6, 'Category 0 should not display Action Group 6');
         }
+
+        // test that action URLs are different for each entity (verifies __clone() works correctly)
+        if ($entityRows->count() >= 2) {
+            $firstRowActionLinks = $entityRows->eq(0)->filter('.dropdown-submenu .dropdown-item[data-action-name]');
+            $secondRowActionLinks = $entityRows->eq(1)->filter('.dropdown-submenu .dropdown-item[data-action-name]');
+
+            if ($firstRowActionLinks->count() > 0 && $secondRowActionLinks->count() > 0) {
+                $firstUrl = $firstRowActionLinks->first()->attr('href');
+                $secondUrl = $secondRowActionLinks->first()->attr('href');
+
+                static::assertNotSame($firstUrl, $secondUrl, 'Action URLs should be different for each entity');
+            }
+        }
     }
 
     public function testActionGroupsInDetailPage(): void
