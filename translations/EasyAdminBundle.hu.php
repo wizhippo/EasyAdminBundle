@@ -89,7 +89,7 @@ return [
         'label.ends_with' => 'így végződik',
         'label.exactly' => 'pontosan',
         'label.not_exactly' => 'nem pontosan',
-        'label.is_same' => 'megyegyezik',
+        'label.is_same' => 'megegyezik',
         'label.is_not_same' => 'nem egyezik meg',
         'label.is_after' => 'korábbi',
         'label.is_after_or_same' => 'korábbi vagy egyezik',
