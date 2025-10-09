@@ -49,6 +49,10 @@ class CrudAutocompleteSubscriber implements EventSubscriberInterface
             $options['choices'] = [];
         } else {
             if (false === $options['id_reader']->isIntId()) {
+                if (!\is_array($data['autocomplete'])) {
+                    $data['autocomplete'] = [$data['autocomplete']];
+                }
+
                 $data['autocomplete'] = array_map(
                     fn ($v) => Ulid::isValid($v) ? Ulid::fromBase32($v)->toRfc4122() : $v,
                     $data['autocomplete']
