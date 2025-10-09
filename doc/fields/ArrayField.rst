@@ -13,9 +13,10 @@ Basic Information
 -----------------
 
 * **PHP Class**: ``EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField``
-* **Doctrine DBAL v4 Type** used to store this value: ``simple_array`` or ``json``
-* **Doctrine DBAL v3 Type** used to store this value: ``array``, ``simple_array`` or ``json``
-* **Doctrine DBAL v2 Type** used to store this value: ``array``, ``simple_array``, ``json_array`` or ``json``
+* **Doctrine DBAL Type** used to store this value: it depends on the installed DBAL version
+  * DBAL **v4**: ``simple_array`` or ``json``
+  * DBAL **v3**: ``array``, ``simple_array`` or ``json``
+  * DNAL **v2**: ``array``, ``simple_array``, ``json_array`` or ``json``
 * **Symfony Form Type** used to render the field: `CollectionType`_
 * **Rendered as**:
 
