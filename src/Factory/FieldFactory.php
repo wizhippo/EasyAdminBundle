@@ -73,7 +73,7 @@ final class FieldFactory
 
     public function processFields(EntityDto $entityDto, FieldCollection $fields): void
     {
-        $this->preProcessFields($fields, $entityDto);
+        $this->replaceGenericFieldsWithSpecificFields($fields, $entityDto);
 
         $context = $this->adminContextProvider->getContext();
         $currentPage = $context->getCrud()->getCurrentPage();
@@ -118,7 +118,7 @@ final class FieldFactory
             }
 
             foreach ($fieldDto->getFormThemes() as $formThemePath) {
-                $context?->getCrud()?->addFormTheme($formThemePath);
+                $context->getCrud()->addFormTheme($formThemePath);
             }
 
             $fields->set($fieldDto);
@@ -131,12 +131,8 @@ final class FieldFactory
         $entityDto->setFields($fields);
     }
 
-    private function preProcessFields(FieldCollection $fields, EntityDto $entityDto): void
+    private function replaceGenericFieldsWithSpecificFields(FieldCollection $fields, EntityDto $entityDto): void
     {
-        if ($fields->isEmpty()) {
-            return;
-        }
-
         foreach ($fields as $fieldDto) {
             if (Field::class !== $fieldDto->getFieldFqcn()) {
                 continue;
@@ -158,12 +154,14 @@ final class FieldFactory
                 }
             }
 
-            $fields->set($this->transformField($fieldDto, $guessedFieldFqcn));
+            $fields->set($this->createSpecificFieldFromGenericField($fieldDto, $guessedFieldFqcn));
         }
     }
 
-    // transforms a generic Field class into a specific <type>Field class (e.g. DateTimeField)
-    private function transformField(FieldDto $fieldDto, string $newFieldFqcn): FieldDto
+    /**
+     * Creates a DTO of a specific field (e.g. DateTimeField) from a DTO of the generic Field.
+     */
+    private function createSpecificFieldFromGenericField(FieldDto $fieldDto, string $newFieldFqcn): FieldDto
     {
         /** @var FieldDto $newField */
         $newField = $newFieldFqcn::new($fieldDto->getProperty())->getAsDto();
