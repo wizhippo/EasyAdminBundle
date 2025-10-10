@@ -30,17 +30,12 @@ use function Symfony\Component\Translation\t;
  */
 final class AssociationConfigurator implements FieldConfiguratorInterface
 {
-    private EntityFactory $entityFactory;
-    private AdminUrlGeneratorInterface $adminUrlGenerator;
-    private RequestStack $requestStack;
-    private ControllerFactory $controllerFactory;
-
-    public function __construct(EntityFactory $entityFactory, AdminUrlGeneratorInterface $adminUrlGenerator, RequestStack $requestStack, ControllerFactory $controllerFactory)
-    {
-        $this->entityFactory = $entityFactory;
-        $this->adminUrlGenerator = $adminUrlGenerator;
-        $this->requestStack = $requestStack;
-        $this->controllerFactory = $controllerFactory;
+    public function __construct(
+        private readonly EntityFactory $entityFactory,
+        private readonly AdminUrlGeneratorInterface $adminUrlGenerator,
+        private readonly RequestStack $requestStack,
+        private readonly ControllerFactory $controllerFactory,
+    ) {
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool

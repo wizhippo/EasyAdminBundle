@@ -17,11 +17,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TimeField;
  */
 final class DateTimeConfigurator implements FieldConfiguratorInterface
 {
-    private IntlFormatterInterface $intlFormatter;
-
-    public function __construct(IntlFormatterInterface $intlFormatter)
+    public function __construct(private readonly IntlFormatterInterface $intlFormatter)
     {
-        $this->intlFormatter = $intlFormatter;
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool

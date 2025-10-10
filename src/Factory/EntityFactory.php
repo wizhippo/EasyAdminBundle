@@ -23,19 +23,13 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 final class EntityFactory
 {
-    private FieldFactory $fieldFactory;
-    private ActionFactory $actionFactory;
-    private AuthorizationCheckerInterface $authorizationChecker;
-    private ManagerRegistry $doctrine;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(FieldFactory $fieldFactory, ActionFactory $actionFactory, AuthorizationCheckerInterface $authorizationChecker, ManagerRegistry $doctrine, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->fieldFactory = $fieldFactory;
-        $this->actionFactory = $actionFactory;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->doctrine = $doctrine;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private readonly FieldFactory $fieldFactory,
+        private readonly ActionFactory $actionFactory,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly ManagerRegistry $doctrine,
+        private readonly EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     public function processFields(EntityDto $entityDto, FieldCollection $fields): void

@@ -79,13 +79,13 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
      * @param iterable<object>                       $adminRouteControllers Controllers with the #[AdminRoute] attribute
      */
     public function __construct(
-        private iterable $dashboardControllers,
-        private iterable $crudControllers,
-        private CacheItemPoolInterface $cache,
-        private Filesystem $filesystem,
-        private string $buildDir,
-        private string $defaultLocale,
-        private iterable $adminRouteControllers = [],
+        private readonly iterable $dashboardControllers,
+        private readonly iterable $crudControllers,
+        private readonly CacheItemPoolInterface $cache,
+        private readonly Filesystem $filesystem,
+        private readonly string $buildDir,
+        private readonly string $defaultLocale,
+        private readonly iterable $adminRouteControllers = [],
     ) {
     }
 

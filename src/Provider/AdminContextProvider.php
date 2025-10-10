@@ -19,11 +19,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AdminContextProvider implements AdminContextProviderInterface
 {
-    private RequestStack $requestStack;
-
-    public function __construct(RequestStack $requestStack)
+    public function __construct(private readonly RequestStack $requestStack)
     {
-        $this->requestStack = $requestStack;
     }
 
     public function hasContext(): bool

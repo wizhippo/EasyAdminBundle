@@ -28,15 +28,11 @@ use function Symfony\Component\String\u;
  */
 final class CollectionConfigurator implements FieldConfiguratorInterface
 {
-    private RequestStack $requestStack;
-    private EntityFactory $entityFactory;
-    private ControllerFactory $controllerFactory;
-
-    public function __construct(RequestStack $requestStack, EntityFactory $entityFactory, ControllerFactory $controllerFactory)
-    {
-        $this->requestStack = $requestStack;
-        $this->entityFactory = $entityFactory;
-        $this->controllerFactory = $controllerFactory;
+    public function __construct(
+        private readonly RequestStack $requestStack,
+        private readonly EntityFactory $entityFactory,
+        private readonly ControllerFactory $controllerFactory,
+    ) {
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool

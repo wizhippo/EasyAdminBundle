@@ -27,11 +27,8 @@ use Symfony\Component\Validator\Constraints\All;
  */
 class FileUploadType extends AbstractType implements DataMapperInterface
 {
-    private string $projectDir;
-
-    public function __construct(string $projectDir)
+    public function __construct(private readonly string $projectDir)
     {
-        $this->projectDir = $projectDir;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
