@@ -304,14 +304,16 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
         if (null === $associatedEntity) {
             $targetCrudControllerAction = Action::NEW;
             $targetCrudControllerPageName = $field->getCustomOption(AssociationField::OPTION_EMBEDDED_CRUD_FORM_NEW_PAGE_NAME) ?? Crud::PAGE_NEW;
+            $crudPageName = Crud::PAGE_NEW;
         } else {
             $targetCrudControllerAction = Action::EDIT;
             $targetCrudControllerPageName = $field->getCustomOption(AssociationField::OPTION_EMBEDDED_CRUD_FORM_EDIT_PAGE_NAME) ?? Crud::PAGE_EDIT;
+            $crudPageName = Crud::PAGE_EDIT;
         }
 
         $field->setFormTypeOption(
             'entityDto',
-            $this->createEntityDto($targetEntityFqcn, $targetCrudControllerFqcn, $targetCrudControllerAction, $targetCrudControllerPageName),
+            $this->createEntityDto($targetEntityFqcn, $targetCrudControllerFqcn, $targetCrudControllerAction, $targetCrudControllerPageName, $crudPageName),
         );
     }
 
@@ -319,7 +321,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
      * @param class-string $entityFqcn
      * @param class-string $crudControllerFqcn
      */
-    private function createEntityDto(string $entityFqcn, string $crudControllerFqcn, string $crudControllerAction, string $crudControllerPageName): EntityDto
+    private function createEntityDto(string $entityFqcn, string $crudControllerFqcn, string $crudControllerAction, string $crudControllerPageName, string $crudPageName): EntityDto
     {
         $entityDto = $this->entityFactory->create($entityFqcn);
 
@@ -331,7 +333,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
 
         $fields = $crudController->configureFields($crudControllerPageName);
 
-        $this->entityFactory->processFields($entityDto, FieldCollection::new($fields));
+        $this->entityFactory->processFields($entityDto, FieldCollection::new($fields), $crudPageName);
 
         return $entityDto;
     }

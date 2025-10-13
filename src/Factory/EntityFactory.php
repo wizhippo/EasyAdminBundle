@@ -38,15 +38,31 @@ final class EntityFactory
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function processFields(EntityDto $entityDto, FieldCollection $fields): void
+    public function processFields(EntityDto $entityDto, FieldCollection $fields, ?string $pageName = null): void
     {
-        $this->fieldFactory->processFields($entityDto, $fields);
+        if (null === $pageName) {
+            trigger_deprecation(
+                'easycorp/easyadmin-bundle',
+                '4.27.0',
+                'Argument "$pageName" is missing. Omitting it will cause an error in 5.0.0.',
+            );
+        }
+
+        $this->fieldFactory->processFields($entityDto, $fields, $pageName);
     }
 
-    public function processFieldsForAll(EntityCollection $entities, FieldCollection $fields): void
+    public function processFieldsForAll(EntityCollection $entities, FieldCollection $fields, ?string $pageName = null): void
     {
+        if (null === $pageName) {
+            trigger_deprecation(
+                'easycorp/easyadmin-bundle',
+                '4.27.0',
+                'Argument "$pageName" is missing. Omitting it will cause an error in 5.0.0.',
+            );
+        }
+
         foreach ($entities as $entity) {
-            $this->processFields($entity, clone $fields);
+            $this->processFields($entity, clone $fields, $pageName);
             $entities->set($entity);
         }
     }
