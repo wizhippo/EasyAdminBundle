@@ -86,8 +86,17 @@ final class EntityFactory
     /**
      * @param object $entityInstance
      */
-    public function createForEntityInstance($entityInstance): EntityDto
+    public function createForEntityInstance(/* object */ $entityInstance): EntityDto
     {
+        if (!\is_object($entityInstance)) {
+            trigger_deprecation(
+                'easycorp/easyadmin-bundle',
+                '4.27.0',
+                'Not passing argument "$entityInstance" for method "%s" of type "object" is deprecated.',
+                __METHOD__,
+            );
+        }
+
         return $this->doCreate(null, null, null, $entityInstance);
     }
 
