@@ -17,9 +17,9 @@ final class AdminRouteLoader extends Loader
     public const PRETTY_URLS_CONTEXT_FILE_NAME = 'easyadmin/application_uses_pretty_urls.txt';
 
     public function __construct(
-        private AdminRouteGeneratorInterface $adminRouteGenerator,
-        private Filesystem $filesystem,
-        private string $buildDir,
+        private readonly AdminRouteGeneratorInterface $adminRouteGenerator,
+        private readonly Filesystem $filesystem,
+        private readonly string $buildDir,
     ) {
         parent::__construct(null);
     }

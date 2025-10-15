@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractFieldTest extends KernelTestCase
 {
-    protected $entityDto;
+    protected EntityDto $entityDto;
     protected $adminContext;
     protected $configurator;
 

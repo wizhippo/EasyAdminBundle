@@ -20,25 +20,20 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 final class EntityDto
 {
     private bool $isAccessible = true;
-    /** @var class-string<TEntity> */
-    private string $fqcn;
-    /** @var ClassMetadata<TEntity> */
-    private ClassMetadata $metadata;
     /** @var TEntity|null */
     private $instance;
     /** @var string|null */
     private $primaryKeyName;
     private mixed $primaryKeyValue = null;
-    private string|Expression|null $permission;
     private ?FieldCollection $fields = null;
     private ?ActionCollection $actions = null;
 
     /**
-     * @param class-string<TEntity>  $entityFqcn
-     * @param ClassMetadata<TEntity> $entityMetadata
+     * @param class-string<TEntity>  $fqcn
+     * @param ClassMetadata<TEntity> $metadata
      * @param TEntity|null           $entityInstance
      */
-    public function __construct(string $entityFqcn, ClassMetadata $entityMetadata, string|Expression|null $entityPermission = null, /* ?object */ $entityInstance = null)
+    public function __construct(private readonly string $fqcn, private readonly ClassMetadata $metadata, private readonly string|Expression|null $permission = null, /* ?object */ $entityInstance = null)
     {
         if (!\is_object($entityInstance)
             && null !== $entityInstance) {
@@ -53,11 +48,8 @@ final class EntityDto
             );
         }
 
-        $this->fqcn = $entityFqcn;
-        $this->metadata = $entityMetadata;
         $this->instance = $entityInstance;
         $this->primaryKeyName = $this->metadata->getIdentifierFieldNames()[0];
-        $this->permission = $entityPermission;
     }
 
     public function __toString(): string

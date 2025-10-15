@@ -11,11 +11,8 @@ use function Symfony\Component\Translation\t;
  */
 final class Actions
 {
-    private ActionConfigDto $dto;
-
-    private function __construct(ActionConfigDto $actionConfigDto)
+    private function __construct(private readonly ActionConfigDto $dto)
     {
-        $this->dto = $actionConfigDto;
     }
 
     public static function new(): self

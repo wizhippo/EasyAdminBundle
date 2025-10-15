@@ -24,13 +24,8 @@ use Symfony\Contracts\Translation\TranslatableInterface;
  */
 final class CommonPreConfigurator implements FieldConfiguratorInterface
 {
-    private PropertyAccessorInterface $propertyAccessor;
-    private EntityFactory $entityFactory;
-
-    public function __construct(PropertyAccessorInterface $propertyAccessor, EntityFactory $entityFactory)
+    public function __construct(private readonly PropertyAccessorInterface $propertyAccessor, private readonly EntityFactory $entityFactory)
     {
-        $this->propertyAccessor = $propertyAccessor;
-        $this->entityFactory = $entityFactory;
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool

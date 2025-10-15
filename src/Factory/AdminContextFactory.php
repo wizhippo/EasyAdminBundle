@@ -33,21 +33,14 @@ use Symfony\Contracts\Translation\TranslatableInterface;
  */
 final class AdminContextFactory
 {
-    private string $buildDir;
-    private ?TokenStorageInterface $tokenStorage;
-    private MenuFactoryInterface $menuFactory;
-    private CrudControllerRegistry $crudControllers;
-    private EntityFactory $entityFactory;
-    private AdminRouteGeneratorInterface $adminRouteGenerator;
-
-    public function __construct(string $buildDir, ?TokenStorageInterface $tokenStorage, MenuFactoryInterface $menuFactory, CrudControllerRegistry $crudControllers, EntityFactory $entityFactory, AdminRouteGeneratorInterface $adminRouteGenerator)
-    {
-        $this->buildDir = $buildDir;
-        $this->tokenStorage = $tokenStorage;
-        $this->menuFactory = $menuFactory;
-        $this->crudControllers = $crudControllers;
-        $this->entityFactory = $entityFactory;
-        $this->adminRouteGenerator = $adminRouteGenerator;
+    public function __construct(
+        private readonly string $buildDir,
+        private readonly ?TokenStorageInterface $tokenStorage,
+        private readonly MenuFactoryInterface $menuFactory,
+        private readonly CrudControllerRegistry $crudControllers,
+        private readonly EntityFactory $entityFactory,
+        private readonly AdminRouteGeneratorInterface $adminRouteGenerator,
+    ) {
     }
 
     public function create(Request $request, DashboardControllerInterface $dashboardController, ?CrudControllerInterface $crudController, ?string $actionName = null): AdminContext
