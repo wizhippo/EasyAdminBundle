@@ -71,12 +71,20 @@ final class FieldFactory
     {
     }
 
-    public function processFields(EntityDto $entityDto, FieldCollection $fields): void
+    public function processFields(EntityDto $entityDto, FieldCollection $fields, ?string $currentPage = null): void
     {
         $this->replaceGenericFieldsWithSpecificFields($fields, $entityDto);
 
         $context = $this->adminContextProvider->getContext();
-        $currentPage = $context->getCrud()->getCurrentPage();
+
+        if (null === $currentPage) {
+            trigger_deprecation(
+                'easycorp/easyadmin-bundle',
+                '4.27.0',
+                'Argument "$currentPage" is missing. Omitting it will cause an error in 5.0.0.',
+            );
+            $currentPage = $context->getCrud()->getCurrentPage();
+        }
 
         $isDetailOrIndex = \in_array($currentPage, [Crud::PAGE_INDEX, Crud::PAGE_DETAIL], true);
         foreach ($fields as $fieldDto) {
@@ -89,14 +97,6 @@ final class FieldFactory
 
             // "form rows" only make sense in pages that contain forms
             if ($isDetailOrIndex && EaFormRowType::class === $fieldDto->getFormType()) {
-                $fields->unset($fieldDto);
-
-                continue;
-            }
-
-            // when creating new entities with "useEntryCrudForm" on an edit page we must
-            // explicitly check for the "new" page because $currentPage will be "edit"
-            if ($isDetailOrIndex && (null === $entityDto->getInstance()) && !$fieldDto->isDisplayedOn(Crud::PAGE_NEW)) {
                 $fields->unset($fieldDto);
 
                 continue;
