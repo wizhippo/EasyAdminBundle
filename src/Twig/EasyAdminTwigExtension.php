@@ -88,8 +88,31 @@ class EasyAdminTwigExtension extends AbstractExtension implements GlobalsInterfa
      *
      * @return mixed[]
      */
-    public function flattenArray($array, $parentKey = null): array
+    public function flattenArray(/* array */ $array, /* ?string */ $parentKey = null): array
     {
+        if (!\is_array($array)) {
+            trigger_deprecation(
+                'easycorp/easyadmin-bundle',
+                '4.27.0',
+                'Argument "%s" for "%s" must be one of these types: %s. Passing type "%s" will cause an error in 5.0.0.',
+                '$array',
+                __METHOD__,
+                '"array"',
+                \gettype($array)
+            );
+        }
+        if (!\is_string($parentKey) && null !== $parentKey) {
+            trigger_deprecation(
+                'easycorp/easyadmin-bundle',
+                '4.27.0',
+                'Argument "%s" for "%s" must be one of these types: %s. Passing type "%s" will cause an error in 5.0.0.',
+                '$parentKey',
+                __METHOD__,
+                '"string" or "null"',
+                \gettype($parentKey)
+            );
+        }
+
         $flattenedArray = [];
 
         foreach ($array as $flattenedKey => $value) {

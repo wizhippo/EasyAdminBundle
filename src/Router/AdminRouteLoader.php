@@ -24,7 +24,7 @@ final class AdminRouteLoader extends Loader
         parent::__construct(null);
     }
 
-    public function supports($resource, ?string $type = null): bool
+    public function supports(mixed $resource, ?string $type = null): bool
     {
         return self::ROUTE_LOADER_TYPE === $type;
     }
