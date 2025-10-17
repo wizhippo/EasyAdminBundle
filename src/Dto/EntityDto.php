@@ -163,6 +163,11 @@ final class EntityDto
         return $this->actions;
     }
 
+    public function getClassMetadata(): ClassMetadata
+    {
+        return $this->metadata;
+    }
+
     /**
      * Returns the names of all properties defined in the entity, no matter
      * if they are used or not in the application.
