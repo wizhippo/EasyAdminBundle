@@ -3,6 +3,7 @@
 namespace EasyCorp\Bundle\EasyAdminBundle\Factory;
 
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\AssociationMapping;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldConfiguratorInterface;
@@ -11,7 +12,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Contracts\Provider\AdminContextProviderInter
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -145,6 +148,19 @@ final class FieldFactory
 
             if ($fieldDto->getProperty() === $entityDto->getPrimaryKeyName()) {
                 $guessedFieldFqcn = IdField::class;
+            } elseif ($entityDto->getClassMetadata()->hasAssociation($fieldDto->getProperty())) {
+                /** @var AssociationMapping|array $associationMapping */
+                /** @phpstan-ignore-next-line */
+                $associationMapping = $entityDto->getClassMetadata()->getAssociationMapping($fieldDto->getProperty());
+                $orphanRemoval = $associationMapping instanceof AssociationMapping
+                    ? $associationMapping->orphanRemoval
+                    : (isset($associationMapping['orphanRemoval']) && $associationMapping['orphanRemoval']);
+                if ($entityDto->getClassMetadata()->isCollectionValuedAssociation($fieldDto->getProperty())
+                    && $orphanRemoval) {
+                    $guessedFieldFqcn = CollectionField::class;
+                } else {
+                    $guessedFieldFqcn = AssociationField::class;
+                }
             } else {
                 $doctrinePropertyType = $entityDto->getPropertyDataType($fieldDto->getProperty());
                 $guessedFieldFqcn = self::$doctrineTypeToFieldFqcn[$doctrinePropertyType] ?? null;
