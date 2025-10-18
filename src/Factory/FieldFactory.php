@@ -155,8 +155,7 @@ final class FieldFactory
                 $orphanRemoval = $associationMapping instanceof AssociationMapping
                     ? $associationMapping->orphanRemoval
                     : (isset($associationMapping['orphanRemoval']) && $associationMapping['orphanRemoval']);
-                if ($entityDto->getClassMetadata()->isCollectionValuedAssociation($fieldDto->getProperty())
-                    && $orphanRemoval) {
+                if ($orphanRemoval && $entityDto->getClassMetadata()->isCollectionValuedAssociation($fieldDto->getProperty())) {
                     $guessedFieldFqcn = CollectionField::class;
                 } else {
                     $guessedFieldFqcn = AssociationField::class;
