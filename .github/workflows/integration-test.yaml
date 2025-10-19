@@ -57,17 +57,18 @@ jobs:
                   expect "Field type" { send "string\r" }
                   expect "Field length" { send "\r" }
                   expect "nullable" { send "no\r" }
-                  expect "New property name" { send "price\r" }
+                  expect "Add another property" { send "price\r" }
                   expect "Field type" { send "integer\r" }
                   expect "nullable" { send "no\r" }
-                  expect "New property name" { send "\r" }
+                  expect "Add another property" { send "\r" }
                   expect eof
                   EOD
 
             - name: Create DB schema
               working-directory: e2e-app
               run: |
-                  php bin/console doctrine:database:create --if-not-exists -q
+                  # Ensure DB file exists for SQLite, ignore if already present
+                  touch var/data.db
                   php bin/console doctrine:schema:create -q
 
             - name: Generate Dashboard and CRUD
