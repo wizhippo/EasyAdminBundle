@@ -215,11 +215,6 @@ final class EntityDto
         throw new \InvalidArgumentException(sprintf('The "%s" field does not exist in the "%s" entity.', $propertyName, $this->getFqcn()));
     }
 
-    public function getClassMetadata(): ClassMetadata
-    {
-        return $this->metadata;
-    }
-
     /**
      * @deprecated since 4.27 and to be removed in 5.0, use $entityDto->getClassMetadata()->getFieldMapping($propertyName)->type and $entityDto->getClassMetadata()->getAssociationMapping($propertyName)->type() instead
      */
