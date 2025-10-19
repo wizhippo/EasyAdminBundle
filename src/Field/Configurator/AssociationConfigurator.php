@@ -56,7 +56,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
             ?? $context->getCrudControllers()->findCrudFqcnByEntityFqcn($targetEntityFqcn);
 
         if (true === $field->getCustomOption(AssociationField::OPTION_RENDER_AS_EMBEDDED_FORM)) {
-            if (false === $entityDto->isToOneAssociation($propertyName)) {
+            if (false === $entityDto->getClassMetadata()->isSingleValuedAssociation($propertyName)) {
                 throw new \RuntimeException(
                     sprintf(
                         'The "%s" association field of "%s" is a to-many association but it\'s trying to use the "renderAsEmbeddedForm()" option, which is only available for to-one associations. If you want to use a CRUD form to render to-many associations, use a CollectionField instead of the AssociationField.',
@@ -130,11 +130,11 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
                 //   * the route is not found, which happens when the associated entity is not accessible from this dashboard; do nothing in that case either.
             }
         } else {
-            if ($entityDto->isToOneAssociation($propertyName)) {
+            if ($entityDto->getClassMetadata()->isSingleValuedAssociation($propertyName)) {
                 $this->configureToOneAssociation($field);
             }
 
-            if ($entityDto->isToManyAssociation($propertyName)) {
+            if ($entityDto->getClassMetadata()->isCollectionValuedAssociation($propertyName)) {
                 $this->configureToManyAssociation($field);
             }
         }
