@@ -102,7 +102,11 @@ jobs:
                   expect eof
                   EOD
 
-                  php bin/console make:fixtures AppFixtures
+                  if [ ! -f src/DataFixtures/AppFixtures.php ]; then
+                    php bin/console make:fixtures AppFixtures
+                  else
+                    echo "AppFixtures.php already exists, skipping creation."
+                  fi
 
                   sed -i 's|use Doctrine\\Persistence\\ObjectManager;|use Doctrine\\Persistence\\ObjectManager;\nuse App\\Factory\\ProductFactory;|' src/DataFixtures/AppFixtures.php
                   sed -i 's|// \$product = new Product();|ProductFactory::createMany(10);|' src/DataFixtures/AppFixtures.php
