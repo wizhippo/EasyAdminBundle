@@ -75,7 +75,16 @@ jobs:
               working-directory: e2e-app
               run: |
                   php bin/console make:admin:dashboard --no-interaction
-                  php bin/console make:admin:crud Product --no-interaction
+                  
+                  # Run make:admin:crud interactively with expect
+                  mkdir -p src/Controller/Admin/
+                  expect <<'EOD'
+                  spawn php bin/console make:admin:crud
+                  expect "Which Doctrine entity" { send "0\r" }
+                  expect "Which directory" { send "\r" }
+                  expect "Namespace of the generated CRUD controller" { send "\r" }
+                  expect eof
+                  EOD
                   
                   # Add MenuItem::linkToCrud() entry if missing
                   file="src/Controller/Admin/DashboardController.php"
@@ -136,9 +145,9 @@ jobs:
                       }
                       const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
                       body += `\nRun: ${runUrl}`;
-                      await github.rest.issues.create({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        title: `Integration test failed: ${new Date().toISOString()}`,
-                        body
-                      });
+                      #await github.rest.issues.create({
+                      #  owner: context.repo.owner,
+                      #  repo: context.repo.repo,
+                      #  title: `Integration test failed: ${new Date().toISOString().slice(0,10)}`,
+                      #  body
+                      #});
