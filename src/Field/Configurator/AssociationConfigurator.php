@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\ControllerFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\EntityFactory;
+use EasyCorp\Bundle\EasyAdminBundle\Factory\FieldFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudAutocompleteType;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudFormType;
@@ -35,7 +36,16 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
         private readonly AdminUrlGeneratorInterface $adminUrlGenerator,
         private readonly RequestStack $requestStack,
         private readonly ControllerFactory $controllerFactory,
+        private readonly ?FieldFactory $fieldFactory = null,
     ) {
+        if (null === $this->fieldFactory) {
+            trigger_deprecation(
+                'easycorp/easyadmin-bundle',
+                '4.27.0',
+                'Not passing argument "$fieldFactory" to the "%s" constructor is deprecated.',
+                self::class
+            );
+        }
     }
 
     public function supports(FieldDto $field, EntityDto $entityDto): bool
@@ -328,7 +338,11 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
 
         $fields = $crudController->configureFields($crudControllerPageName);
 
-        $this->entityFactory->processFields($entityDto, FieldCollection::new($fields), $crudPageName);
+        if (null === $this->fieldFactory) {
+            $this->entityFactory->processFields($entityDto, FieldCollection::new($fields), $crudPageName);
+        } else {
+            $this->fieldFactory->processFields($entityDto, FieldCollection::new($fields), $crudPageName);
+        }
 
         return $entityDto;
     }

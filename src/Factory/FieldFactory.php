@@ -5,6 +5,7 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Factory;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\FieldMapping;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\EntityCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldConfiguratorInterface;
@@ -133,6 +134,22 @@ final class FieldFactory
         }
 
         $entityDto->setFields($fields);
+    }
+
+    public function processFieldsForAll(EntityCollection $entityDtos, FieldCollection $fields, ?string $currentPage = null): void
+    {
+        if (null === $currentPage) {
+            trigger_deprecation(
+                'easycorp/easyadmin-bundle',
+                '4.27.0',
+                'Argument "$currentPage" is missing. Omitting it will cause an error in 5.0.0.',
+            );
+        }
+
+        foreach ($entityDtos as $entityDto) {
+            $this->processFields($entityDto, clone $fields, $currentPage);
+            $entityDtos->set($entityDto);
+        }
     }
 
     private function replaceGenericFieldsWithSpecificFields(FieldCollection $fields, EntityDto $entityDto): void
