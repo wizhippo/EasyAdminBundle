@@ -96,9 +96,16 @@ jobs:
             - name: Create factory and fixtures
               working-directory: e2e-app
               run: |
-                  php bin/console make:factory ProductFactory --no-interaction
+                  expect <<'EOD'
+                  spawn php bin/console make:factory
+                  expect "Entity, Document or class" { send "0\r" }
+                  expect eof
+                  EOD
+
                   php bin/console make:fixtures --no-interaction
-                  sed -i 's|// TODO: Implement the load() method|use App\\Factory\\ProductFactory;\n\n        ProductFactory::createMany(10);|' src/DataFixtures/AppFixtures.php
+
+                  sed -i 's|use Doctrine\\Persistence\\ObjectManager;|use Doctrine\\Persistence\\ObjectManager;\nuse App\\Factory\\ProductFactory;|' src/DataFixtures/AppFixtures.php
+                  sed -i 's|// \$product = new Product();|ProductFactory::createMany(10);|' src/DataFixtures/AppFixtures.php
 
             - name: Load fixtures
               working-directory: e2e-app
