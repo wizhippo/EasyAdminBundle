@@ -102,7 +102,7 @@ jobs:
                   expect eof
                   EOD
 
-                  php bin/console make:fixtures --no-interaction
+                  php bin/console make:fixtures AppFixtures
 
                   sed -i 's|use Doctrine\\Persistence\\ObjectManager;|use Doctrine\\Persistence\\ObjectManager;\nuse App\\Factory\\ProductFactory;|' src/DataFixtures/AppFixtures.php
                   sed -i 's|// \$product = new Product();|ProductFactory::createMany(10);|' src/DataFixtures/AppFixtures.php
