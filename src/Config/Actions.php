@@ -183,7 +183,7 @@ final class Actions
         }
 
         if (Action::DETAIL === $actionName) {
-            return Action::new(Action::DETAIL, t('action.detail', domain: 'EasyAdminBundle'))
+            return Action::new(Action::DETAIL, t('action.detail', domain: 'EasyAdminBundle'), Crud::PAGE_INDEX === $pageName ? 'internal:detail' : null)
                 ->linkToCrudAction(Action::DETAIL);
         }
 
