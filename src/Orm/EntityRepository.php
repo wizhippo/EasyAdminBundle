@@ -181,7 +181,7 @@ final class EntityRepository implements EntityRepositoryInterface
 
                         $queryBuilder->addSelect(sprintf('(%s) as HIDDEN sub_query_sort', $countQueryBuilder->getDQL()));
                         $queryBuilder->addOrderBy('sub_query_sort', $sortOrder);
-                        $queryBuilder->addOrderBy('entity.'.$entityDto->getPrimaryKeyName(), $sortOrder);
+                        $queryBuilder->addOrderBy('entity.'.$entityDto->getClassMetadata()->getSingleIdentifierFieldName(), $sortOrder);
                     } else {
                         $field = $fields->getByProperty($sortProperty);
                         $associationSortProperty = $field?->getCustomOption(AssociationField::OPTION_SORT_PROPERTY);
@@ -261,7 +261,7 @@ final class EntityRepository implements EntityRepositoryInterface
     {
         $searchablePropertiesConfig = [];
         $configuredSearchableProperties = $searchDto->getSearchableProperties();
-        $searchableProperties = (null === $configuredSearchableProperties || 0 === \count($configuredSearchableProperties)) ? $entityDto->getAllPropertyNames() : $configuredSearchableProperties;
+        $searchableProperties = (null === $configuredSearchableProperties || 0 === \count($configuredSearchableProperties)) ? $entityDto->getClassMetadata()->getFieldNames() : $configuredSearchableProperties;
 
         $entitiesAlreadyJoined = [];
         foreach ($searchableProperties as $propertyName) {

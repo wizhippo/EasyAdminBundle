@@ -35,13 +35,13 @@ final class FieldProvider
         ];
 
         $excludedPropertyNames = [
-            Crud::PAGE_EDIT => [$entityDto->getPrimaryKeyName()],
+            Crud::PAGE_EDIT => [$entityDto->getClassMetadata()->getSingleIdentifierFieldName()],
             Crud::PAGE_INDEX => ['password', 'salt', 'slug', 'updatedAt', 'uuid'],
-            Crud::PAGE_NEW => [$entityDto->getPrimaryKeyName()],
+            Crud::PAGE_NEW => [$entityDto->getClassMetadata()->getSingleIdentifierFieldName()],
             Crud::PAGE_DETAIL => [],
         ];
 
-        foreach ($entityDto->getAllPropertyNames() as $propertyName) {
+        foreach ($entityDto->getClassMetadata()->getFieldNames() as $propertyName) {
             $metadata = $entityDto->getPropertyMetadata($propertyName);
             if (!\in_array($propertyName, $excludedPropertyNames[$pageName], true) && !\in_array($metadata->get('type'), $excludedPropertyTypes[$pageName], true)) {
                 $defaultPropertyNames[] = $propertyName;
