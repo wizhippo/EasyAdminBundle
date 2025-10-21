@@ -362,41 +362,17 @@
         {% if image_uri|default('') is not empty %}
             {% if download_uri|default('') is empty %}
                 <div class="ea-lightbox-thumbnail">
-                    {% if formTypeOptions.imagine_pattern is defined and formTypeOptions.imagine_pattern is not empty %}
-                        {% guard filter imagine_filter %}
-                            <img style="cursor: initial" src="{{ (asset_helper is same as(true) ? asset(image_uri) : image_uri)|imagine_filter(formTypeOptions.imagine_pattern) }}">
-                        {% else %}
-                            <img style="cursor: initial" src="{{ (asset_helper is same as(true) ? asset(image_uri) : image_uri) }}">
-                        {% endguard %}
-                    {% else %}
-                        <img style="cursor: initial" src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}">
-                    {% endif %}
+                    <img style="cursor: initial" src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}">
                 </div>
             {% else %}
                 {% set _lightbox_id = 'ea-lightbox-' ~ id %}
 
                 <a href="#" class="ea-lightbox-thumbnail" data-ea-lightbox-content-selector="#{{ _lightbox_id }}">
-                    {% if formTypeOptions.imagine_pattern is defined and formTypeOptions.imagine_pattern is not empty %}
-                        {% guard filter imagine_filter %}
-                            <img src="{{ (asset_helper is same as(true) ? asset(image_uri) : image_uri)|imagine_filter(formTypeOptions.imagine_pattern) }}">
-                        {% else %}
-                            <img src="{{ (asset_helper is same as(true) ? asset(image_uri) : image_uri) }}">
-                        {% endguard %}
-                    {% else %}
-                        <img src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}">
-                    {% endif %}
+                    <img src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}">
                 </a>
 
                 <div id="{{ _lightbox_id }}" class="ea-lightbox">
-                    {% if formTypeOptions.imagine_pattern is defined and formTypeOptions.imagine_pattern is not empty %}
-                        {% guard filter imagine_filter %}
-                            <img src="{{ (asset_helper is same as(true) ? asset(download_uri) : download_uri)|imagine_filter(formTypeOptions.imagine_pattern) }}">
-                        {% else %}
-                            <img src="{{ (asset_helper is same as(true) ? asset(download_uri) : download_uri) }}">
-                        {% endguard %}
-                    {% else %}
-                        <img src="{{ asset_helper is same as(true) ? asset(download_uri) : download_uri }}">
-                    {% endif %}
+                    <img src="{{ asset_helper is same as(true) ? asset(download_uri) : download_uri }}">
                 </div>
             {% endif %}
         {% endif %}
