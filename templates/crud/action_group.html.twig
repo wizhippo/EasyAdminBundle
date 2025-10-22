@@ -52,7 +52,7 @@
             {% else %}
                 {# item is an ActionDto #}
                 <twig:ea:ActionMenu:ActionList:Item
-                    label="{{ item.label }}" icon="{{ item.icon }}" class="{{ item.cssClass }} dropdown-item-variant-{{ item.variant.value }}"
+                    label="{{ item.label|trans }}" icon="{{ item.icon }}" class="{{ item.cssClass }} dropdown-item-variant-{{ item.variant.value }}"
                     htmlAttributes="{{ item.htmlAttributes }}"
                     renderAsForm="{{ item.isRenderedAsForm }}"
                     url="{{ item.linkUrl }}" renderLabelRaw="true"
