@@ -12,7 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\FieldFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\FormLayoutFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Entity\FieldFactory\Project;
+use EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Entity\ProjectDomain\Project;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
