@@ -175,7 +175,7 @@ final class EntityRepository implements EntityRepositoryInterface
                             // one-to-many relation
                             $countQueryBuilder
                                 ->select($queryBuilder->expr()->count('subQueryEntity'))
-                                ->from($metadata->get('targetEntity'), 'subQueryEntity')
+                                ->from($entityDto->getClassMetadata()->getAssociationTargetClass($sortProperty), 'subQueryEntity')
                                 ->where(sprintf('subQueryEntity.%s = entity', $metadata->get('mappedBy')));
                         }
 
@@ -274,9 +274,7 @@ final class EntityRepository implements EntityRepositoryInterface
                     throw new \InvalidArgumentException(sprintf('The "%s" property included in the setSearchFields() method is not a valid search field. When using associated properties in search, you must also define the exact field used in the search (e.g. \'%s.id\', \'%s.name\', etc.)', $propertyName, $propertyName, $propertyName));
                 }
 
-                $originalPropertyName = $associatedProperties[0];
-                $originalPropertyMetadata = $entityDto->getPropertyMetadata($originalPropertyName);
-                $associatedEntityDto = $this->entityFactory->create($originalPropertyMetadata->get('targetEntity'));
+                $associatedEntityDto = $this->entityFactory->create($entityDto->getClassMetadata()->getAssociationTargetClass($associatedProperties[0]));
 
                 $associatedEntityAlias = $associatedPropertyName = '';
                 for ($i = 0; $i < $numAssociatedProperties - 1; ++$i) {
@@ -291,8 +289,7 @@ final class EntityRepository implements EntityRepositoryInterface
                     }
 
                     if ($i < $numAssociatedProperties - 2) {
-                        $propertyMetadata = $associatedEntityDto->getPropertyMetadata($associatedPropertyName);
-                        $targetEntity = $propertyMetadata->get('targetEntity');
+                        $targetEntity = $associatedEntityDto->getClassMetadata()->getAssociationTargetClass($associatedPropertyName);
                         $associatedEntityDto = $this->entityFactory->create($targetEntity);
                     }
                 }

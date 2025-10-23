@@ -60,7 +60,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
             throw new \RuntimeException(sprintf('The "%s" field is not a Doctrine association, so it cannot be used as an association field.', $propertyName));
         }
 
-        $targetEntityFqcn = $field->getDoctrineMetadata()->get('targetEntity');
+        $targetEntityFqcn = $entityDto->getClassMetadata()->getAssociationTargetClass($propertyName);
         // the target CRUD controller can be NULL; in that case, field value doesn't link to the related entity
         $targetCrudControllerFqcn = $field->getCustomOption(AssociationField::OPTION_EMBEDDED_CRUD_FORM_CONTROLLER)
             ?? $context->getCrudControllers()->findCrudFqcnByEntityFqcn($targetEntityFqcn);
@@ -105,7 +105,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
         if (\count($propertyNameParts) > 1) {
             // prepare starting class for association
             /** @var class-string $targetEntityFqcn */
-            $targetEntityFqcn = $entityDto->getPropertyMetadata($propertyNameParts[0])->get('targetEntity');
+            $targetEntityFqcn = $entityDto->getClassMetadata()->getAssociationTargetClass($propertyNameParts[0]);
             array_shift($propertyNameParts);
             $metadata = $this->entityFactory->getEntityMetadata($targetEntityFqcn);
 
@@ -141,11 +141,11 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
             }
         } else {
             if ($entityDto->getClassMetadata()->isSingleValuedAssociation($propertyName)) {
-                $this->configureToOneAssociation($field);
+                $this->configureToOneAssociation($field, $entityDto);
             }
 
             if ($entityDto->getClassMetadata()->isCollectionValuedAssociation($propertyName)) {
-                $this->configureToManyAssociation($field);
+                $this->configureToManyAssociation($field, $entityDto);
             }
         }
 
@@ -190,7 +190,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
         }
     }
 
-    private function configureToOneAssociation(FieldDto $field): void
+    private function configureToOneAssociation(FieldDto $field, EntityDto $entityDto): void
     {
         $field->setCustomOption(AssociationField::OPTION_DOCTRINE_ASSOCIATION_TYPE, 'toOne');
 
@@ -198,7 +198,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
             $field->setFormTypeOptionIfNotSet('attr.placeholder', t('label.form.empty_value', [], 'EasyAdminBundle'));
         }
 
-        $targetEntityFqcn = $field->getDoctrineMetadata()->get('targetEntity');
+        $targetEntityFqcn = $entityDto->getClassMetadata()->getAssociationTargetClass($field->getProperty());
         $targetCrudControllerFqcn = $field->getCustomOption(AssociationField::OPTION_EMBEDDED_CRUD_FORM_CONTROLLER);
 
         $targetEntityDto = null === $field->getValue()
@@ -216,14 +216,14 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
         $field->setFormattedValue($this->formatAsString($field->getValue(), $targetEntityDto));
     }
 
-    private function configureToManyAssociation(FieldDto $field): void
+    private function configureToManyAssociation(FieldDto $field, EntityDto $entityDto): void
     {
         $field->setCustomOption(AssociationField::OPTION_DOCTRINE_ASSOCIATION_TYPE, 'toMany');
 
         $field->setFormTypeOptionIfNotSet('multiple', true);
 
         /* @var PersistentCollection $collection */
-        $field->setFormTypeOptionIfNotSet('class', $field->getDoctrineMetadata()->get('targetEntity'));
+        $field->setFormTypeOptionIfNotSet('class', $entityDto->getClassMetadata()->getAssociationTargetClass($field->getProperty()));
 
         if (null === $field->getTextAlign()) {
             $field->setTextAlign(TextAlign::RIGHT);

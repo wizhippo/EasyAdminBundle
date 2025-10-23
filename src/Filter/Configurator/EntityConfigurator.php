@@ -30,7 +30,7 @@ final class EntityConfigurator implements FilterConfiguratorInterface
 
         $doctrineMetadata = $entityDto->getPropertyMetadata($propertyName);
         // TODO: add the 'em' form type option too?
-        $filterDto->setFormTypeOptionIfNotSet('value_type_options.class', $doctrineMetadata->get('targetEntity'));
+        $filterDto->setFormTypeOptionIfNotSet('value_type_options.class', $entityDto->getClassMetadata()->getAssociationTargetClass($propertyName));
         $filterDto->setFormTypeOptionIfNotSet('value_type_options.multiple', $entityDto->getClassMetadata()->isCollectionValuedAssociation($propertyName));
         $filterDto->setFormTypeOptionIfNotSet('value_type_options.attr.data-ea-widget', 'ea-autocomplete');
 
