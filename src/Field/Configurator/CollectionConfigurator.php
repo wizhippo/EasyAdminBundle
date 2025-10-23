@@ -98,7 +98,7 @@ final class CollectionConfigurator implements FieldConfiguratorInterface
 
             $field->setFormTypeOption('entry_type', CrudFormType::class);
 
-            $targetEntityFqcn = $field->getDoctrineMetadata()->get('targetEntity');
+            $targetEntityFqcn = $entityDto->getClassMetadata()->getAssociationTargetClass($field->getProperty());
             $targetCrudControllerFqcn = $field->getCustomOption(CollectionField::OPTION_ENTRY_CRUD_CONTROLLER_FQCN)
                 ?? $context->getCrudControllers()->findCrudFqcnByEntityFqcn($targetEntityFqcn);
 
