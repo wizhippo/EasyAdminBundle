@@ -111,21 +111,24 @@ By default, EasyAdmin uses a generic database query to find the items of the
 related entity. Use this option if you need to use a custom query to filter results
 or to sort them in some specific way.
 
-Similar to the `query_builder option`_ of Symfony's ``EntityType``, the value of
-this option can be a ``Doctrine\ORM\QueryBuilder`` object or a ``callable``.
+The value of this option must be a ``callable``.
+
+If you want to use a ``Doctrine\ORM\QueryBuilder`` object, you should use the
+`query_builder option`_ of Symfony's ``EntityType`` instead.
 
 You can use the ``QueryBuilder`` objects when the custom query is short and not
 reused everywhere else in the application::
 
-    // get the entity repository somehow...
+    // get the entity repository somehow (e.g. injecting entityManager)
     $someRepository = $this->entityManager->getRepository(SomeEntity::class);
 
-    yield AssociationField::new('...')->setQueryBuilder(
-        $someRepository->createQueryBuilder('entity')
-            ->where('entity.some_property = :some_value')
-            ->setParameter('some_value', '...')
-            ->orderBy('entity.some_property', 'ASC')
-    );
+    // create QueryBuilder
+    $qb = $someRepository->createQueryBuilder('entity') // must be `entity`
+        ->where('entity.some_property = :some_value')
+        ->setParameter('some_value', '...')
+        ->orderBy('entity.some_property', 'ASC');
+
+    yield AssociationField::new('...')->setFormTypeOption('query_builder', $qb);
 
 Using callables is more convenient when custom queries are complex and are
 already defined in the entity repository because they are reused in other parts
@@ -139,7 +142,7 @@ automatically injected by Symfony as the first argument::
 Or if you prefer using the repository of the entity::
 
     yield AssociationField::new('...')->setQueryBuilder(
-        fn (QueryBuilder $queryBuilder) => $queryBuilder->getEntityManager()->getRepository(Foo::class)->findBySomeCriteria();
+        fn (QueryBuilder &$queryBuilder) => $queryBuilder->getEntityManager()->getRepository(Foo::class)->findBySomeCriteria();
     );
 
 setSortProperty
