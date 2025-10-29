@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Entity\FieldFactory;
+namespace EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Entity\ProjectDomain;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

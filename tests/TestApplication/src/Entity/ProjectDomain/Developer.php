@@ -1,11 +1,11 @@
 <?php
 
-namespace EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Entity\FieldFactory;
+namespace EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Entity\ProjectDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-class ProjectIssue
+class Developer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -15,9 +15,8 @@ class ProjectIssue
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'projectIssues')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project = null;
+    #[ORM\ManyToOne(inversedBy: 'favouriteProjectOf')]
+    private ?Project $favouriteProject = null;
 
     public function __toString(): string
     {
@@ -41,14 +40,14 @@ class ProjectIssue
         return $this;
     }
 
-    public function getProject(): ?Project
+    public function getFavouriteProject(): ?Project
     {
-        return $this->project;
+        return $this->favouriteProject;
     }
 
-    public function setProject(?Project $project): static
+    public function setFavouriteProject(?Project $favouriteProject): static
     {
-        $this->project = $project;
+        $this->favouriteProject = $favouriteProject;
 
         return $this;
     }
