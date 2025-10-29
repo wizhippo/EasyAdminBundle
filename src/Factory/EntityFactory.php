@@ -136,7 +136,7 @@ final class EntityFactory
         /** @var ClassMetadata<TEntity> $entityMetadata */
         $entityMetadata = $entityManager->getClassMetadata($entityFqcn);
 
-        if (1 !== \count($entityMetadata->getIdentifierFieldNames())) {
+        if ($entityMetadata->isIdentifierComposite) {
             throw new \RuntimeException(sprintf('EasyAdmin does not support Doctrine entities with composite primary keys (such as the ones used in the "%s" entity).', $entityFqcn));
         }
 

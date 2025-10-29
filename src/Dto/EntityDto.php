@@ -22,8 +22,6 @@ final class EntityDto
     private bool $isAccessible = true;
     /** @var TEntity|null */
     private $instance;
-    /** @var string|null */
-    private $primaryKeyName;
     private mixed $primaryKeyValue = null;
     private ?FieldCollection $fields = null;
     private ?ActionCollection $actions = null;
@@ -49,7 +47,6 @@ final class EntityDto
         }
 
         $this->instance = $entityInstance;
-        $this->primaryKeyName = $this->metadata->getIdentifierFieldNames()[0];
     }
 
     public function __toString(): string
@@ -93,9 +90,12 @@ final class EntityDto
         return $this->instance;
     }
 
-    public function getPrimaryKeyName(): ?string
+    /**
+     * @deprecated since 4.27 and to be removed in 5.0, use $entityDto->getClassMetadata()->getSingleIdentifierFieldName() instead
+     */
+    public function getPrimaryKeyName(): string
     {
-        return $this->primaryKeyName;
+        return $this->metadata->getSingleIdentifierFieldName();
     }
 
     public function getPrimaryKeyValue(): mixed
@@ -113,7 +113,7 @@ final class EntityDto
             ->getPropertyAccessor();
 
         try {
-            $primaryKeyValue = $propertyAccessor->getValue($this->instance, $this->primaryKeyName);
+            $primaryKeyValue = $propertyAccessor->getValue($this->instance, $this->metadata->getSingleIdentifierFieldName());
         } catch (UninitializedPropertyException $exception) {
             $primaryKeyValue = null;
         }
@@ -169,6 +169,8 @@ final class EntityDto
     }
 
     /**
+     * @deprecated since 4.27 and to be removed in 5.0, use $entityDto->getClassMetadata()->getFieldNames() instead
+     *
      * Returns the names of all properties defined in the entity, no matter
      * if they are used or not in the application.
      *
@@ -231,8 +233,17 @@ final class EntityDto
 
     public function isAssociation(string $propertyName): bool
     {
-        return $this->metadata->hasAssociation($propertyName)
-            || (str_contains($propertyName, '.') && !$this->isEmbeddedClassProperty($propertyName));
+        if ($this->metadata->hasAssociation($propertyName)) {
+            return true;
+        }
+
+        if (!str_contains($propertyName, '.')) {
+            return false;
+        }
+
+        $propertyNameParts = explode('.', $propertyName, 2);
+
+        return !isset($this->metadata->embeddedClasses[$propertyNameParts[0]]);
     }
 
     /**
@@ -251,6 +262,9 @@ final class EntityDto
         return $this->getClassMetadata()->isCollectionValuedAssociation($propertyName);
     }
 
+    /**
+     * @deprecated since 4.27 and to be removed in 5.0 without replacement
+     */
     public function isEmbeddedClassProperty(string $propertyName): bool
     {
         $propertyNameParts = explode('.', $propertyName, 2);

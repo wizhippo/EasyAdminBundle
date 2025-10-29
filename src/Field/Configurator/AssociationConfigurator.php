@@ -128,7 +128,7 @@ final class AssociationConfigurator implements FieldConfiguratorInterface
 
             try {
                 if (null !== $entityDto->getInstance()) {
-                    $relatedEntityId = $accessor->getValue($entityDto->getInstance(), $propertyName.'.'.$metadata->getIdentifierFieldNames()[0]);
+                    $relatedEntityId = $accessor->getValue($entityDto->getInstance(), $propertyName.'.'.$metadata->getSingleIdentifierFieldName());
                     $relatedEntityDto = $this->entityFactory->create($targetEntityFqcn, $relatedEntityId);
 
                     $field->setCustomOption(AssociationField::OPTION_RELATED_URL, $this->generateLinkToAssociatedEntity($targetCrudControllerFqcn, $relatedEntityDto));
