@@ -88,7 +88,7 @@ final class CollectionConfigurator implements FieldConfiguratorInterface
         $field->setFormattedValue($this->formatCollection($field, $context));
 
         if (true === $field->getCustomOption(CollectionField::OPTION_ENTRY_USES_CRUD_FORM)) {
-            if (!$entityDto->isAssociation($field->getProperty())) {
+            if (!$entityDto->getClassMetadata()->hasAssociation($field->getProperty())) {
                 throw new \RuntimeException(sprintf('The "%s" collection field of "%s" cannot use the "useEntryCrudForm()" method because it is not a Doctrine association.', $field->getProperty(), $context->getCrud()?->getControllerFqcn()));
             }
 

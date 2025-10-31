@@ -3,7 +3,6 @@
 namespace EasyCorp\Bundle\EasyAdminBundle\Filter\Configurator;
 
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping\FieldMapping;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Filter\FilterConfiguratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -29,17 +28,9 @@ final class ComparisonConfigurator implements FilterConfiguratorInterface
             return;
         }
 
-        // Doctrine ORM 2.x returns an array and Doctrine ORM 3.x returns a FieldMapping object
-        /** @var FieldMapping|array $fieldMapping */
-        /** @phpstan-ignore-next-line */
         $fieldMapping = $entityDto->getClassMetadata()->getFieldMapping($filterDto->getProperty());
-        if (\is_array($fieldMapping)) {
-            $doctrineFieldMappingType = $fieldMapping['type'];
-        } else {
-            $doctrineFieldMappingType = $fieldMapping->type;
-        }
 
-        if (Types::DATEINTERVAL === $doctrineFieldMappingType) {
+        if (Types::DATEINTERVAL === $fieldMapping['type']) {
             $filterDto->setFormTypeOption('value_type', DateIntervalType::class);
             $filterDto->setFormTypeOption('comparison_type_options.type', 'datetime');
         }

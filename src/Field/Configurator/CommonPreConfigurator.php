@@ -2,6 +2,7 @@
 
 namespace EasyCorp\Bundle\EasyAdminBundle\Field\Configurator;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\JoinColumnMapping;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -70,7 +71,14 @@ final class CommonPreConfigurator implements FieldConfiguratorInterface
         $templatePath = $this->buildTemplatePathOption($context, $field, $entityDto, $isReadable);
         $field->setTemplatePath($templatePath);
 
-        $doctrineMetadata = $entityDto->hasProperty($field->getProperty()) ? $entityDto->getPropertyMetadata($field->getProperty())->all() : [];
+        $doctrineMetadata = [];
+        if (isset($entityDto->getClassMetadata()->fieldMappings[$field->getProperty()])) {
+            $doctrineMetadata = (array) $entityDto->getClassMetadata()->getFieldMapping($field->getProperty());
+        } elseif ($entityDto->getClassMetadata()->hasAssociation($field->getProperty())) {
+            $mappingType = $entityDto->getClassMetadata()->getAssociationMapping($field->getProperty())['type'];
+            $doctrineMetadata = (array) $entityDto->getClassMetadata()->getAssociationMapping($field->getProperty());
+            $doctrineMetadata['type'] = $mappingType;
+        }
         $field->setDoctrineMetadata($doctrineMetadata);
 
         if (null !== $helpMessage = $this->buildHelpOption($field, $translationDomain)) {
@@ -151,12 +159,14 @@ final class CommonPreConfigurator implements FieldConfiguratorInterface
             return $isSortable;
         }
 
-        return $entityDto->hasProperty($field->getProperty());
+        return isset($entityDto->getClassMetadata()->fieldMappings[$field->getProperty()])
+            || $entityDto->getClassMetadata()->hasAssociation($field->getProperty());
     }
 
     private function buildVirtualOption(FieldDto $field, EntityDto $entityDto): bool
     {
-        return !$entityDto->hasProperty($field->getProperty());
+        return !isset($entityDto->getClassMetadata()->fieldMappings[$field->getProperty()])
+            && !$entityDto->getClassMetadata()->hasAssociation($field->getProperty());
     }
 
     private function buildTemplatePathOption(AdminContext $adminContext, FieldDto $field, EntityDto $entityDto, bool $isReadable): string
@@ -184,35 +194,31 @@ final class CommonPreConfigurator implements FieldConfiguratorInterface
         }
 
         // consider that virtual properties are not required
-        if (!$entityDto->hasProperty($field->getProperty())) {
+        if (!isset($entityDto->getClassMetadata()->fieldMappings[$field->getProperty()])
+            && !$entityDto->getClassMetadata()->hasAssociation($field->getProperty())) {
             return false;
         }
 
-        $doctrinePropertyMetadata = $entityDto->getPropertyMetadata($field->getProperty());
-
         // If at least one join column of an association field isn't nullable then the field is "required" by default, otherwise the field is optional
-        if ($entityDto->isAssociation($field->getProperty())) {
+        if ($entityDto->getClassMetadata()->hasAssociation($field->getProperty())) {
+            $associationMapping = $entityDto->getClassMetadata()->associationMappings[$field->getProperty()];
             /** @var class-string $targetEntityFqcn */
             $targetEntityFqcn = $entityDto->getClassMetadata()->getAssociationTargetClass($field->getProperty());
             $associatedEntityMetadata = $this->entityFactory->getEntityMetadata($targetEntityFqcn);
-            foreach ($doctrinePropertyMetadata->get('joinColumns', []) as $joinColumn) {
-                if (true === $doctrinePropertyMetadata->get('isOwningSide', true)) {
+            foreach ($associationMapping['joinColumns'] ?? [] as $joinColumn) {
+                if (true === $associationMapping['isOwningSide']) {
                     if ($joinColumn instanceof JoinColumnMapping) {
                         $isNullable = $joinColumn->nullable ?? true;
                     } else {
                         $isNullable = $joinColumn['nullable'] ?? true;
                     }
-                    if (false === $isNullable) {
-                        return true;
-                    }
                 } else {
                     $propertyNameInAssociatedEntity = $joinColumn instanceof JoinColumnMapping ? $joinColumn->referencedColumnName : $joinColumn['referencedColumnName'];
                     $associatedPropertyMetadata = $associatedEntityMetadata->fieldMappings[$propertyNameInAssociatedEntity] ?? [];
                     $isNullable = $associatedPropertyMetadata['nullable'] ?? true;
-
-                    if (false === $isNullable) {
-                        return true;
-                    }
+                }
+                if (false === $isNullable) {
+                    return true;
                 }
             }
 
@@ -221,11 +227,12 @@ final class CommonPreConfigurator implements FieldConfiguratorInterface
 
         // TODO: check if it's correct to never make a boolean value required
         // I guess it's correct because Symfony Forms treat NULL as FALSE by default (i.e. in the database the value won't be NULL)
-        if ('boolean' === $doctrinePropertyMetadata->get('type')) {
+        if (isset($entityDto->getClassMetadata()->fieldMappings[$field->getProperty()])
+            && Types::BOOLEAN === $entityDto->getClassMetadata()->getFieldMapping($field->getProperty())['type']) {
             return false;
         }
 
-        $nullable = $doctrinePropertyMetadata->get('nullable');
+        $nullable = $entityDto->getClassMetadata()->fieldMappings[$field->getProperty()]['nullable'];
 
         return false === $nullable || null === $nullable;
     }

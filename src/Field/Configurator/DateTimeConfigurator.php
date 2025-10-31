@@ -3,7 +3,6 @@
 namespace EasyCorp\Bundle\EasyAdminBundle\Field\Configurator;
 
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping\FieldMapping;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldConfiguratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Intl\IntlFormatterInterface;
@@ -96,17 +95,9 @@ final class DateTimeConfigurator implements FieldConfiguratorInterface
             return;
         }
 
-        // Doctrine ORM 2.x returns an array and Doctrine ORM 3.x returns a FieldMapping object
-        /** @var FieldMapping|array $fieldMapping */
-        /** @phpstan-ignore-next-line */
         $fieldMapping = $entityDto->getClassMetadata()->getFieldMapping($field->getProperty());
-        if (\is_array($fieldMapping)) {
-            $doctrineFieldMappingType = $fieldMapping['type'];
-        } else {
-            $doctrineFieldMappingType = $fieldMapping->type;
-        }
 
-        $isImmutableDateTime = \in_array($doctrineFieldMappingType, [Types::DATETIMETZ_IMMUTABLE, Types::DATETIME_IMMUTABLE, Types::DATE_IMMUTABLE, Types::TIME_IMMUTABLE], true);
+        $isImmutableDateTime = \in_array($fieldMapping['type'], [Types::DATETIMETZ_IMMUTABLE, Types::DATETIME_IMMUTABLE, Types::DATE_IMMUTABLE, Types::TIME_IMMUTABLE], true);
         if ($isImmutableDateTime) {
             $field->setFormTypeOptionIfNotSet('input', 'datetime_immutable');
         }
