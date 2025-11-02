@@ -640,17 +640,39 @@ The following example shows all kinds of actions in practice::
     of the shortcuts and utilities available in regular `Symfony controllers`_,
     such as ``$this->render()``, ``$this->redirect()``, and others.
 
-Custom actions can define the ``#[AdminRoute]`` attribute to
-:ref:`customize their route name, path and methods <crud_routes>`::
+It's recommended to apply the ``#[AdminRoute]`` attribute to your custom actions
+to :ref:`customize their route name, path and methods <crud_routes>`. This is
+recommended even for custom actions defined as methods in the CRUD controllers::
+
+    namespace App\Controller\Admin;
 
     use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
-    // ...
+    use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+    use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+    use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
-
-    #[AdminRoute(path: '/invoice', name: 'view_invoice')]
-    public function renderInvoice(AdminContext $context)
+    class OrderCrudController extends AbstractCrudController
     {
+        public function configureActions(Actions $actions): Actions
+        {
+            $viewInvoice = Action::new('viewInvoice', 'Invoice', 'fa fa-file-invoice')
+                ->linkToCrudAction('renderInvoice');
+
+            // ...
+        }
+
         // ...
+
+        #[AdminRoute(path: '/invoice', name: 'view_invoice')]
+        public function renderInvoice(AdminContext $context)
+        {
+            // if the dashboard uses 'admin' as the main route name, the resulting
+            // route of this action will be:
+            //   path: /admin/order/invoice
+            //   name: admin_order_view_invoice
+
+            // ...
+        }
     }
 
 .. _global-actions:
@@ -823,7 +845,6 @@ for the actions using the ``#[AdminRoute]`` attribute::
             $this->businessStatsCalculator = $businessStatsCalculator;
         }
 
-        #[Route("/admin/business-stats", name: "business_stats_index")]
         #[AdminRoute("/", name: "index")]
         public function index()
         {
@@ -832,7 +853,6 @@ for the actions using the ``#[AdminRoute]`` attribute::
             ]);
         }
 
-        #[Route("/admin/business-stats/{id}", name: "business_stats_customer")]
         #[AdminRoute("/{id}", name: "customer")]
         public function customer(Customer $customer)
         {
