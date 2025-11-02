@@ -5,6 +5,7 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Orm;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\FieldMapping;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -297,14 +298,32 @@ final class EntityRepository implements EntityRepositoryInterface
                     throw new \InvalidArgumentException(sprintf('The "%s" property included in the setSearchFields() method is not a valid search field. When using associated properties in search, you must also define the exact field used in the search (e.g. \'%s.id\', \'%s.name\', etc.)', $propertyName, $propertyName, $propertyName));
                 }
 
-                $propertyDataType = $associatedEntityDto->getClassMetadata()->getFieldMapping($propertyName)['type'];
+                // In Doctrine ORM 3.x, FieldMapping implements \ArrayAccess; in 4.x it's an object with properties
+                $fieldMapping = $associatedEntityDto->getClassMetadata()->getFieldMapping($propertyName);
+                // In Doctrine ORM 2.x, getFieldMapping() returns an array
+                /** @phpstan-ignore-next-line function.impossibleType */
+                if (\is_array($fieldMapping)) {
+                    /** @phpstan-ignore-next-line cast.useless */
+                    $fieldMapping = (object) $fieldMapping;
+                }
+                /** @phpstan-ignore-next-line function.alreadyNarrowedType */
+                $propertyDataType = property_exists($fieldMapping, 'type') ? $fieldMapping->type : $fieldMapping['type'];
             } else {
                 $entityName = 'entity';
                 if (!isset($entityDto->getClassMetadata()->fieldMappings[$propertyName])) {
                     throw new \InvalidArgumentException(sprintf('The "%s" property included in the setSearchFields() method is not a valid search field. When using associated properties in search, you must also define the exact field used in the search (e.g. \'%s.id\', \'%s.name\', etc.)', $propertyName, $propertyName, $propertyName));
                 }
 
-                $propertyDataType = $entityDto->getClassMetadata()->getFieldMapping($propertyName)['type'];
+                // In Doctrine ORM 3.x, FieldMapping implements \ArrayAccess; in 4.x it's an object with properties
+                $fieldMapping = $entityDto->getClassMetadata()->getFieldMapping($propertyName);
+                // In Doctrine ORM 2.x, getFieldMapping() returns an array
+                /** @phpstan-ignore-next-line function.impossibleType */
+                if (\is_array($fieldMapping)) {
+                    /** @phpstan-ignore-next-line cast.useless */
+                    $fieldMapping = (object) $fieldMapping;
+                }
+                /** @phpstan-ignore-next-line function.alreadyNarrowedType */
+                $propertyDataType = property_exists($fieldMapping, 'type') ? $fieldMapping->type : $fieldMapping['type'];
             }
 
             $isBoolean = 'boolean' === $propertyDataType;

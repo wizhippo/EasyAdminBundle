@@ -19,11 +19,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
 use function Symfony\Component\Translation\t;
 
-// needed for Symfony 5.4 - 8.0 compatibility (Atribute doesn't exist in 5.4 and
+// needed for Symfony 5.4 - 8.0 compatibility (Attribute doesn't exist in 5.4 and
 // Annotation doesn't exist in 8.0; both exist in the other versions)
-if (!class_exists(Route::class)) {
+if (class_exists('Symfony\Component\Routing\Annotation\Route') && !class_exists('Symfony\Component\Routing\Attribute\Route')) {
     // @phpstan-ignore-next-line class.notFound
-    class_alias(\Symfony\Component\Routing\Annotation\Route::class, Route::class);
+    class_alias(\Symfony\Component\Routing\Annotation\Route::class, 'Symfony\Component\Routing\Attribute\Route');
 }
 
 use Symfony\Component\Routing\Attribute\Route;

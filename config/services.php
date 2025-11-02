@@ -275,6 +275,7 @@ return static function (ContainerConfigurator $container) {
             ->arg(1, service(AdminUrlGenerator::class))
 
         ->set(FormLayoutFactory::class)
+            ->arg(0, service('translator'))
 
         ->set(FieldFactory::class)
             ->arg(0, service(AdminContextProvider::class))
