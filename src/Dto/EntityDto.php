@@ -181,6 +181,9 @@ final class EntityDto
         return $this->metadata->getFieldNames();
     }
 
+    /**
+     * @deprecated since 4.27 and to be removed in 5.0, use $entityDto->getClassMetadata()->fieldMappings[$propertyName] and $entityDto->getClassMetadata()->associationMappings[$propertyName] instead
+     */
     public function getPropertyMetadata(string $propertyName): KeyValueStore
     {
         if (isset($this->metadata->fieldMappings[$propertyName])) {
@@ -222,15 +225,27 @@ final class EntityDto
      */
     public function getPropertyDataType(string $propertyName): string|int
     {
-        return $this->getPropertyMetadata($propertyName)->get('type');
+        if (isset($this->getClassMetadata()->fieldMappings[$propertyName])) {
+            return $this->getClassMetadata()->fieldMappings[$propertyName]['type'];
+        }
+        if (isset($this->getClassMetadata()->associationMappings[$propertyName])) {
+            return $this->getClassMetadata()->associationMappings[$propertyName]['type'];
+        }
+        throw new \InvalidArgumentException(sprintf('The "%s" field does not exist in the "%s" entity.', $propertyName, $this->getFqcn()));
     }
 
+    /**
+     * @deprecated since 4.27 and to be removed in 5.0, use isset($entityDto->getClassMetadata()->fieldMappings[$propertyName]) || $entityDto->getClassMetadata()->hasAssociation($propertyName) instead
+     */
     public function hasProperty(string $propertyName): bool
     {
         return isset($this->metadata->fieldMappings[$propertyName])
             || $this->metadata->hasAssociation($propertyName);
     }
 
+    /**
+     * @deprecated since 4.27 and to be removed in 5.0 without replacement
+     */
     public function isAssociation(string $propertyName): bool
     {
         if ($this->metadata->hasAssociation($propertyName)) {

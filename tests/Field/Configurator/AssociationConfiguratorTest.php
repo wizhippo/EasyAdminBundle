@@ -52,7 +52,7 @@ class AssociationConfiguratorTest extends AbstractFieldTest
      */
     public function testToOneAssociation(FieldInterface $field): void
     {
-        $field->getAsDto()->setDoctrineMetadata($this->projectDto->getPropertyMetadata($field->getAsDto()->getProperty())->all());
+        $field->getAsDto()->setDoctrineMetadata((array) $this->projectDto->getClassMetadata()->getAssociationMapping($field->getAsDto()->getProperty()));
         $field->setCustomOption(AssociationField::OPTION_EMBEDDED_CRUD_FORM_CONTROLLER, DeveloperCrudController::class);
 
         $field = $this->configure($field, controllerFqcn: ProjectCrudController::class);
@@ -71,7 +71,7 @@ class AssociationConfiguratorTest extends AbstractFieldTest
      */
     public function testToManyAssociation(FieldInterface $field): void
     {
-        $field->getAsDto()->setDoctrineMetadata($this->projectDto->getPropertyMetadata($field->getAsDto()->getProperty())->all());
+        $field->getAsDto()->setDoctrineMetadata((array) $this->projectDto->getClassMetadata()->getAssociationMapping($field->getAsDto()->getProperty()));
         $field->setCustomOption(AssociationField::OPTION_EMBEDDED_CRUD_FORM_CONTROLLER, DeveloperCrudController::class);
 
         $field = $this->configure($field, controllerFqcn: ProjectCrudController::class);
@@ -137,7 +137,7 @@ class AssociationConfiguratorTest extends AbstractFieldTest
      */
     public function testFailsOnOptionRenderAsEmbeddedCrudFormIfNoCrudControllerCanBeFound(FieldInterface $field): void
     {
-        $field->getAsDto()->setDoctrineMetadata($this->projectDto->getPropertyMetadata($field->getAsDto()->getProperty())->all());
+        $field->getAsDto()->setDoctrineMetadata((array) $this->projectDto->getClassMetadata()->getAssociationMapping($field->getAsDto()->getProperty()));
         $field->setCustomOption(AssociationField::OPTION_RENDER_AS_EMBEDDED_FORM, true);
 
         $this->expectException(\RuntimeException::class);

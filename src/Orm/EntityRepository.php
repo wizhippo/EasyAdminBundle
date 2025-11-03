@@ -5,7 +5,6 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Orm;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\FieldMapping;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -147,7 +146,7 @@ final class EntityRepository implements EntityRepositoryInterface
     {
         foreach ($searchDto->getSort() as $sortProperty => $sortOrder) {
             $aliases = $queryBuilder->getAllAliases();
-            $sortFieldIsDoctrineAssociation = $entityDto->isAssociation($sortProperty);
+            $sortFieldIsDoctrineAssociation = $this->isAssociation($entityDto, $sortProperty);
 
             if ($sortFieldIsDoctrineAssociation) {
                 $sortFieldParts = explode('.', $sortProperty, 2);
@@ -158,13 +157,11 @@ final class EntityRepository implements EntityRepositoryInterface
 
                 if (1 === \count($sortFieldParts)) {
                     if ($entityDto->getClassMetadata()->isCollectionValuedAssociation($sortProperty)) {
-                        $metadata = $entityDto->getPropertyMetadata($sortProperty);
-
                         /** @var EntityManagerInterface $entityManager */
                         $entityManager = $this->doctrine->getManagerForClass($entityDto->getFqcn());
                         $countQueryBuilder = $entityManager->createQueryBuilder();
 
-                        if (ClassMetadata::MANY_TO_MANY === $metadata->get('type')) {
+                        if (ClassMetadata::MANY_TO_MANY === $entityDto->getClassMetadata()->getAssociationMapping($sortProperty)['type']) {
                             // many-to-many relation
                             $countQueryBuilder
                                 ->select($queryBuilder->expr()->count('subQueryEntity'))
@@ -176,7 +173,7 @@ final class EntityRepository implements EntityRepositoryInterface
                             $countQueryBuilder
                                 ->select($queryBuilder->expr()->count('subQueryEntity'))
                                 ->from($entityDto->getClassMetadata()->getAssociationTargetClass($sortProperty), 'subQueryEntity')
-                                ->where(sprintf('subQueryEntity.%s = entity', $metadata->get('mappedBy')));
+                                ->where(sprintf('subQueryEntity.%s = entity', $entityDto->getClassMetadata()->getAssociationMapping($sortProperty)['mappedBy']));
                         }
 
                         $queryBuilder->addSelect(sprintf('(%s) as HIDDEN sub_query_sort', $countQueryBuilder->getDQL()));
@@ -265,7 +262,7 @@ final class EntityRepository implements EntityRepositoryInterface
 
         $entitiesAlreadyJoined = [];
         foreach ($searchableProperties as $propertyName) {
-            if ($entityDto->isAssociation($propertyName)) {
+            if ($this->isAssociation($entityDto, $propertyName)) {
                 // support arbitrarily nested associations (e.g. foo.bar.baz.qux)
                 $associatedProperties = explode('.', $propertyName);
                 $numAssociatedProperties = \count($associatedProperties);
@@ -300,30 +297,14 @@ final class EntityRepository implements EntityRepositoryInterface
                     throw new \InvalidArgumentException(sprintf('The "%s" property included in the setSearchFields() method is not a valid search field. When using associated properties in search, you must also define the exact field used in the search (e.g. \'%s.id\', \'%s.name\', etc.)', $propertyName, $propertyName, $propertyName));
                 }
 
-                // Doctrine ORM 2.x returns an array and Doctrine ORM 3.x returns a FieldMapping object
-                /** @var FieldMapping|array $fieldMapping */
-                /** @phpstan-ignore-next-line */
-                $fieldMapping = $associatedEntityDto->getClassMetadata()->getFieldMapping($propertyName);
-                if (\is_array($fieldMapping)) {
-                    $propertyDataType = $fieldMapping['type'];
-                } else {
-                    $propertyDataType = $fieldMapping->type;
-                }
+                $propertyDataType = $associatedEntityDto->getClassMetadata()->getFieldMapping($propertyName)['type'];
             } else {
                 $entityName = 'entity';
                 if (!isset($entityDto->getClassMetadata()->fieldMappings[$propertyName])) {
                     throw new \InvalidArgumentException(sprintf('The "%s" property included in the setSearchFields() method is not a valid search field. When using associated properties in search, you must also define the exact field used in the search (e.g. \'%s.id\', \'%s.name\', etc.)', $propertyName, $propertyName, $propertyName));
                 }
 
-                // Doctrine ORM 2.x returns an array and Doctrine ORM 3.x returns a FieldMapping object
-                /** @var FieldMapping|array $fieldMapping */
-                /** @phpstan-ignore-next-line */
-                $fieldMapping = $entityDto->getClassMetadata()->getFieldMapping($propertyName);
-                if (\is_array($fieldMapping)) {
-                    $propertyDataType = $fieldMapping['type'];
-                } else {
-                    $propertyDataType = $fieldMapping->type;
-                }
+                $propertyDataType = $entityDto->getClassMetadata()->getFieldMapping($propertyName)['type'];
             }
 
             $isBoolean = 'boolean' === $propertyDataType;
@@ -391,5 +372,20 @@ final class EntityRepository implements EntityRepositoryInterface
         }
 
         return $searchablePropertiesConfig;
+    }
+
+    private function isAssociation(EntityDto $entityDto, string $propertyName): bool
+    {
+        if ($entityDto->getClassMetadata()->hasAssociation($propertyName)) {
+            return true;
+        }
+
+        if (!str_contains($propertyName, '.')) {
+            return false;
+        }
+
+        $propertyNameParts = explode('.', $propertyName, 2);
+
+        return !isset($entityDto->getClassMetadata()->embeddedClasses[$propertyNameParts[0]]);
     }
 }

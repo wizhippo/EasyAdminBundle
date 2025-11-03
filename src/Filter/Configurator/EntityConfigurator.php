@@ -24,21 +24,21 @@ final class EntityConfigurator implements FilterConfiguratorInterface
     public function configure(FilterDto $filterDto, ?FieldDto $fieldDto, EntityDto $entityDto, AdminContext $context): void
     {
         $propertyName = $filterDto->getProperty();
-        if (!$entityDto->isAssociation($propertyName)) {
+        if (!$entityDto->getClassMetadata()->hasAssociation($propertyName)) {
             return;
         }
 
-        $doctrineMetadata = $entityDto->getPropertyMetadata($propertyName);
         // TODO: add the 'em' form type option too?
         $filterDto->setFormTypeOptionIfNotSet('value_type_options.class', $entityDto->getClassMetadata()->getAssociationTargetClass($propertyName));
         $filterDto->setFormTypeOptionIfNotSet('value_type_options.multiple', $entityDto->getClassMetadata()->isCollectionValuedAssociation($propertyName));
         $filterDto->setFormTypeOptionIfNotSet('value_type_options.attr.data-ea-widget', 'ea-autocomplete');
 
         if ($entityDto->getClassMetadata()->isSingleValuedAssociation($propertyName)) {
+            $associationMapping = $entityDto->getClassMetadata()->associationMappings[$propertyName];
             // don't show the 'empty value' placeholder when all join columns are required,
             // because an empty filter value would always return no result
             $numberOfRequiredJoinColumns = \count(array_filter(
-                $doctrineMetadata->get('joinColumns'),
+                $associationMapping['joinColumns'],
                 static function (array|JoinColumnMapping $joinColumn): bool {
                     // Doctrine ORM 3.x changed the returned type from array to JoinColumnMapping
                     if ($joinColumn instanceof JoinColumnMapping) {
@@ -51,7 +51,7 @@ final class EntityConfigurator implements FilterConfiguratorInterface
                 }
             ));
 
-            $someJoinColumnsAreNullable = \count($doctrineMetadata->get('joinColumns')) !== $numberOfRequiredJoinColumns;
+            $someJoinColumnsAreNullable = \count($associationMapping['joinColumns']) !== $numberOfRequiredJoinColumns;
 
             if ($someJoinColumnsAreNullable) {
                 $filterDto->setFormTypeOptionIfNotSet('value_type_options.placeholder', 'label.form.empty_value');

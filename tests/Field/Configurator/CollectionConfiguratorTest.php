@@ -104,7 +104,7 @@ class CollectionConfiguratorTest extends AbstractFieldTest
      */
     public function testFailsOnOptionRenderAsEmbeddedCrudFormIfNoCrudControllerCanBeFound(FieldInterface $field): void
     {
-        $field->getAsDto()->setDoctrineMetadata($this->projectDto->getPropertyMetadata($field->getAsDto()->getProperty())->all());
+        $field->getAsDto()->setDoctrineMetadata((array) $this->projectDto->getClassMetadata()->getAssociationMapping($field->getAsDto()->getProperty()));
         $field->setCustomOption(CollectionField::OPTION_ENTRY_USES_CRUD_FORM, true);
 
         $this->expectException(\RuntimeException::class);
