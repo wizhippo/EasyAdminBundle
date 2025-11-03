@@ -26,5 +26,13 @@ return static function (ContainerConfigurator $container) {
         $config['orm']['auto_generate_proxy_classes'] = true;
     }
 
+    // TODO: make this config option unconditional when rising the Symfony requirements to 6.4
+    // this option was added in doctrine-bundle PR 1554, released as Doctrine Bundle 2.7.1 (https://github.com/doctrine/DoctrineBundle/releases/tag/2.7.1)
+    if (class_exists(Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\ControllerResolverPass::class)) {
+        $config['orm']['controller_resolver'] = [
+            'auto_mapping' => false,
+        ];
+    }
+
     $container->extension('doctrine', $config);
 };

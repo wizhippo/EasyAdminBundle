@@ -75,12 +75,12 @@ class ActionGroupsCrudController extends AbstractCrudController
         $group4 = ActionGroup::new('group4', 'Action Group 4')
             ->addAction(Action::new('link_action', 'Action 1')->linkToCrudAction('edit'))
             ->addAction(Action::new('button_action', 'Action 2')->linkToCrudAction('detail')->addCssClass('btn-primary'))
-            ->addAction(Action::new('form_action', 'Action 3')->linkToCrudAction('delete')->displayAsForm());
+            ->addAction(Action::new('form_action', 'Action 3')->linkToCrudAction('delete')->renderAsForm());
         $group4Global = ActionGroup::new('group4global ', 'Global Action Group 4')
             ->createAsGlobalActionGroup()
             ->addAction(Action::new('link_action', 'Action 1')->linkToCrudAction('aGlobalAction'))
             ->addAction(Action::new('button_action', 'Action 2')->linkToCrudAction('aGlobalAction')->addCssClass('btn-primary'))
-            ->addAction(Action::new('form_action', 'Action 3')->linkToCrudAction('aGlobalAction')->displayAsForm());
+            ->addAction(Action::new('form_action', 'Action 3')->linkToCrudAction('aGlobalAction')->renderAsForm());
 
         // custom styling
         $group5 = ActionGroup::new('group5', 'Action Group 5')
