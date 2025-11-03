@@ -197,8 +197,9 @@ class name of the controller as the first argument::
 
 .. note::
 
-    For Doctrine associations you can omit ``useEntryCrudForm()``. If no Symfony Form option ``entry_type`` is set
-    ``CollectionFields`` for association properties per default use ``CrudFormType`` as ``entry_type``.
+    For Doctrine associations, you can omit the ``useEntryCrudForm()`` method.
+    When no Symfony form option ``entry_type`` is set, ``CollectionField`` for
+    association properties will use ``CrudFormType`` as the default ``entry_type``.
 
 JavaScript Events
 -----------------
