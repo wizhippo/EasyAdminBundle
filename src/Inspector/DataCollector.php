@@ -60,11 +60,14 @@ class DataCollector extends BaseDataCollector
      */
     private function collectData(AdminContextInterface $context): array
     {
+        $attributes = $context->getRequest()->attributes->all();
+        $query = $context->getRequest()->query->all();
+
         return [
             'CRUD Controller FQCN' => null === $context->getCrud() ? null : $context->getCrud()->getControllerFqcn(),
-            'CRUD Action' => $context->getRequest()->attributes->get(EA::CRUD_ACTION) ?? $context->getRequest()->query->get(EA::CRUD_ACTION),
-            'Entity ID' => $context->getRequest()->attributes->get(EA::ENTITY_ID) ?? $context->getRequest()->query->get(EA::ENTITY_ID),
-            'Sort' => $context->getRequest()->attributes->get(EA::SORT) ?? $context->getRequest()->query->all(EA::SORT),
+            'CRUD Action' => $attributes[EA::CRUD_ACTION] ?? $query[EA::CRUD_ACTION] ?? null,
+            'Entity ID' => $attributes[EA::ENTITY_ID] ?? $query[EA::ENTITY_ID] ?? null,
+            'Sort' => $attributes[EA::SORT] ?? $query[EA::SORT] ?? null,
         ];
     }
 
