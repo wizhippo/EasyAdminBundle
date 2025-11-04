@@ -567,8 +567,11 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
 
             $routeAttribute = $attributes[0]->newInstance();
             $config[$reflectionClass->getName()] = [
-                'routeName' => $routeAttribute->getName(),
-                'routePath' => rtrim($routeAttribute->getPath(), '/'),
+                // Symfony 8 removed the getName() and getPath() methods in favor of public properties
+                /** @phpstan-ignore-next-line */
+                'routeName' => method_exists($routeAttribute, 'getName') ? $routeAttribute->getName() : $routeAttribute->name,
+                /** @phpstan-ignore-next-line */
+                'routePath' => rtrim(method_exists($routeAttribute, 'getPath') ? $routeAttribute->getPath() : $routeAttribute->path, '/'),
             ];
         }
 
