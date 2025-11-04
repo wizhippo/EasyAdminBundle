@@ -7,6 +7,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
@@ -54,7 +55,15 @@ class CrudAutocompleteSubscriber implements EventSubscriberInterface
                 }
 
                 $data['autocomplete'] = array_map(
-                    fn ($v) => Ulid::isValid($v) ? Ulid::fromBase32($v)->toRfc4122() : $v,
+                    function ($v) {
+                        if (Ulid::isValid($v)) {
+                            return Ulid::fromBase32($v)->toRfc4122();
+                        } elseif (Uuid::isValid($v)) {
+                            return Uuid::fromString($v)->toBinary();
+                        }
+
+                        return $v;
+                    },
                     $data['autocomplete']
                 );
             }
