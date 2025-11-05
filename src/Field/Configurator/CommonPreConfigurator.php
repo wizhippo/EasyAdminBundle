@@ -3,6 +3,7 @@
 namespace EasyCorp\Bundle\EasyAdminBundle\Field\Configurator;
 
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\FieldMapping;
 use Doctrine\ORM\Mapping\JoinColumnMapping;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -227,12 +228,16 @@ final class CommonPreConfigurator implements FieldConfiguratorInterface
 
         // TODO: check if it's correct to never make a boolean value required
         // I guess it's correct because Symfony Forms treat NULL as FALSE by default (i.e. in the database the value won't be NULL)
-        if (isset($entityDto->getClassMetadata()->fieldMappings[$field->getProperty()])
-            && Types::BOOLEAN === $entityDto->getClassMetadata()->getFieldMapping($field->getProperty())['type']) {
+        // Doctrine ORM 2.x returns an array and Doctrine ORM 3.x returns a FieldMapping object
+        $fieldMapping = $entityDto->getClassMetadata()->getFieldMapping($field->getProperty());
+        // @phpstan-ignore-next-line (backward compatibility with Doctrine ORM 2.x)
+        $fieldType = \is_array($fieldMapping) ? ($fieldMapping['type'] ?? null) : $fieldMapping->type;
+        if (Types::BOOLEAN === $fieldType && isset($entityDto->getClassMetadata()->fieldMappings[$field->getProperty()])) {
             return false;
         }
 
-        $nullable = $entityDto->getClassMetadata()->fieldMappings[$field->getProperty()]['nullable'];
+        // @phpstan-ignore-next-line (backward compatibility with Doctrine ORM 2.x)
+        $nullable = \is_array($fieldMapping) ? ($fieldMapping['nullable'] ?? null) : $fieldMapping->nullable;
 
         return false === $nullable || null === $nullable;
     }
