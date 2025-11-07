@@ -6,6 +6,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use EasyCorp\Bundle\EasyAdminBundle\Maker\ClassMaker;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -32,6 +33,7 @@ class MakeCrudControllerCommand extends Command
     {
         $this
             ->setHelp($this->getCommandHelp())
+            ->addArgument('doctrine_entity', InputArgument::OPTIONAL, 'Which Doctrine entity are you going to manage with this CRUD controller?')
         ;
     }
 
@@ -46,10 +48,19 @@ class MakeCrudControllerCommand extends Command
 
             return Command::FAILURE;
         }
-        $entityFqcn = $io->choice(
-            'Which Doctrine entity are you going to manage with this CRUD controller?',
-            $doctrineEntitiesFqcn
-        );
+        if (null !== $input->getArgument('doctrine_entity')) {
+            $entityFqcn = $input->getArgument('doctrine_entity');
+            if (!\in_array($entityFqcn, $doctrineEntitiesFqcn, true)) {
+                $io->error(sprintf('The "%s" entity does not exist. Pick one of the existing entities: %s', $entityFqcn, implode(', ', $doctrineEntitiesFqcn)));
+
+                return Command::FAILURE;
+            }
+        } else {
+            $entityFqcn = $io->choice(
+                'Which Doctrine entity are you going to manage with this CRUD controller?',
+                $doctrineEntitiesFqcn
+            );
+        }
         $entityClassName = u($entityFqcn)->afterLast('\\')->toString();
         $controllerFileNamePattern = sprintf('%s{number}CrudController.php', $entityClassName);
 
