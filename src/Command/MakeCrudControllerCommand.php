@@ -33,7 +33,7 @@ class MakeCrudControllerCommand extends Command
     {
         $this
             ->setHelp($this->getCommandHelp())
-            ->addArgument('doctrine_entity', InputArgument::OPTIONAL, 'Which Doctrine entity are you going to manage with this CRUD controller?')
+            ->addArgument('entity_fqcn', InputArgument::OPTIONAL, 'The FQCN of the Doctrine entity managed with this CRUD controller')
         ;
     }
 
@@ -48,8 +48,9 @@ class MakeCrudControllerCommand extends Command
 
             return Command::FAILURE;
         }
-        if (null !== $input->getArgument('doctrine_entity')) {
-            $entityFqcn = $input->getArgument('doctrine_entity');
+
+        if (null !== $input->getArgument('entity_fqcn')) {
+            $entityFqcn = $input->getArgument('entity_fqcn');
             if (!\in_array($entityFqcn, $doctrineEntitiesFqcn, true)) {
                 $io->error(sprintf('The "%s" entity does not exist. Pick one of the existing entities: %s', $entityFqcn, implode(', ', $doctrineEntitiesFqcn)));
 
@@ -61,6 +62,7 @@ class MakeCrudControllerCommand extends Command
                 $doctrineEntitiesFqcn
             );
         }
+
         $entityClassName = u($entityFqcn)->afterLast('\\')->toString();
         $controllerFileNamePattern = sprintf('%s{number}CrudController.php', $entityClassName);
 
