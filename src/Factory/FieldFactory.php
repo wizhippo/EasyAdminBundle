@@ -3,6 +3,7 @@
 namespace EasyCorp\Bundle\EasyAdminBundle\Factory;
 
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\FieldMapping;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\EntityCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -176,10 +177,19 @@ final class FieldFactory
             } elseif (!isset($entityDto->getClassMetadata()->fieldMappings[$fieldDto->getProperty()])) {
                 throw new \RuntimeException(sprintf('Could not guess a field class for "%s" field. It possibly is an association field or an embedded class field.', $fieldDto->getProperty()));
             } else {
+                // In Doctrine ORM 3.x, FieldMapping implements \ArrayAccess; in 4.x it's an object with properties
                 $fieldMapping = $entityDto->getClassMetadata()->getFieldMapping($fieldDto->getProperty());
-                $guessedFieldFqcn = self::$doctrineTypeToFieldFqcn[$fieldMapping['type']] ?? null;
+                // In Doctrine ORM 2.x, getFieldMapping() returns an array
+                /** @phpstan-ignore-next-line function.impossibleType */
+                if (\is_array($fieldMapping)) {
+                    /** @phpstan-ignore-next-line cast.useless */
+                    $fieldMapping = (object) $fieldMapping;
+                }
+                /** @phpstan-ignore-next-line function.alreadyNarrowedType */
+                $fieldType = property_exists($fieldMapping, 'type') ? $fieldMapping->type : $fieldMapping['type'];
+                $guessedFieldFqcn = self::$doctrineTypeToFieldFqcn[$fieldType] ?? null;
                 if (null === $guessedFieldFqcn) {
-                    throw new \RuntimeException(sprintf('The Doctrine type of the "%s" field is "%s", which is not supported by EasyAdmin. For Doctrine\'s Custom Mapping Types have a look at EasyAdmin\'s field docs.', $fieldDto->getProperty(), $fieldMapping['type']));
+                    throw new \RuntimeException(sprintf('The Doctrine type of the "%s" field is "%s", which is not supported by EasyAdmin. For Doctrine\'s Custom Mapping Types have a look at EasyAdmin\'s field docs.', $fieldDto->getProperty(), $fieldType));
                 }
             }
 
