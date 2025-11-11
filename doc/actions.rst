@@ -31,6 +31,8 @@ strings with the action names (``'index'``, ``'detail'``, ``'edit'``, etc.) you
 can also use constants for these values: ``Action::INDEX``, ``Action::DETAIL``,
 ``Action::EDIT``, etc. (they are defined in the ``EasyCorp\Bundle\EasyAdminBundle\Config\Action`` class).
 
+.. _actions-built-in:
+
 Built-in Actions
 ----------------
 
@@ -1016,6 +1018,63 @@ This is no longer needed in modern EasyAdmin versions and is now a discouraged
 practice that you should avoid in your applications. Instead, see the previous
 section about :ref:`how to integrate custom Symfony controllers into EasyAdmin dashboards <actions-integrating-symfony>`.
 
+Actions Extensions
+------------------
+
+Applications using EasyAdmin define their actions in the ``configureActions()``
+method of the :doc:`CRUD controllers </crud>`. You can enable, disable, or modify
+:ref:`built-in actions <actions-built-in>`, and also create your own
+:ref:`custom actions <actions-custom>`.
+
+EasyAdmin provides an additional feature to add, remove, or change actions
+(built-in or custom) dynamically at runtime: **action extensions**. They allow
+your application (or third-party bundles installed in it) to modify the actions
+defined for your controllers.
+
+Action extensions are PHP classes that receive the full configuration of
+actions in your backend so they can add, remove, or update any of them.
+
+For example, imagine you need a **Duplicate** action across most of your
+backends. Instead of defining it repeatedly, you can create a reusable package
+(such as a `Symfony bundle`_) and add the following class::
+
+    // <your-package>/src/DuplicateActionExtension.php
+    use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+    use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+    use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+    use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+    use EasyCorp\Bundle\EasyAdminBundle\Contracts\Action\ActionsExtensionInterface;
+
+    final class DuplicateActionExtension implements ActionsExtension
+    {
+        // return true in this method to enable the extension for
+        // the current backend request
+        public function supports(AdminContext $context): bool
+        {
+            // enable the extension only on some pages
+            return $context->getCrud()->getCurrentPage() === Crud::PAGE_DETAIL;
+
+            // enable it on all except some entities
+            $entityFqcn = $context->getCrud()->getEntityFqcn();
+            return null !== $entityFqcn && !\in_array(entityFqcn, ['...'], true);
+
+            // or use any other admin context data to make the decision
+        }
+
+        public function extend(Actions $actions, AdminContext $context): void
+        {
+            $duplicate = Action::new('duplicate', 'Duplicate', 'fa fa-clone')
+                ->linkToCrudAction('duplicate')
+                ->asSuccessAction();
+
+            $actions->add(Crud::PAGE_DETAIL, $duplicate);
+
+            // you can add single actions, groups of actions, etc.
+            // you can also remove or update existing actions
+        }
+    }
+
 .. _`FontAwesome`: https://fontawesome.com/
 .. _`Symfony base controller class`: https://symfony.com/doc/current/controller.html#the-base-controller-class-services
 .. _`Symfony controllers`: https://symfony.com/doc/current/controller.html
+.. _`Symfony bundle`: https://symfony.com/doc/current/bundles.html

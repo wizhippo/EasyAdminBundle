@@ -191,6 +191,7 @@ return static function (ContainerConfigurator $container) {
             ->arg(3, new Reference(CrudControllerRegistry::class))
             ->arg(4, new Reference(EntityFactory::class))
             ->arg(5, service(AdminRouteGenerator::class))
+            ->arg(6, service(ActionFactory::class))
 
         ->set(AdminUrlGenerator::class)
             // I don't know if we truly need the share() method to get a new instance of the
@@ -319,6 +320,7 @@ return static function (ContainerConfigurator $container) {
             ->arg(1, new Reference(AuthorizationChecker::class))
             ->arg(2, new Reference(AdminUrlGenerator::class))
             ->arg(3, new Reference('security.csrf.token_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE))
+            ->arg(4, tagged_iterator(EasyAdminExtension::TAG_ACTIONS_EXTENSION))
 
         ->set(SecurityVoter::class)
             ->arg(0, service(AuthorizationChecker::class))

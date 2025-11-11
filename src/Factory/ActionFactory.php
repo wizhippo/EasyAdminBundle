@@ -5,9 +5,13 @@ namespace EasyCorp\Bundle\EasyAdminBundle\Factory;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\ActionCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\EntityCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Action\ActionsExtensionInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\CrudControllerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\DashboardControllerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Provider\AdminContextProviderInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\ActionConfigDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\ActionDto;
@@ -29,11 +33,15 @@ use Symfony\Contracts\Translation\TranslatableInterface;
  */
 final class ActionFactory
 {
+    /**
+     * @param iterable<ActionsExtensionInterface> $actionsExtensions
+     */
     public function __construct(
         private readonly AdminContextProviderInterface $adminContextProvider,
         private readonly AuthorizationCheckerInterface $authChecker,
         private readonly AdminUrlGeneratorInterface $adminUrlGenerator,
         private readonly ?CsrfTokenManagerInterface $csrfTokenManager = null,
+        private readonly iterable $actionsExtensions = [],
     ) {
     }
 
@@ -408,5 +416,38 @@ final class ActionFactory
         $newGroupDto->setHtmlAttribute('data-action-group-name', $newGroupDto->getName());
 
         return $newGroupDto;
+    }
+
+    /**
+     * Builds the complete actions configuration in this order:
+     * Dashboard action config / Default action config > CRUD controller action config > Action Extensions.
+     */
+    public function buildActionsConfig(DashboardControllerInterface $dashboardController, ?CrudControllerInterface $crudController, AdminContext $context, ?string $pageName): ActionConfigDto
+    {
+        if (null === $crudController) {
+            return new ActionConfigDto();
+        }
+
+        $defaultActionConfig = $dashboardController->configureActions();
+        $actions = $crudController->configureActions($defaultActionConfig);
+
+        $this->applyExtensions($actions, $context);
+
+        return $actions->getAsDto($pageName);
+    }
+
+    /**
+     * Applies all registered action extensions to the original Actions configuration
+     * so they can modify it adding/updating/removing actions.
+     */
+    private function applyExtensions(Actions $actions, AdminContext $context): void
+    {
+        foreach ($this->actionsExtensions as $extension) {
+            if (!$extension->supports($context)) {
+                continue;
+            }
+
+            $extension->extend($actions, $context);
+        }
     }
 }
