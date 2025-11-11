@@ -9,6 +9,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FilterDto;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudAutocompleteType;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
@@ -16,6 +18,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
  */
 final class EntityConfigurator implements FilterConfiguratorInterface
 {
+    public function __construct(
+        private AdminUrlGenerator $adminUrlGenerator,
+    ) {
+    }
+
     public function supports(FilterDto $filterDto, ?FieldDto $fieldDto, EntityDto $entityDto, AdminContext $context): bool
     {
         return EntityFilter::class === $filterDto->getFqcn();
@@ -33,6 +40,7 @@ final class EntityConfigurator implements FilterConfiguratorInterface
         $filterDto->setFormTypeOptionIfNotSet('value_type_options.multiple', $entityDto->getClassMetadata()->isCollectionValuedAssociation($propertyName));
         $filterDto->setFormTypeOptionIfNotSet('value_type_options.attr.data-ea-widget', 'ea-autocomplete');
 
+        $supportsAutocomplete = true === $filterDto->getFormTypeOption('autocomplete');
         if ($entityDto->getClassMetadata()->isSingleValuedAssociation($propertyName)) {
             $associationMapping = $entityDto->getClassMetadata()->associationMappings[$propertyName];
             // don't show the 'empty value' placeholder when all join columns are required,
@@ -53,9 +61,35 @@ final class EntityConfigurator implements FilterConfiguratorInterface
 
             $someJoinColumnsAreNullable = \count($associationMapping['joinColumns']) !== $numberOfRequiredJoinColumns;
 
-            if ($someJoinColumnsAreNullable) {
+            if ($someJoinColumnsAreNullable && false === $supportsAutocomplete) {
                 $filterDto->setFormTypeOptionIfNotSet('value_type_options.placeholder', 'label.form.empty_value');
             }
+        }
+        if ($supportsAutocomplete) {
+            $doctrineMetadata = $entityDto->getClassMetadata()->getAssociationMapping($propertyName);
+            $targetEntityFqcn = $doctrineMetadata->targetEntity;
+            $targetCrudControllerFqcn = $context->getCrudControllers()->findCrudFqcnByEntityFqcn($targetEntityFqcn);
+            if (null === $targetCrudControllerFqcn) {
+                throw new \LogicException('The target CRUD controller for the entity '.$targetEntityFqcn.' is not defined.');
+            }
+            $filterDto->setFormTypeOptionIfNotSet('value_type', CrudAutocompleteType::class);
+            $filterDto->setFormTypeOptionIfNotSet('value_type_options.class', $targetEntityFqcn);
+            $filterDto->setFormTypeOptionIfNotSet('value_type_options.attr.data-widget', 'select2');
+            $autocompleteEndpointUrl = $this->adminUrlGenerator
+                ->unsetAll()
+                ->set('page', 1)
+                ->setController($targetCrudControllerFqcn)
+                ->setAction('autocomplete')
+                ->set('autocompleteContext', [
+                    'propertyName' => $propertyName,
+                    'originatingPage' => $context->getCrud()?->getCurrentAction() ?? throw new \LogicException('The current action is not defined.'),
+                ])
+                ->generateUrl()
+            ;
+            $filterDto->setFormTypeOption(
+                'value_type_options.attr.data-ea-autocomplete-endpoint-url',
+                $autocompleteEndpointUrl
+            );
         }
     }
 }
