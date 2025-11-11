@@ -65,16 +65,13 @@ final class EntityConfigurator implements FilterConfiguratorInterface
                 $filterDto->setFormTypeOptionIfNotSet('value_type_options.placeholder', 'label.form.empty_value');
             }
         }
+
         if ($supportsAutocomplete) {
-            $doctrineMetadata = $entityDto->getClassMetadata()->getAssociationMapping($propertyName);
-            $targetEntityFqcn = $doctrineMetadata->targetEntity;
-            $targetCrudControllerFqcn = $context->getCrudControllers()->findCrudFqcnByEntityFqcn($targetEntityFqcn);
-            if (null === $targetCrudControllerFqcn) {
+            $associationMapping = $entityDto->getClassMetadata()->associationMappings[$propertyName];
+            $targetEntityFqcn = $associationMapping['targetEntity'];
+            if (null === $targetCrudControllerFqcn = $context->getCrudControllers()->findCrudFqcnByEntityFqcn($targetEntityFqcn)) {
                 throw new \LogicException('The target CRUD controller for the entity '.$targetEntityFqcn.' is not defined.');
             }
-            $filterDto->setFormTypeOptionIfNotSet('value_type', CrudAutocompleteType::class);
-            $filterDto->setFormTypeOptionIfNotSet('value_type_options.class', $targetEntityFqcn);
-            $filterDto->setFormTypeOptionIfNotSet('value_type_options.attr.data-widget', 'select2');
             $autocompleteEndpointUrl = $this->adminUrlGenerator
                 ->unsetAll()
                 ->set('page', 1)
@@ -86,10 +83,11 @@ final class EntityConfigurator implements FilterConfiguratorInterface
                 ])
                 ->generateUrl()
             ;
-            $filterDto->setFormTypeOption(
-                'value_type_options.attr.data-ea-autocomplete-endpoint-url',
-                $autocompleteEndpointUrl
-            );
+
+            $filterDto->setFormTypeOptionIfNotSet('value_type', CrudAutocompleteType::class);
+            $filterDto->setFormTypeOptionIfNotSet('value_type_options.class', $targetEntityFqcn);
+            $filterDto->setFormTypeOptionIfNotSet('value_type_options.attr.data-widget', 'select2');
+            $filterDto->setFormTypeOption('value_type_options.attr.data-ea-autocomplete-endpoint-url', $autocompleteEndpointUrl);
         }
     }
 }
