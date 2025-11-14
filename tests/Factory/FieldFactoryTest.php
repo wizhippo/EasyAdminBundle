@@ -15,7 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Tests\TestApplication\Entity\ProjectDomain\Project;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 class FieldFactoryTest extends KernelTestCase
 {
@@ -31,14 +31,11 @@ class FieldFactoryTest extends KernelTestCase
         $authorizationCheckerInterface = $this->getMockBuilder(AuthorizationCheckerInterface::class)->disableOriginalConstructor()->getMock();
         $authorizationCheckerInterface->method('isGranted')->willReturn(true);
 
-        $translatorMock = $this->createMock(TranslatorInterface::class);
-        $translatorMock->method('trans')->willReturnArgument(0);
-
         $this->fieldFactory = new FieldFactory(
             $this->getMockBuilder(AdminContextProviderInterface::class)->disableOriginalConstructor()->getMock(),
             $authorizationCheckerInterface,
             [],
-            new FormLayoutFactory($translatorMock),
+            new FormLayoutFactory(new IdentityTranslator()),
         );
     }
 
