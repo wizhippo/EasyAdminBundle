@@ -18,7 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Form\Type\Layout\EaFormTabPaneCloseType;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\Layout\EaFormTabPaneGroupCloseType;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\Layout\EaFormTabPaneGroupOpenType;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 class FormLayoutFactoryTest extends TestCase
 {
@@ -30,10 +30,7 @@ class FormLayoutFactoryTest extends TestCase
         $originalFields = $this->createFormFieldsFromConfig($fieldConfig);
         $expectedFields = $this->createFormFieldsFromLayout($expectedLayout);
 
-        $translatorMock = $this->createMock(TranslatorInterface::class);
-        $translatorMock->method('trans')->willReturnArgument(0);
-
-        $formLayoutFactory = new FormLayoutFactory($translatorMock);
+        $formLayoutFactory = new FormLayoutFactory(new IdentityTranslator());
         $formLayoutFactory->createLayout($originalFields, Crud::PAGE_EDIT);
 
         $this->assertTrue($this->isFormLayoutTheSame($expectedFields, $originalFields));
@@ -49,10 +46,7 @@ class FormLayoutFactoryTest extends TestCase
 
         $originalFields = $this->createFormFieldsFromConfig($originalFields);
 
-        $translatorMock = $this->createMock(TranslatorInterface::class);
-        $translatorMock->method('trans')->willReturnArgument(0);
-
-        $fieldFactory = new FormLayoutFactory($translatorMock);
+        $fieldFactory = new FormLayoutFactory(new IdentityTranslator());
         $fieldFactory->createLayout($originalFields, Crud::PAGE_EDIT);
     }
 

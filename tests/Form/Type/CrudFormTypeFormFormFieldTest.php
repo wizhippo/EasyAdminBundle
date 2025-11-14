@@ -11,7 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudFormType;
 use Symfony\Bridge\Doctrine\Form\DoctrineOrmTypeGuesser;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 
 class CrudFormTypeFormFormFieldTest extends TypeTestCase
 {
@@ -81,12 +81,9 @@ class CrudFormTypeFormFormFieldTest extends TypeTestCase
             ->method('getFqcn')
             ->willReturn(_TestEntity::class);
 
-        $translatorMock = $this->createMock(TranslatorInterface::class);
-        $translatorMock->method('trans')->willReturnArgument(0);
-
         $mock
             ->method('getFields')
-            ->willReturn((new FormLayoutFactory($translatorMock))
+            ->willReturn((new FormLayoutFactory(new IdentityTranslator()))
                 ->createLayout(FieldCollection::new($fields), Crud::PAGE_NEW)
             );
 
