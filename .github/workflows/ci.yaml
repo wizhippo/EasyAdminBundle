@@ -107,16 +107,6 @@ jobs:
               if: ${{ matrix.symfony_version }}
               run: composer config extra.symfony.require "${{ matrix.symfony_version }}.*"
 
-            # Remove this step when https://github.com/doctrine/DoctrineFixturesBundle/pull/542 is merged and released
-            - name: "Temporary: alias some packages to make Symfony 8 packages installable"
-              if: ${{ matrix.symfony_version == '8.0.x' }}
-              run: |
-                  composer require --no-update "symfony/config:7.4.x-dev as 8.0.x-dev"
-                  composer require --no-update "symfony/console:7.4.x-dev as 8.0.x-dev"
-                  composer require --no-update "symfony/dependency-injection:7.4.x-dev as 8.0.x-dev"
-                  composer require --no-update "symfony/doctrine-bridge:7.4.x-dev as 8.0.x-dev"
-                  composer require --no-update "symfony/http-kernel:7.4.x-dev as 8.0.x-dev"
-
             - name: Install dependencies
               run: |
                   composer update ${{ matrix.composer_args }};
