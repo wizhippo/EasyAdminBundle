@@ -60,8 +60,8 @@ final class FieldProvider
                 $fieldMappingType = property_exists($fieldMapping, 'type') ? $fieldMapping->type : $fieldMapping['type'];
             }
 
-            if (!\in_array($propertyName, $excludedPropertyNames[$pageName], true)
-                && (!$isFieldMapping || !\in_array($fieldMappingType, $excludedPropertyTypes[$pageName], true))) {
+            if (!\in_array($propertyName, $excludedPropertyNames[$pageName] ?? [], true)
+                && (!$isFieldMapping || !\in_array($fieldMappingType, $excludedPropertyTypes[$pageName] ?? [], true))) {
                 $defaultPropertyNames[] = $propertyName;
             }
         }
