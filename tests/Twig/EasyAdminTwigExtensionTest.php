@@ -101,7 +101,7 @@ class EasyAdminTwigExtensionTest extends KernelTestCase
             }
         }, '*some value'];
         yield [new class {}, '/class@anonymous.*/', true];
-        yield [new class {
+        yield [new class implements \Stringable {
             public function __toString()
             {
                 return 'foo bar';

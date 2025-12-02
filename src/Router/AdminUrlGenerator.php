@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-final class AdminUrlGenerator implements AdminUrlGeneratorInterface
+final class AdminUrlGenerator implements \Stringable, AdminUrlGeneratorInterface
 {
     private bool $isInitialized = false;
     private ?string $dashboardRoute = null;

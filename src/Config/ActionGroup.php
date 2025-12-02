@@ -10,7 +10,7 @@ use Symfony\Contracts\Translation\TranslatableInterface;
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-final class ActionGroup
+final class ActionGroup implements \Stringable
 {
     // these are the action groups applied to a specific entity instance
     public const TYPE_ENTITY = 'entity';
