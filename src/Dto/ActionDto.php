@@ -16,7 +16,7 @@ final class ActionDto
 {
     private ?string $type = null;
     private ?string $name = null;
-    /** @var TranslatableInterface|string|(callable(object): string)|false|null */
+    /** @var TranslatableInterface|string|callable|false|null */
     private mixed $label = null;
     private ?string $icon = null;
     private string $cssClass = '';
@@ -91,9 +91,6 @@ final class ActionDto
         return $this->label;
     }
 
-    /**
-     * @param TranslatableInterface|string|(callable(object $entity): string)|false|null $label
-     */
     public function setLabel(TranslatableInterface|string|callable|false|null $label): void
     {
         $this->label = $label;
