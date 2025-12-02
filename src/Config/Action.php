@@ -13,7 +13,7 @@ use Symfony\Contracts\Translation\TranslatableInterface;
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-final class Action
+final class Action implements \Stringable
 {
     public const BATCH_DELETE = 'batchDelete';
     public const DELETE = 'delete';

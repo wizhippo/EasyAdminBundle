@@ -17,7 +17,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  *
  * @template TEntity of object = object
  */
-final class EntityDto
+final class EntityDto implements \Stringable
 {
     private bool $isAccessible = true;
     /** @var TEntity|null */
