@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Contracts\Router\AdminRouteGeneratorInterfac
 use EasyCorp\Bundle\EasyAdminBundle\Factory\AdminContextFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\ControllerFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Registry\CrudControllerRegistry;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminRouteGenerator;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
