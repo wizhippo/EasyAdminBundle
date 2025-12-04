@@ -23,13 +23,10 @@ final class CommonConfigurator implements FilterConfiguratorInterface
     public function configure(FilterDto $filterDto, ?FieldDto $fieldDto, EntityDto $entityDto, AdminContext $context): void
     {
         if (null === $filterDto->getLabel()) {
-            $fieldLabel = null !== $fieldDto
-                ? (
-                    $fieldDto->getLabel() instanceof TranslatableMessage
-                        ? $fieldDto->getLabel()->getMessage()
-                        : $fieldDto->getLabel()
-                )
-                : null;
+            $fieldLabel = $fieldDto?->getLabel();
+            if ($fieldLabel instanceof TranslatableMessage) {
+                $fieldLabel = $fieldLabel->getMessage();
+            }
             $label = $fieldLabel ?? u($filterDto->getProperty())->title()->toString();
             $filterDto->setLabel($label);
         }
