@@ -43,8 +43,8 @@ final class Action implements \Stringable
     }
 
     /**
-     * @param TranslatableInterface|string|(callable(object $entity): string)|false|null $label Use FALSE to hide the label; use NULL to autogenerate it
-     * @param string|null                                                                $icon  The full CSS classes of the FontAwesome icon to render (see https://fontawesome.com/v6/search?m=free)
+     * @param TranslatableInterface|string|callable|false|null $label Use FALSE to hide the label; use NULL to autogenerate it
+     * @param string|null                                      $icon  The full CSS classes of the FontAwesome icon to render (see https://fontawesome.com/v6/search?m=free)
      */
     public static function new(string $name, $label = null, ?string $icon = null): self
     {
@@ -91,7 +91,7 @@ final class Action implements \Stringable
     }
 
     /**
-     * @param TranslatableInterface|string|(callable(object $entity): string)|false|null $label Use FALSE to hide the label; use NULL to autogenerate it
+     * @param TranslatableInterface|string|callable|false|null $label Use FALSE to hide the label; use NULL to autogenerate it
      */
     public function setLabel($label): self
     {
