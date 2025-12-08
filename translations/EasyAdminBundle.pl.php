@@ -59,6 +59,7 @@ return [
         'create_and_continue' => 'Zapisz i kontynuuj',
         'save' => 'Zapisz',
         'save_and_continue' => 'Zapisz i kontynuuj',
+        'toggle_dropdown' => 'Przełącz menu rozwijane',
     ],
 
     'batch_action_modal' => [
