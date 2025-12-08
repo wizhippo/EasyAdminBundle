@@ -935,7 +935,7 @@ final class AdminRouteGenerator implements AdminRouteGeneratorInterface
                 EA::CRUD_ACTION => $route->getDefault(EA::CRUD_ACTION),
             ];
 
-            $fqcnToRouteName[$route->getDefault(EA::DASHBOARD_CONTROLLER_FQCN)][$route->getDefault(EA::CRUD_CONTROLLER_FQCN)][$route->getDefault(EA::CRUD_ACTION)] = $routeName;
+            $fqcnToRouteName[$route->getDefault(EA::DASHBOARD_CONTROLLER_FQCN)][$route->getDefault(EA::CRUD_CONTROLLER_FQCN) ?? ''][$route->getDefault(EA::CRUD_ACTION) ?? ''] = $routeName;
         }
 
         $routeNameToFqcnItem = $this->cache->getItem(self::CACHE_KEY_ROUTE_TO_FQCN);
