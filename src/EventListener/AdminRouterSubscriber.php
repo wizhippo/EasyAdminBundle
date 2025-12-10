@@ -93,7 +93,7 @@ class AdminRouterSubscriber implements EventSubscriberInterface
             }
 
             // this is not a cached dashboard route, so this is case (3) a regular Symfony request
-            if (!\array_key_exists($request->attributes->get('_route'), $dashboardControllerRoutes)) {
+            if (!\array_key_exists($request->attributes->get('_route', ''), $dashboardControllerRoutes)) {
                 return;
             }
         }
